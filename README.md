@@ -115,88 +115,6 @@
 └── Python - 动画生成和数据处理
 ```
 
-### 部署平台
-```
-☁️ 云服务
-├── GitHub Pages - 静态网站托管
-├── Netlify - 自动化部署和CDN
-├── Vercel - 现代化部署平台
-└── 腾讯云/阿里云 - 国内云服务
-```
-
----
-
-## 🚀 快速开始
-
-### 方式一：一键部署（推荐）
-
-#### GitHub Pages 部署
-```bash
-# 1. 克隆仓库
-git clone https://github.com/yourusername/smart-math-education.git
-cd smart-math-education
-
-# 2. 运行一键部署脚本
-# Windows
-双击运行：一键部署到GitHub.bat
-
-# Linux/macOS
-chmod +x deploy-github.sh
-./deploy-github.sh
-```
-
-#### Netlify 快速部署
-```bash
-# 1. 运行Netlify部署脚本
-# Windows
-双击运行：一键部署到Netlify.bat
-
-# 或者直接拖拽部署
-# 访问 https://netlify.com
-# 将项目文件夹拖拽到页面中央
-```
-
-### 方式二：本地开发
-
-#### 环境要求
-- **Node.js** >= 14.0.0
-- **Python** >= 3.8.0
-- **Git** 最新版本
-
-#### 安装步骤
-```bash
-# 1. 克隆项目
-git clone https://github.com/yourusername/smart-math-education.git
-cd smart-math-education
-
-# 2. 安装Python依赖（用于动画生成）
-pip install -r requirements.txt
-
-# 3. 启动本地服务器
-# Windows
-双击运行：启动本地服务器.bat
-
-# Linux/macOS
-python -m http.server 8000
-
-# 4. 访问网站
-# 打开浏览器访问：http://localhost:8000
-```
-
-### 方式三：Docker部署
-```bash
-# 1. 构建Docker镜像
-docker build -t smart-math-education .
-
-# 2. 运行容器
-docker run -p 8080:80 smart-math-education
-
-# 3. 访问应用
-# 浏览器打开：http://localhost:8080
-```
-
----
-
 ## 📁 项目结构
 
 ```
@@ -254,92 +172,6 @@ docker run -p 8080:80 smart-math-education
     ├── 📄 一键部署到Netlify.bat     # Netlify部署脚本
     └── 📄 启动本地服务器.bat        # 本地服务器启动
 ```
-
----
-
-## 📦 部署指南
-
-### 🌟 推荐部署方案
-
-#### 1. GitHub Pages（免费 + 稳定）
-```bash
-✅ 优势：
-• 完全免费
-• 与Git版本控制无缝集成
-• 支持自定义域名
-• 全球CDN加速
-
-📝 部署步骤：
-1. Fork或克隆本仓库
-2. 在GitHub中启用Pages服务
-3. 选择main分支作为源
-4. 访问 https://yourusername.github.io/repo-name
-```
-
-#### 2. Netlify（最简单 + 功能强大）
-```bash
-✅ 优势：
-• 拖拽即可部署
-• 自动HTTPS证书
-• 表单处理和无服务器函数
-• 分支预览功能
-
-📝 部署步骤：
-1. 访问 https://netlify.com
-2. 拖拽项目ZIP文件到页面
-3. 立即获得 https://randomname.netlify.app 网址
-4. 可绑定自定义域名
-```
-
-#### 3. Vercel（开发者友好）
-```bash
-✅ 优势：
-• 极快的全球CDN
-• 自动优化性能
-• 支持无服务器API
-• 与GitHub深度集成
-
-📝 部署步骤：
-1. 连接GitHub仓库到Vercel
-2. 自动检测项目类型
-3. 一键部署到全球CDN
-4. 获得 https://projectname.vercel.app 网址
-```
-
-### 🔧 自定义部署
-
-#### 域名配置
-```bash
-# 1. 购买域名（推荐国内服务商）
-• 阿里云：https://wanwang.aliyun.com
-• 腾讯云：https://dnspod.cloud.tencent.com
-• 华为云：https://www.huaweicloud.com
-
-# 2. DNS配置
-类型: CNAME
-主机记录: www
-记录值: yourusername.github.io
-
-# 3. 在GitHub仓库设置中添加自定义域名
-Settings → Pages → Custom domain → 输入域名
-```
-
-#### HTTPS配置
-```bash
-# GitHub Pages
-• 自动提供免费SSL证书
-• 在设置中勾选"Enforce HTTPS"
-
-# Netlify
-• 自动配置Let's Encrypt证书
-• 支持自定义证书上传
-
-# 自建服务器
-• 使用Certbot申请免费证书
-• 配置Nginx或Apache反向代理
-```
-
----
 
 ## 🧪 使用指南
 
@@ -479,7 +311,7 @@ git push origin feature/new-feature
 
 ### 项目维护者
 - **GitHub**: [@zero236108](https://github.com/zero236108)
-- **邮箱**: your.email@example.com
+- **邮箱**: 2024022502@szjm.edu.com
 
 ### 社区交流
 - **GitHub Discussions**: [项目讨论区](https://github.com/yourusername/smart-math-education/discussions)
@@ -506,3 +338,4 @@ git push origin feature/new-feature
 =======
 利用生成式人工智能来制作网页版课件
 >>>>>>> dad5029687e744b615573f268c40c69301802805
+

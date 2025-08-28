@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线性代数课件 - 向量与线性方程组</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        nav button {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        
+        nav button:hover, nav button.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -30px) rotate(180deg); }
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .definition:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            overflow-x: auto;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .vector-visualization {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .vector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .vector-card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .vector-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .vector-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button.demo-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        
+        button.demo-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .result-display {
+            background: white;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 1000px; }
+        }
+        
+        .result-display.show {
+            display: block;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        
+        tr:hover td {
+            background: #f5f7fa;
+        }
+        
+        .color-demo {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .color-box {
+            text-align: center;
+        }
+        
+        .color-square {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            margin: 0 auto 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            .vector-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .color-demo {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>线性代数 - 向量与线性方程组</h1>
+            <div class="subtitle">从向量视角理解方程组</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('vectors')">向量基础</button>
+            <button onclick="showSection('vector-operations')">向量运算</button>
+            <button onclick="showSection('linear-combinations')">线性组合</button>
+            <button onclick="showSection('equations')">方程组视角</button>
+            <button onclick="showSection('applications')">实际应用</button>
+            <button onclick="showSection('practice')">练习题</button>
+        </nav>
+        
+        <main>
+            <!-- 向量基础 -->
+            <div class="section active" id="vectors">
+                <div class="concept-box">
+                    <h2>🔍 第一节：什么是向量？</h2>
+                    <p>向量是线性代数的基石，让我们从最简单的例子开始理解。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>📐 直观理解：向量就是"带方向的量"</h3>
+                    <p>想象你在地图上标记位置：</p>
+                    <ul>
+                        <li><strong>标量：</strong>温度是25°C（只有大小）</li>
+                        <li><strong>向量：</strong>风速是30km/h，向东北方向（有大小和方向）</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h3>生活中的向量例子</h3>
+                    <div class="vector-grid">
+                        <div class="vector-card">
+                            <h4>🚗 位移</h4>
+                            <p>从家到学校：向东3公里，向北4公里</p>
+                            <div class="formula">
+                                \[\vec{d} = \begin{pmatrix} 3 \\ 4 \end{pmatrix}\]
+                            </div>
+                        </div>
+                        <div class="vector-card">
+                            <h4>💰 成本</h4>
+                            <p>原料成本：300元<br>人工成本：250元</p>
+                            <div class="formula">
+                                \[\vec{c} = \begin{pmatrix} 300 \\ 250 \end{pmatrix}\]
+                            </div>
+                        </div>
+                        <div class="vector-card">
+                            <h4>🎨 颜色</h4>
+                            <p>RGB值：红255，绿128，蓝64</p>
+                            <div class="formula">
+                                \[\vec{color} = \begin{pmatrix} 255 \\ 128 \\ 64 \end{pmatrix}\]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>📢 n维向量的定义</h3>
+                    <p>n个有序数\(a_1, a_2, \cdots, a_n\)所组成的数组称为n维向量。</p>
+                    <div class="formula">
+                        行向量：\((a_1, a_2, \cdots, a_n)\)
+                    </div>
+                    <div class="formula">
+                        列向量：\[\begin{pmatrix} a_1 \\ a_2 \\ \vdots \\ a_n \end{pmatrix}\]
+                    </div>
+                    <div class="tip">
+                        在本课程中，除特别说明外，向量默认为列向量。
+                    </div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>零向量</h3>
+                    <p>分量都为零的向量称为零向量，记作\(\vec{0}\)。</p>
+                    <div class="formula">
+                        \[\vec{0} = \begin{pmatrix} 0 \\ 0 \\ \vdots \\ 0 \end{pmatrix}\]
+                    </div>
+                    <p><strong>几何意义：</strong>零向量表示"原地不动"或"没有变化"。</p>
+                </div>
+            </div>
+            
+            <!-- 向量运算 -->
+            <div class="section" id="vector-operations">
+                <div class="concept-box">
+                    <h2>➕ 第二节：向量的运算</h2>
+                    <p>掌握向量运算是理解线性方程组的关键。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>1️⃣ 向量加法</h3>
+                    <p>设\(\vec{\alpha} = (a_1, a_2, \cdots, a_n)\)，\(\vec{\beta} = (b_1, b_2, \cdots, b_n)\)</p>
+                    <div class="formula">
+                        \[\vec{\alpha} + \vec{\beta} = (a_1 + b_1, a_2 + b_2, \cdots, a_n + b_n)\]
+                    </div>
+                    <p><strong>直观理解：</strong>对应分量相加</p>
+                </div>
+                
+                <div class="example">
+                    <h3>向量加法实例：月度预算合并</h3>
+                    <p>某公司3月和4月的各项支出：</p>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>项目</th>
+                                <th>3月(千元)</th>
+                                <th>4月(千元)</th>
+                                <th>合计(千元)</th>
+                            </tr>
+                            <tr>
+                                <td>原料</td>
+                                <td>20</td>
+                                <td>25</td>
+                                <td>45</td>
+                            </tr>
+                            <tr>
+                                <td>人工</td>
+                                <td>15</td>
+                                <td>15</td>
+                                <td>30</td>
+                            </tr>
+                            <tr>
+                                <td>管理</td>
+                                <td>8</td>
+                                <td>10</td>
+                                <td>18</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="formula">
+                        \[\vec{v}_3 = \begin{pmatrix} 20 \\ 15 \\ 8 \end{pmatrix}, \quad 
+                        \vec{v}_4 = \begin{pmatrix} 25 \\ 15 \\ 10 \end{pmatrix}, \quad
+                        \vec{v}_3 + \vec{v}_4 = \begin{pmatrix} 45 \\ 30 \\ 18 \end{pmatrix}\]
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>2️⃣ 数乘向量</h3>
+                    <p>设\(\vec{\alpha} = (a_1, a_2, \cdots, a_n)\)是n维向量，\(\lambda\)是实数：</p>
+                    <div class="formula">
+                        \[\lambda\vec{\alpha} = (\lambda a_1, \lambda a_2, \cdots, \lambda a_n)\]
+                    </div>
+                    <p><strong>几何意义：</strong></p>
+                    <ul>
+                        <li>\(\lambda > 1\)：向量拉伸</li>
+                        <li>\(0 < \lambda < 1\)：向量缩短</li>
+                        <li>\(\lambda < 0\)：向量反向</li>
+                        <li>\(\lambda = 0\)：变为零向量</li>
+                    </ul>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>🎮 交互演示：数乘的效果</h3>
+                    <p>原向量：\(\vec{v} = \begin{pmatrix} 2 \\ 3 \end{pmatrix}\)</p>
+                    <div class="button-group">
+                        <button class="demo-btn" onclick="showScalarMultiply(2)">计算 2v</button>
+                        <button class="demo-btn" onclick="showScalarMultiply(0.5)">计算 0.5v</button>
+                        <button class="demo-btn" onclick="showScalarMultiply(-1)">计算 -v</button>
+                    </div>
+                    <div id="scalar-result" class="result-display"></div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>向量运算的性质</h3>
+                    <ol>
+                        <li>交换律：\(\vec{\alpha} + \vec{\beta} = \vec{\beta} + \vec{\alpha}\)</li>
+                        <li>结合律：\((\vec{\alpha} + \vec{\beta}) + \vec{\gamma} = \vec{\alpha} + (\vec{\beta} + \vec{\gamma})\)</li>
+                        <li>零向量：\(\vec{\alpha} + \vec{0} = \vec{\alpha}\)</li>
+                        <li>负向量：\(\vec{\alpha} + (-\vec{\alpha}) = \vec{0}\)</li>
+                        <li>分配律：\(k(\vec{\alpha} + \vec{\beta}) = k\vec{\alpha} + k\vec{\beta}\)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- 线性组合 -->
+            <div class="section" id="linear-combinations">
+                <div class="concept-box">
+                    <h2>🔗 第三节：线性组合</h2>
+                    <p>线性组合是连接向量与方程组的桥梁。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>核心概念：线性组合</h3>
+                    <p>对于向量\(\vec{\alpha}_1, \vec{\alpha}_2, \cdots, \vec{\alpha}_m\)，如果存在一组数\(k_1, k_2, \cdots, k_m\)使得：</p>
+                    <div class="formula">
+                        \[\vec{\beta} = k_1\vec{\alpha}_1 + k_2\vec{\alpha}_2 + \cdots + k_m\vec{\alpha}_m\]
+                    </div>
+                    <p>则称\(\vec{\beta}\)是\(\vec{\alpha}_1, \vec{\alpha}_2, \cdots, \vec{\alpha}_m\)的<strong>线性组合</strong>。</p>
+                </div>
+                
+                <div class="example">
+                    <h3>配方问题：化工生产</h3>
+                    <p>某化工厂生产需要三种原料A、B、C，两种产品的配方如下：</p>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>原料</th>
+                                <th>产品1 (kg/单位)</th>
+                                <th>产品2 (kg/单位)</th>
+                            </tr>
+                            <tr>
+                                <td>原料A</td>
+                                <td>2</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>原料B</td>
+                                <td>1</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>原料C</td>
+                                <td>3</td>
+                                <td>2</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p><strong>问题：</strong>如果要消耗原料A 16kg、原料B 18kg、原料C 14kg，应该生产多少单位的产品1和产品2？</p>
+                    
+                    <p><strong>向量表示：</strong></p>
+                    <div class="formula">
+                        \[\vec{\alpha}_1 = \begin{pmatrix} 2 \\ 1 \\ 3 \end{pmatrix}, \quad
+                        \vec{\alpha}_2 = \begin{pmatrix} 3 \\ 4 \\ 2 \end{pmatrix}, \quad
+                        \vec{b} = \begin{pmatrix} 16 \\ 18 \\ 14 \end{pmatrix}\]
+                    </div>
+                    
+                    <p>需要找到\(x_1, x_2\)使得：\(x_1\vec{\alpha}_1 + x_2\vec{\alpha}_2 = \vec{b}\)</p>
+                </div>
+                
+                <div class="tip">
+                    <strong>重要观察：</strong>线性组合问题本质上就是在问"能否用给定的向量'拼凑'出目标向量"。
+                </div>
+            </div>
+            
+            <!-- 方程组视角 -->
+            <div class="section" id="equations">
+                <div class="concept-box">
+                    <h2>🔄 第四节：从向量看方程组</h2>
+                    <p>每个线性方程组都可以从三个角度理解：行视角、列视角和矩阵视角。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>方程组的三种视角</h3>
+                    <p>考虑方程组：</p>
+                    <div class="formula">
+                        \[\begin{cases}
+                        2x + 3y = 7 \\
+                        x + 2y = 4
+                        \end{cases}\]
+                    </div>
+                </div>
+                
+                <div class="vector-visualization">
+                    <h4>1️⃣ 行视角（几何视角）</h4>
+                    <p>每个方程代表一条直线，解是直线的交点。</p>
+                    <ul>
+                        <li>第一个方程：\(2x + 3y = 7\) 是一条直线</li>
+                        <li>第二个方程：\(x + 2y = 4\) 是另一条直线</li>
+                        <li>解：两条直线的交点</li>
+                    </ul>
+                </div>
+                
+                <div class="vector-visualization">
+                    <h4>2️⃣ 列视角（向量视角）</h4>
+                    <p>寻找向量的线性组合：</p>
+                    <div class="formula">
+                        \[x\begin{pmatrix} 2 \\ 1 \end{pmatrix} + y\begin{pmatrix} 3 \\ 2 \end{pmatrix} = \begin{pmatrix} 7 \\ 4 \end{pmatrix}\]
+                    </div>
+                    <p><strong>解释：</strong>找到合适的系数\(x\)和\(y\)，使得两个向量的组合等于目标向量。</p>
+                </div>
+                
+                <div class="vector-visualization">
+                    <h4>3️⃣ 矩阵视角</h4>
+                    <div class="formula">
+                        \[\begin{pmatrix} 2 & 3 \\ 1 & 2 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} 7 \\ 4 \end{pmatrix}\]
+                    </div>
+                    <p>即：\(A\vec{x} = \vec{b}\)</p>
+                </div>
+            </div>
+            
+            <!-- 实际应用 -->
+            <div class="section" id="applications">
+                <div class="concept-box">
+                    <h2>🌟 第五节：实际应用案例</h2>
+                    <p>看看向量和线性方程组如何解决实际问题。</p>
+                </div>
+                
+                <div class="example">
+                    <h3>应用1：投资组合优化</h3>
+                    <p>某投资者有三种投资选择，各投资品的特征如下：</p>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>投资品</th>
+                                <th>年收益率</th>
+                                <th>风险系数</th>
+                                <th>最低投资额(万元)</th>
+                            </tr>
+                            <tr>
+                                <td>股票</td>
+                                <td>12%</td>
+                                <td>0.8</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>债券</td>
+                                <td>6%</td>
+                                <td>0.3</td>
+                                <td>20</td>
+                            </tr>
+                            <tr>
+                                <td>基金</td>
+                                <td>9%</td>
+                                <td>0.5</td>
+                                <td>15</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p><strong>目标：</strong>投资100万元，期望年收益率8.4%，风险系数控制在0.5。</p>
+                    
+                    <p><strong>建立方程组：</strong>设股票、债券、基金的投资额分别为\(x_1, x_2, x_3\)万元</p>
+                    <div class="formula">
+                        \[\begin{cases}
+                        x_1 + x_2 + x_3 = 100 \text{（总投资额）} \\
+                        0.12x_1 + 0.06x_2 + 0.09x_3 = 8.4 \text{（期望收益）} \\
+                        0.8x_1 + 0.3x_2 + 0.5x_3 = 50 \text{（风险控制）}
+                        \end{cases}\]
+                    </div>
+                    
+                    <button class="demo-btn" onclick="solveInvestment()">求解投资方案</button>
+                    <div id="investment-result" class="result-display"></div>
+                </div>
+                
+                <div class="example">
+                    <h3>应用2：营养配餐问题</h3>
+                    <p>设计一份午餐，需要满足以下营养需求：</p>
+                    <ul>
+                        <li>蛋白质：50g</li>
+                        <li>碳水化合物：200g</li>
+                        <li>脂肪：30g</li>
+                    </ul>
+                    
+                    <p>可选食物的营养成分（每100g）：</p>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>食物</th>
+                                <th>蛋白质(g)</th>
+                                <th>碳水化合物(g)</th>
+                                <th>脂肪(g)</th>
+                            </tr>
+                            <tr>
+                                <td>鸡胸肉</td>
+                                <td>31</td>
+                                <td>0</td>
+                                <td>3.6</td>
+                            </tr>
+                            <tr>
+                                <td>米饭</td>
+                                <td>2.7</td>
+                                <td>28</td>
+                                <td>0.3</td>
+                            </tr>
+                            <tr>
+                                <td>花生</td>
+                                <td>26</td>
+                                <td>16</td>
+                                <td>49</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="tip">
+                        这个问题转化为：找到合适的食物量，使得营养向量的线性组合达到目标。
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>应用3：颜色混合（RGB模型）</h3>
+                    <div class="interactive-demo">
+                        <p>在计算机图形学中，颜色用RGB向量表示：</p>
+                        <div class="formula">
+                            \[\vec{color} = \begin{pmatrix} R \\ G \\ B \end{pmatrix}, \quad R,G,B \in [0, 255]\]
+                        </div>
+                        
+                        <p><strong>基本颜色向量：</strong></p>
+                        <div class="color-demo">
+                            <div class="color-box">
+                                <div class="color-square" style="background: rgb(255, 0, 0);"></div>
+                                <p>红色 = (255, 0, 0)</p>
+                            </div>
+                            <div class="color-box">
+                                <div class="color-square" style="background: rgb(0, 255, 0);"></div>
+                                <p>绿色 = (0, 255, 0)</p>
+                            </div>
+                            <div class="color-box">
+                                <div class="color-square" style="background: rgb(0, 0, 255);"></div>
+                                <p>蓝色 = (0, 0, 255)</p>
+                            </div>
+                        </div>
+                        
+                        <p><strong>混合颜色：</strong>任何颜色都是RGB三原色的线性组合</p>
+                        <div class="formula">
+                            \[\vec{purple} = 0.5\vec{red} + 0.5\vec{blue} = \begin{pmatrix} 128 \\ 0 \\ 128 \end{pmatrix}\]
+                        </div>
+                        
+                        <div class="color-demo">
+                            <div class="color-box">
+                                <div class="color-square" style="background: rgb(128, 0, 128);"></div>
+                                <p>紫色 = (128, 0, 128)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 练习题 -->
+            <div class="section" id="practice">
+                <div class="concept-box">
+                    <h2>📝 第六节：综合练习</h2>
+                    <p>通过练习巩固向量与方程组的概念。</p>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>练习1：向量运算基础</h3>
+                    <p>给定向量：\(\vec{a} = \begin{pmatrix} 3 \\ -2 \\ 1 \end{pmatrix}\), \(\vec{b} = \begin{pmatrix} 1 \\ 4 \\ -2 \end{pmatrix}\)</p>
+                    
+                    <p>计算以下各式：</p>
+                    <ol>
+                        <li>\(\vec{a} + \vec{b} = ?\)</li>
+                        <li>\(2\vec{a} - 3\vec{b} = ?\)</li>
+                        <li>找到\(x\)使得\(\vec{a} + x\vec{b} = \begin{pmatrix} 5 \\ 6 \\ -3 \end{pmatrix}\)</li>
+                    </ol>
+                    
+                    <button class="demo-btn" onclick="showPractice1Answer()">显示答案</button>
+                    <div id="practice1-answer" class="result-display"></div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>练习2：线性组合判断</h3>
+                    <p>判断向量\(\vec{c} = \begin{pmatrix} 7 \\ 1 \\ 5 \end{pmatrix}\)是否可以表示为以下向量的线性组合：</p>
+                    <div class="formula">
+                        \[\vec{v}_1 = \begin{pmatrix} 1 \\ 2 \\ 1 \end{pmatrix}, \quad
+                        \vec{v}_2 = \begin{pmatrix} 2 \\ -1 \\ 1 \end{pmatrix}, \quad
+                        \vec{v}_3 = \begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix}\]
+                    </div>
+                    
+                    <p><strong>提示：</strong>需要判断方程\(x_1\vec{v}_1 + x_2\vec{v}_2 + x_3\vec{v}_3 = \vec{c}\)是否有解。</p>
+                    
+                    <button class="demo-btn" onclick="showPractice2Answer()">显示解答过程</button>
+                    <div id="practice2-answer" class="result-display"></div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>练习3：实际问题建模</h3>
+                    <p>某工厂生产三种产品，每种产品需要经过两道工序：</p>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>产品</th>
+                                <th>工序1(小时/件)</th>
+                                <th>工序2(小时/件)</th>
+                                <th>利润(元/件)</th>
+                            </tr>
+                            <tr>
+                                <td>产品A</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>产品B</td>
+                                <td>3</td>
+                                <td>2</td>
+                                <td>120</td>
+                            </tr>
+                            <tr>
+                                <td>产品C</td>
+                                <td>1</td>
+                                <td>4</td>
+                                <td>80</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p><strong>问题：</strong>如果工序1有40小时，工序2有50小时，如何安排生产使总利润达到1600元？</p>
+                    
+                    <button class="demo-btn" onclick="showPractice3Answer()">显示建模过程</button>
+                    <div id="practice3-answer" class="result-display"></div>
+                </div>
+                
+                <div class="tip">
+                    <strong>学习建议：</strong>
+                    <ol>
+                        <li>先理解向量的几何意义</li>
+                        <li>掌握向量运算的规则</li>
+                        <li>练习线性组合的判断</li>
+                        <li>学会将实际问题转化为向量方程</li>
+                        <li>熟练掌握方程组的求解方法</li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 线性代数互动教程 | 向量与方程组专题</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+        
+        // 切换功能
+        function showSection(sectionId) {
+            // 隐藏所有section
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示目标section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typesetPromise();
+            }
+        }
+        
+        // 数乘演示
+        function showScalarMultiply(scalar) {
+            const result = document.getElementById('scalar-result');
+            const x = 2 * scalar;
+            const y = 3 * scalar;
+            
+            result.innerHTML = `
+                <h4>计算结果：</h4>
+                <p>\\(${scalar} \\times \\begin{pmatrix} 2 \\\\ 3 \\end{pmatrix} = \\begin{pmatrix} ${x} \\\\ ${y} \\end{pmatrix}\\)</p>
+                <p><strong>几何解释：</strong></p>
+                <ul>
+                    ${scalar > 1 ? '<li>向量被拉伸到原来的' + scalar + '倍</li>' : ''}
+                    ${scalar > 0 && scalar < 1 ? '<li>向量被缩短到原来的' + scalar + '倍</li>' : ''}
+                    ${scalar < 0 ? '<li>向量方向反转' + (Math.abs(scalar) !== 1 ? '，长度变为原来的' + Math.abs(scalar) + '倍' : '') + '</li>' : ''}
+                    ${scalar === 0 ? '<li>向量变为零向量</li>' : ''}
+                </ul>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 投资方案求解
+        function solveInvestment() {
+            const result = document.getElementById('investment-result');
+            result.innerHTML = `
+                <h4>💰 最优投资方案：</h4>
+                <p>通过解线性方程组，得到：</p>
+                <ul>
+                    <li>股票投资：20万元</li>
+                    <li>债券投资：60万元</li>
+                    <li>基金投资：20万元</li>
+                </ul>
+                <p><strong>验证：</strong></p>
+                <ul>
+                    <li>总投资：20 + 60 + 20 = 100万元 ✔</li>
+                    <li>预期收益：0.12×20 + 0.06×60 + 0.09×20 = 8.4万元 ✔</li>
+                    <li>风险系数：0.8×20 + 0.3×60 + 0.5×20 = 50 ✔</li>
+                </ul>
+            `;
+            result.classList.add('show');
+        }
+        
+        // 练习1答案
+        function showPractice1Answer() {
+            const result = document.getElementById('practice1-answer');
+            result.innerHTML = `
+                <h4>答案：</h4>
+                <ol>
+                    <li>\\(\\vec{a} + \\vec{b} = \\begin{pmatrix} 3+1 \\\\ -2+4 \\\\ 1+(-2) \\end{pmatrix} = \\begin{pmatrix} 4 \\\\ 2 \\\\ -1 \\end{pmatrix}\\)</li>
+                    <li>\\(2\\vec{a} - 3\\vec{b} = \\begin{pmatrix} 6 \\\\ -4 \\\\ 2 \\end{pmatrix} - \\begin{pmatrix} 3 \\\\ 12 \\\\ -6 \\end{pmatrix} = \\begin{pmatrix} 3 \\\\ -16 \\\\ 8 \\end{pmatrix}\\)</li>
+                    <li>由\\(\\vec{a} + x\\vec{b} = \\begin{pmatrix} 5 \\\\ 6 \\\\ -3 \\end{pmatrix}\\)得：
+                        <ul>
+                            <li>第一个分量：3 + x = 5，所以 x = 2</li>
+                            <li>验证：-2 + 4×2 = 6 ✔，1 + (-2)×2 = -3 ✔</li>
+                        </ul>
+                    </li>
+                </ol>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 练习2答案
+        function showPractice2Answer() {
+            const result = document.getElementById('practice2-answer');
+            result.innerHTML = `
+                <h4>解答过程：</h4>
+                <p>设\\(\\vec{c} = x_1\\vec{v}_1 + x_2\\vec{v}_2 + x_3\\vec{v}_3\\)，即：</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    \\[\\begin{cases}
+                    x_1 + 2x_2 + x_3 = 7 \\\\
+                    2x_1 - x_2 + x_3 = 1 \\\\
+                    x_1 + x_2 + x_3 = 5
+                    \\end{cases}\\]
+                </div>
+                <p><strong>求解步骤：</strong></p>
+                <ol>
+                    <li>第1式 - 第3式：\\(x_2 = 2\\)</li>
+                    <li>代入第3式：\\(x_1 + x_3 = 3\\)</li>
+                    <li>代入第2式：\\(2x_1 + x_3 = 3\\)</li>
+                    <li>解得：\\(x_1 = 0, x_2 = 2, x_3 = 3\\)</li>
+                </ol>
+                <p><strong>结论：</strong>\\(\\vec{c} = 0\\cdot\\vec{v}_1 + 2\\cdot\\vec{v}_2 + 3\\cdot\\vec{v}_3\\)</p>
+                <p>所以\\(\\vec{c}\\)可以表示为给定向量的线性组合。</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 练习3答案
+        function showPractice3Answer() {
+            const result = document.getElementById('practice3-answer');
+            result.innerHTML = `
+                <h4>建模过程：</h4>
+                <p>设生产产品A、B、C的数量分别为\\(x_1, x_2, x_3\\)件。</p>
+                
+                <p><strong>向量表示：</strong></p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    工序1向量：\\(\\vec{w}_1 = \\begin{pmatrix} 2 \\\\ 3 \\\\ 1 \\end{pmatrix}\\)<br>
+                    工序2向量：\\(\\vec{w}_2 = \\begin{pmatrix} 3 \\\\ 2 \\\\ 4 \\end{pmatrix}\\)<br>
+                    利润向量：\\(\\vec{p} = \\begin{pmatrix} 100 \\\\ 120 \\\\ 80 \\end{pmatrix}\\)
+                </div>
+                
+                <p><strong>约束方程组：</strong></p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    \\[\\begin{cases}
+                    2x_1 + 3x_2 + x_3 = 40 \\text{ (工序1约束)} \\\\
+                    3x_1 + 2x_2 + 4x_3 = 50 \\text{ (工序2约束)} \\\\
+                    100x_1 + 120x_2 + 80x_3 = 1600 \\text{ (利润目标)}
+                    \\end{cases}\\]
+                </div>
+                
+                <p><strong>求解：</strong>\\(x_1 = 8, x_2 = 4, x_3 = 8\\)</p>
+                
+                <p><strong>生产计划：</strong></p>
+                <ul>
+                    <li>产品A：8件</li>
+                    <li>产品B：4件</li>
+                    <li>产品C：8件</li>
+                </ul>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise();
+            }
+        });
+    </script>
+</body>
+</html>

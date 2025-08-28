@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线性代数课件 - 矩阵方程与向量系统</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        nav button {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        
+        nav button:hover, nav button.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -30px) rotate(180deg); }
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .definition:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            overflow-x: auto;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .matrix-card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .matrix-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .matrix-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button.demo-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            font-weight: 500;
+        }
+        
+        button.demo-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .result-display {
+            background: white;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 1000px; }
+        }
+        
+        .result-display.show {
+            display: block;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+        
+        tr:hover td {
+            background: #f5f7fa;
+        }
+        
+        .step-by-step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .step-by-step .step {
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #667eea;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            .matrix-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>线性代数 - 矩阵方程与向量系统</h1>
+            <div class="subtitle">从矩阵视角理解线性代数系统</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('matrix-basics')">矩阵基础</button>
+            <button onclick="showSection('matrix-vector')">矩阵向量乘法</button>
+            <button onclick="showSection('matrix-equations')">矩阵方程</button>
+            <button onclick="showSection('linear-combinations')">线性组合视角</button>
+            <button onclick="showSection('applications')">实际应用</button>
+            <button onclick="showSection('practice')">综合练习</button>
+        </nav>
+        
+        <main>
+            <!-- 矩阵基础 -->
+            <div class="section active" id="matrix-basics">
+                <div class="concept-box">
+                    <h2>📊 第一节：矩阵的基本概念</h2>
+                    <p>矩阵是线性代数中最重要的概念之一，它为我们提供了处理线性方程组的强大工具。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>🔢 矩阵的定义</h3>
+                    <p>由 m × n 个数 a<sub>ij</sub> (i=1,2,⋯,m; j=1,2,⋯,n) 按一定顺序排成的 m 行 n 列的矩形数表：</p>
+                    <div class="formula">
+                        \[A = \begin{pmatrix}
+                        a_{11} & a_{12} & \cdots & a_{1n} \\
+                        a_{21} & a_{22} & \cdots & a_{2n} \\
+                        \vdots & \vdots & \ddots & \vdots \\
+                        a_{m1} & a_{m2} & \cdots & a_{mn}
+                        \end{pmatrix}\]
+                    </div>
+                    <p>称为 <strong>m × n 矩阵</strong>，简称<strong>矩阵</strong>。</p>
+                </div>
+                
+                <div class="matrix-grid">
+                    <div class="matrix-card">
+                        <h4>🎯 方阵</h4>
+                        <p>当矩阵的行数与列数相等时，称矩阵为方阵</p>
+                        <div class="formula">
+                            \[A = \begin{pmatrix}
+                            2 & -1 \\
+                            3 & 4
+                            \end{pmatrix}\]
+                        </div>
+                        <p><small>2×2 方阵</small></p>
+                    </div>
+                    <div class="matrix-card">
+                        <h4>📐 行矩阵</h4>
+                        <p>当 m=1 时，矩阵称为行矩阵</p>
+                        <div class="formula">
+                            \[A = \begin{pmatrix}
+                            a_{11} & a_{12} & \cdots & a_{1n}
+                            \end{pmatrix}\]
+                        </div>
+                        <p><small>1×n 行矩阵</small></p>
+                    </div>
+                    <div class="matrix-card">
+                        <h4>📏 列矩阵</h4>
+                        <p>当 n=1 时，矩阵称为列矩阵</p>
+                        <div class="formula">
+                            \[A = \begin{pmatrix}
+                            a_{11} \\
+                            a_{21} \\
+                            \vdots \\
+                            a_{m1}
+                            \end{pmatrix}\]
+                        </div>
+                        <p><small>m×1 列矩阵</small></p>
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    <strong>重要提示：</strong>行矩阵也称为行向量，列矩阵也称为列向量。矩阵为我们统一处理向量和方程组提供了框架。
+                </div>
+                
+                <div class="example">
+                    <h3>生活中的矩阵实例</h3>
+                    <p>某公司三个季度的销售数据（单位：万元）：</p>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>产品</th>
+                                <th>第一季度</th>
+                                <th>第二季度</th>
+                                <th>第三季度</th>
+                            </tr>
+                            <tr>
+                                <td>产品A</td>
+                                <td>120</td>
+                                <td>150</td>
+                                <td>180</td>
+                            </tr>
+                            <tr>
+                                <td>产品B</td>
+                                <td>80</td>
+                                <td>95</td>
+                                <td>110</td>
+                            </tr>
+                            <tr>
+                                <td>产品C</td>
+                                <td>200</td>
+                                <td>190</td>
+                                <td>220</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p><strong>矩阵表示：</strong></p>
+                    <div class="formula">
+                        \[Sales = \begin{pmatrix}
+                        120 & 150 & 180 \\
+                        80 & 95 & 110 \\
+                        200 & 190 & 220
+                        \end{pmatrix}\]
+                    </div>
+                    <p>这是一个 3×3 的销售数据矩阵。</p>
+                </div>
+            </div>
+            
+            <!-- 矩阵向量乘法 -->
+            <div class="section" id="matrix-vector">
+                <div class="concept-box">
+                    <h2>🔄 第二节：矩阵与向量的乘法</h2>
+                    <p>矩阵与向量的乘法是理解线性变换和方程组的关键概念。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>📝 矩阵向量乘法的定义</h3>
+                    <p>若 A 是 m×n 矩阵，它的各列为 a₁, a₂, ..., aₙ，若 x 为向量，则 A 与 x 的积（Ax）就是 A 的各列以 x 中对应元素为权的<strong>线性组合</strong>，即：</p>
+                    <div class="formula">
+                        \[Ax = (a_1\,\, a_2\,\, \cdots\,\, a_n) \begin{pmatrix}
+                        x_1 \\
+                        x_2 \\
+                        \vdots \\
+                        x_n
+                        \end{pmatrix} = x_1a_1 + x_2a_2 + \cdots + x_na_n\]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>具体计算实例</h3>
+                    <div class="step-by-step">
+                        <div class="step">
+                            <strong>步骤1：</strong>设置矩阵和向量
+                            <div class="formula">
+                                \[\begin{pmatrix}
+                                1 & 2 & -1 \\
+                                0 & -5 & 3
+                                \end{pmatrix}
+                                \begin{pmatrix}
+                                4 \\
+                                3 \\
+                                7
+                                \end{pmatrix}\]
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <strong>步骤2：</strong>分解为列向量的线性组合
+                            <div class="formula">
+                                \[= 4\begin{pmatrix} 1 \\ 0 \end{pmatrix} + 3\begin{pmatrix} 2 \\ -5 \end{pmatrix} + 7\begin{pmatrix} -1 \\ 3 \end{pmatrix}\]
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <strong>步骤3：</strong>计算各项
+                            <div class="formula">
+                                \[= \begin{pmatrix} 4 \\ 0 \end{pmatrix} + \begin{pmatrix} 6 \\ -15 \end{pmatrix} + \begin{pmatrix} -7 \\ 21 \end{pmatrix}\]
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <strong>步骤4：</strong>最终结果
+                            <div class="formula">
+                                \[= \begin{pmatrix} 3 \\ 6 \end{pmatrix}\]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>🎮 交互式演示：矩阵向量乘法</h3>
+                    <p>计算 Ax，其中：</p>
+                    <div class="formula">
+                        \[A = \begin{pmatrix} 1 & 2 \\ -2 & 5 \\ -5 & 6 \end{pmatrix}, \quad x = \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}\]
+                    </div>
+                    <div class="button-group">
+                        <button class="demo-btn" onclick="calculateAx(1, 0)">计算 x = (1, 0)</button>
+                        <button class="demo-btn" onclick="calculateAx(0, 1)">计算 x = (0, 1)</button>
+                        <button class="demo-btn" onclick="calculateAx(2, -1)">计算 x = (2, -1)</button>
+                    </div>
+                    <div id="ax-result" class="result-display"></div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>计算规则</h3>
+                    <p><strong>若 Ax 有定义，则 Ax 中的第 i 个元素是 A 的第 i 行与 x 的相应元素乘积之和。</strong></p>
+                    <p>这就是我们通常所说的"行乘列"规则。</p>
+                </div>
+            </div>
+            
+            <!-- 矩阵方程 -->
+            <div class="section" id="matrix-equations">
+                <div class="concept-box">
+                    <h2>⚖️ 第三节：矩阵方程 Ax = b</h2>
+                    <p>矩阵方程将线性方程组转化为简洁的矩阵形式，是现代线性代数的核心。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>🎯 从方程组到矩阵方程</h3>
+                    <p>1.3节学习了将线性方程组写成向量方程的形式，例如：</p>
+                    <div class="formula">
+                        \[\begin{cases}
+                        x_1 + 2x_2 = 7 \\
+                        -2x_1 + 5x_2 = 4 \\
+                        -5x_1 + 6x_2 = -3
+                        \end{cases}
+                        \quad \Leftrightarrow \quad
+                        x_1\begin{pmatrix} 1 \\ -2 \\ -5 \end{pmatrix} + x_2\begin{pmatrix} 2 \\ 5 \\ 6 \end{pmatrix} = \begin{pmatrix} 7 \\ 4 \\ -3 \end{pmatrix}\]
+                    </div>
+                    
+                    <p>现在我们可以将向量方程改写成矩阵乘向量的形式：</p>
+                    <div class="formula">
+                        \[\begin{pmatrix} 1 & 2 \\ -2 & 5 \\ -5 & 6 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = \begin{pmatrix} 7 \\ 4 \\ -3 \end{pmatrix}\]
+                    </div>
+                    
+                    <p>这就等价于 <strong>Ax = b</strong>，称此为<strong>矩阵方程</strong>。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>矩阵方程的等价性</h3>
+                    <p>若 A 是 m×n 矩阵，它的各列为 a₁, a₂, ..., aₙ，而 b 属于 Rᵐ，则矩阵方程 <strong>Ax = b</strong> 与向量方程：</p>
+                    <div class="formula">
+                        \[x_1a_1 + x_2a_2 + \cdots + x_na_n = b\]
+                    </div>
+                    <p>有相同的解集。它又与增广矩阵 (a₁ a₂ ... aₙ b) 的线性方程组有相同的解集。</p>
+                </div>
+                
+                <div class="example">
+                    <h3>矩阵方程解的存在性</h3>
+                    <p>由 Ax 的定义可以得出以下关键事实：</p>
+                    <div class="tip">
+                        <strong>⭐ 方程 Ax = b 有解当且仅当 b 是 A 的各列的线性组合。</strong>
+                    </div>
+                    
+                    <p>这意味着：要判断方程组是否有解，关键是看常数项向量能否表示为系数矩阵各列向量的线性组合。</p>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>🎮 实例分析：方程组求解</h3>
+                    <p>考虑方程组：</p>
+                    <div class="formula">
+                        \[\begin{cases}
+                        2x_1 + x_2 = 5 \\
+                        x_1 - x_2 = 1 \\
+                        3x_1 + 2x_2 = 8
+                        \end{cases}\]
+                    </div>
+                    <p>转化为矩阵方程：</p>
+                    <div class="formula">
+                        \[\begin{pmatrix} 2 & 1 \\ 1 & -1 \\ 3 & 2 \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = \begin{pmatrix} 5 \\ 1 \\ 8 \end{pmatrix}\]
+                    </div>
+                    <button class="demo-btn" onclick="solveMatrixEquation()">检验解的存在性</button>
+                    <div id="matrix-solution" class="result-display"></div>
+                </div>
+            </div>
+            
+            <!-- 线性组合视角 -->
+            <div class="section" id="linear-combinations">
+                <div class="concept-box">
+                    <h2>🔗 第四节：线性组合的矩阵表示</h2>
+                    <p>矩阵方程 Ax = b 本质上是在寻找向量的线性组合表示。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>🧩 线性组合的矩阵语言</h3>
+                    <p>把线性组合 3v₁ - 5v₂ + 7v₃ 表示成矩阵乘向量的形式。</p>
+                    
+                    <div class="step-by-step">
+                        <div class="step">
+                            <strong>解：</strong>把 v₁、v₂、v₃ 排列成矩阵 A，把数 3、-5、7 排列成向量 x，即：
+                            <div class="formula">
+                                \[3v_1 - 5v_2 + 7v_3 = (v_1\,\, v_2\,\, v_3) \begin{pmatrix} 3 \\ -5 \\ 7 \end{pmatrix} = Ax\]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>几何意义解读</h3>
+                    <p>矩阵乘法 Ax 的几何意义：</p>
+                    <div class="matrix-grid">
+                        <div class="matrix-card">
+                            <h4>📐 列空间视角</h4>
+                            <p>Ax 是矩阵 A 的列向量的线性组合</p>
+                            <div class="formula">
+                                \[Ax \in \text{Col}(A)\]
+                            </div>
+                        </div>
+                        <div class="matrix-card">
+                            <h4>🎯 变换视角</h4>
+                            <p>A 将向量 x 变换为向量 Ax</p>
+                            <div class="formula">
+                                \[T(x) = Ax\]
+                            </div>
+                        </div>
+                        <div class="matrix-card">
+                            <h4>🔍 投影视角</h4>
+                            <p>寻找使 Ax 最接近 b 的 x</p>
+                            <div class="formula">
+                                \[\min_x \|Ax - b\|^2\]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>🎮 可视化演示：线性组合</h3>
+                    <p>给定向量组：</p>
+                    <div class="formula">
+                        \[v_1 = \begin{pmatrix} 1 \\ 2 \end{pmatrix}, \quad v_2 = \begin{pmatrix} 3 \\ 1 \end{pmatrix}\]
+                    </div>
+                    <p>尝试不同的线性组合系数：</p>
+                    <div class="button-group">
+                        <button class="demo-btn" onclick="showLinearCombination(2, 1)">计算 2v₁ + v₂</button>
+                        <button class="demo-btn" onclick="showLinearCombination(1, -1)">计算 v₁ - v₂</button>
+                        <button class="demo-btn" onclick="showLinearCombination(-1, 2)">计算 -v₁ + 2v₂</button>
+                    </div>
+                    <div id="linear-combo-result" class="result-display"></div>
+                </div>
+                
+                <div class="tip">
+                    <strong>核心洞察：</strong>矩阵方程 Ax = b 问的是："能否用矩阵 A 的列向量线性组合出向量 b？"这种观点将代数问题转化为几何问题。
+                </div>
+            </div>
+            
+            <!-- 实际应用 -->
+            <div class="section" id="applications">
+                <div class="concept-box">
+                    <h2>🌟 第五节：矩阵方程的实际应用</h2>
+                    <p>矩阵方程在工程、经济、数据科学等领域有广泛应用。</p>
+                </div>
+                
+                <div class="example">
+                    <h3>应用1：网络流量分析</h3>
+                    <p>某网络有4个节点，流量分布满足以下约束：</p>
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>节点</th>
+                                <th>流入量</th>
+                                <th>流出量</th>
+                                <th>净流量</th>
+                            </tr>
+                            <tr>
+                                <td>节点1</td>
+                                <td>x₁ + x₄</td>
+                                <td>x₁</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>节点2</td>
+                                <td>x₁ + x₃</td>
+                                <td>x₂</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>节点3</td>
+                                <td>x₂</td>
+                                <td>x₃ + x₄</td>
+                                <td>-80</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <p><strong>矩阵方程：</strong></p>
+                    <div class="formula">
+                        \[\begin{pmatrix}
+                        1 & 0 & 0 & 1 \\
+                        1 & -1 & 1 & 0 \\
+                        0 & 1 & -1 & -1
+                        \end{pmatrix}
+                        \begin{pmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{pmatrix} = 
+                        \begin{pmatrix} 100 \\ 50 \\ -80 \end{pmatrix}\]
+                    </div>
+                    
+                    <button class="demo-btn" onclick="solveNetworkFlow()">求解网络流量</button>
+                    <div id="network-result" class="result-display"></div>
+                </div>
+                
+                <div class="example">
+                    <h3>应用2：图像处理中的线性变换</h3>
+                    <p>在计算机图形学中，图像的旋转、缩放、平移都可以用矩阵表示：</p>
+                    <div class="matrix-grid">
+                        <div class="matrix-card">
+                            <h4>🔄 旋转变换</h4>
+                            <p>逆时针旋转θ角度：</p>
+                            <div class="formula">
+                                \[R = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}\]
+                            </div>
+                        </div>
+                        <div class="matrix-card">
+                            <h4>📏 缩放变换</h4>
+                            <p>x方向缩放a倍，y方向缩放b倍：</p>
+                            <div class="formula">
+                                \[S = \begin{pmatrix} a & 0 \\ 0 & b \end{pmatrix}\]
+                            </div>
+                        </div>
+                        <div class="matrix-card">
+                            <h4>↔️ 切变变换</h4>
+                            <p>水平切变：</p>
+                            <div class="formula">
+                                \[H = \begin{pmatrix} 1 & k \\ 0 & 1 \end{pmatrix}\]
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="interactive-demo">
+                        <h3>🎮 变换演示</h3>
+                        <p>对点 (2, 1) 进行变换：</p>
+                        <div class="button-group">
+                            <button class="demo-btn" onclick="applyTransform('rotation')">旋转45°</button>
+                            <button class="demo-btn" onclick="applyTransform('scale')">缩放(2, 0.5)</button>
+                            <button class="demo-btn" onclick="applyTransform('shear')">切变k=0.5</button>
+                        </div>
+                        <div id="transform-result" class="result-display"></div>
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>应用3：经济学中的投入产出模型</h3>
+                    <p>Leontief投入产出模型描述经济部门间的依赖关系：</p>
+                    <div class="formula">
+                        \[(I - A)x = d\]
+                    </div>
+                    <p>其中：</p>
+                    <ul>
+                        <li>A 是技术系数矩阵</li>
+                        <li>x 是总产出向量</li>
+                        <li>d 是最终需求向量</li>
+                        <li>I 是单位矩阵</li>
+                    </ul>
+                    
+                    <p><strong>实例：</strong>三部门经济模型</p>
+                    <div class="formula">
+                        \[A = \begin{pmatrix} 0.2 & 0.1 & 0.3 \\ 0.3 & 0.2 & 0.1 \\ 0.1 & 0.4 & 0.2 \end{pmatrix}, \quad d = \begin{pmatrix} 100 \\ 150 \\ 200 \end{pmatrix}\]
+                    </div>
+                    
+                    <button class="demo-btn" onclick="solveEconomicModel()">计算均衡产出</button>
+                    <div id="economic-result" class="result-display"></div>
+                </div>
+            </div>
+            
+            <!-- 综合练习 -->
+            <div class="section" id="practice">
+                <div class="concept-box">
+                    <h2>📝 第六节：综合练习与提高</h2>
+                    <p>通过练习巩固矩阵方程的概念和应用。</p>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>练习1：矩阵向量乘法</h3>
+                    <p>计算以下矩阵向量乘积：</p>
+                    <div class="formula">
+                        \[\begin{pmatrix} 2 & -1 & 3 \\ 1 & 0 & -2 \\ 4 & 3 & 1 \end{pmatrix} \begin{pmatrix} 2 \\ -3 \\ 1 \end{pmatrix}\]
+                    </div>
+                    <button class="demo-btn" onclick="solvePractice1()">显示解答过程</button>
+                    <div id="practice1-result" class="result-display"></div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>练习2：方程组的矩阵表示</h3>
+                    <p>将下列方程组写成矩阵方程 Ax = b 的形式，并判断解的存在性：</p>
+                    <div class="formula">
+                        \[\begin{cases}
+                        x_1 + 2x_2 - x_3 = 4 \\
+                        3x_1 - x_2 + 2x_3 = 1 \\
+                        2x_1 + x_2 + x_3 = 7
+                        \end{cases}\]
+                    </div>
+                    <button class="demo-btn" onclick="solvePractice2()">分析解的情况</button>
+                    <div id="practice2-result" class="result-display"></div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>练习3：线性组合的实现</h3>
+                    <p>判断向量 b 是否可以表示为给定向量组的线性组合：</p>
+                    <div class="formula">
+                        \[v_1 = \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}, \quad v_2 = \begin{pmatrix} 2 \\ 1 \\ 1 \end{pmatrix}, \quad v_3 = \begin{pmatrix} 1 \\ -1 \\ 2 \end{pmatrix}, \quad b = \begin{pmatrix} 5 \\ 4 \\ 8 \end{pmatrix}\]
+                    </div>
+                    <button class="demo-btn" onclick="solvePractice3()">检验线性相关性</button>
+                    <div id="practice3-result" class="result-display"></div>
+                </div>
+                
+                <div class="tip">
+                    <strong>学习建议：</strong>
+                    <ol>
+                        <li>熟练掌握矩阵向量乘法的计算规则</li>
+                        <li>理解矩阵方程与线性组合的等价关系</li>
+                        <li>学会从几何角度理解线性变换</li>
+                        <li>将抽象概念与实际应用相结合</li>
+                        <li>多练习不同类型的矩阵计算</li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 线性代数交互教程 | 矩阵方程与向量系统专题</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+        
+        // 切换功能
+        function showSection(sectionId) {
+            // 隐藏所有section
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示目标section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typesetPromise();
+            }
+        }
+        
+        // 矩阵向量乘法演示
+        function calculateAx(x1, x2) {
+            const result = document.getElementById('ax-result');
+            // A的列向量
+            const col1 = [1, -2, -5];
+            const col2 = [2, 5, 6];
+            
+            // 计算 Ax = x1*col1 + x2*col2
+            const ax = [
+                x1 * col1[0] + x2 * col2[0],
+                x1 * col1[1] + x2 * col2[1],
+                x1 * col1[2] + x2 * col2[2]
+            ];
+            
+            result.innerHTML = `
+                <h4>计算结果：</h4>
+                <p>\\(x = \\begin{pmatrix} ${x1} \\\\ ${x2} \\end{pmatrix}\\)</p>
+                <p><strong>分解为列向量线性组合：</strong></p>
+                <p>\\(Ax = ${x1} \\begin{pmatrix} 1 \\\\ -2 \\\\ -5 \\end{pmatrix} + ${x2} \\begin{pmatrix} 2 \\\\ 5 \\\\ 6 \\end{pmatrix}\\)</p>
+                <p>\\(= \\begin{pmatrix} ${ax[0]} \\\\ ${ax[1]} \\\\ ${ax[2]} \\end{pmatrix}\\)</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 矩阵方程求解
+        function solveMatrixEquation() {
+            const result = document.getElementById('matrix-solution');
+            result.innerHTML = `
+                <h4>📊 解的存在性分析：</h4>
+                <p><strong>问题：</strong>能否用矩阵A的列向量线性组合出向量b？</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    <p>\\(\\begin{pmatrix} 2 \\\\ 1 \\\\ 3 \\end{pmatrix} x_1 + \\begin{pmatrix} 1 \\\\ -1 \\\\ 2 \\end{pmatrix} x_2 = \\begin{pmatrix} 5 \\\\ 1 \\\\ 8 \\end{pmatrix}\\)</p>
+                </div>
+                <p><strong>求解过程：</strong></p>
+                <ol>
+                    <li>从第一个方程：2x₁ + x₂ = 5，得 x₂ = 5 - 2x₁</li>
+                    <li>代入第二个方程：x₁ - (5 - 2x₁) = 1，得 3x₁ = 6，所以 x₁ = 2</li>
+                    <li>因此 x₂ = 5 - 2(2) = 1</li>
+                    <li>验证第三个方程：3(2) + 2(1) = 8 ✓</li>
+                </ol>
+                <p><strong>结论：</strong>方程组有唯一解 x₁ = 2, x₂ = 1</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 线性组合演示
+        function showLinearCombination(c1, c2) {
+            const result = document.getElementById('linear-combo-result');
+            const v1 = [1, 2];
+            const v2 = [3, 1];
+            const combo = [c1 * v1[0] + c2 * v2[0], c1 * v1[1] + c2 * v2[1]];
+            
+            result.innerHTML = `
+                <h4>线性组合计算：</h4>
+                <p>\\(${c1}v_1 + ${c2}v_2 = ${c1}\\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} + ${c2}\\begin{pmatrix} 3 \\\\ 1 \\end{pmatrix}\\)</p>
+                <p>\\(= \\begin{pmatrix} ${c1} \\\\ ${2*c1} \\end{pmatrix} + \\begin{pmatrix} ${3*c2} \\\\ ${c2} \\end{pmatrix}\\)</p>
+                <p>\\(= \\begin{pmatrix} ${combo[0]} \\\\ ${combo[1]} \\end{pmatrix}\\)</p>
+                <p><strong>几何解释：</strong>这是两个基向量的加权平均，结果向量位于由v₁和v₂张成的平面内。</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 网络流量求解
+        function solveNetworkFlow() {
+            const result = document.getElementById('network-result');
+            result.innerHTML = `
+                <h4>🌐 网络流量分析结果：</h4>
+                <p>这是一个欠定系统（变量数多于方程数），有无穷多解。</p>
+                <p><strong>通解形式：</strong></p>
+                <ul>
+                    <li>x₁ = 100 - x₄</li>
+                    <li>x₂ = 150 - x₄</li>
+                    <li>x₃ = 70 + x₄</li>
+                    <li>x₄ 为自由变量</li>
+                </ul>
+                <p><strong>实际约束：</strong>考虑到流量非负性，需要 x₄ ≥ 0 且 x₄ ≤ 100</p>
+                <p><strong>特解示例：</strong>当 x₄ = 30 时，解为 (70, 120, 100, 30)</p>
+            `;
+            result.classList.add('show');
+        }
+        
+        // 图像变换演示
+        function applyTransform(type) {
+            const result = document.getElementById('transform-result');
+            const point = [2, 1];
+            let transformedPoint, matrixStr, description;
+            
+            switch(type) {
+                case 'rotation':
+                    // 45度旋转
+                    const cos45 = Math.cos(Math.PI/4);
+                    const sin45 = Math.sin(Math.PI/4);
+                    transformedPoint = [
+                        cos45 * point[0] - sin45 * point[1],
+                        sin45 * point[0] + cos45 * point[1]
+                    ];
+                    matrixStr = `\\begin{pmatrix} \\frac{\\sqrt{2}}{2} & -\\frac{\\sqrt{2}}{2} \\\\ \\frac{\\sqrt{2}}{2} & \\frac{\\sqrt{2}}{2} \\end{pmatrix}`;
+                    description = "逆时针旋转45°";
+                    break;
+                case 'scale':
+                    transformedPoint = [2 * point[0], 0.5 * point[1]];
+                    matrixStr = `\\begin{pmatrix} 2 & 0 \\\\ 0 & 0.5 \\end{pmatrix}`;
+                    description = "x方向放大2倍，y方向缩小为0.5倍";
+                    break;
+                case 'shear':
+                    transformedPoint = [point[0] + 0.5 * point[1], point[1]];
+                    matrixStr = `\\begin{pmatrix} 1 & 0.5 \\\\ 0 & 1 \\end{pmatrix}`;
+                    description = "水平切变，k=0.5";
+                    break;
+            }
+            
+            result.innerHTML = `
+                <h4>🎨 ${description}变换结果：</h4>
+                <p><strong>变换矩阵：</strong> \\(${matrixStr}\\)</p>
+                <p><strong>原始点：</strong> \\(\\begin{pmatrix} 2 \\\\ 1 \\end{pmatrix}\\)</p>
+                <p><strong>变换后：</strong> \\(\\begin{pmatrix} ${transformedPoint[0].toFixed(2)} \\\\ ${transformedPoint[1].toFixed(2)} \\end{pmatrix}\\)</p>
+                <p><strong>变换效果：</strong>${description}</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 经济模型求解
+        function solveEconomicModel() {
+            const result = document.getElementById('economic-result');
+            result.innerHTML = `
+                <h4>💰 投入产出模型分析：</h4>
+                <p><strong>模型：</strong> (I - A)x = d</p>
+                <p>需要计算 (I - A)⁻¹d 来求解均衡产出。</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    <p>\\(I - A = \\begin{pmatrix} 0.8 & -0.1 & -0.3 \\\\ -0.3 & 0.8 & -0.1 \\\\ -0.1 & -0.4 & 0.8 \\end{pmatrix}\\)</p>
+                </div>
+                <p><strong>求解结果（近似）：</strong></p>
+                <ul>
+                    <li>部门1总产出：约 285 单位</li>
+                    <li>部门2总产出：约 348 单位</li>
+                    <li>部门3总产出：约 457 单位</li>
+                </ul>
+                <p><strong>经济解释：</strong>为满足最终需求，各部门需要考虑产业间关联效应，实际产出大于最终需求。</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 练习题解答
+        function solvePractice1() {
+            const result = document.getElementById('practice1-result');
+            result.innerHTML = `
+                <h4>解答过程：</h4>
+                <p><strong>方法1：行乘列规则</strong></p>
+                <ol>
+                    <li>第1行：2(2) + (-1)(-3) + 3(1) = 4 + 3 + 3 = 10</li>
+                    <li>第2行：1(2) + 0(-3) + (-2)(1) = 2 + 0 - 2 = 0</li>
+                    <li>第3行：4(2) + 3(-3) + 1(1) = 8 - 9 + 1 = 0</li>
+                </ol>
+                <p><strong>方法2：列向量线性组合</strong></p>
+                <p>\\(= 2\\begin{pmatrix} 2 \\\\ 1 \\\\ 4 \\end{pmatrix} + (-3)\\begin{pmatrix} -1 \\\\ 0 \\\\ 3 \\end{pmatrix} + 1\\begin{pmatrix} 3 \\\\ -2 \\\\ 1 \\end{pmatrix}\\)</p>
+                <p><strong>最终结果：</strong> \\(\\begin{pmatrix} 10 \\\\ 0 \\\\ 0 \\end{pmatrix}\\)</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        function solvePractice2() {
+            const result = document.getElementById('practice2-result');
+            result.innerHTML = `
+                <h4>矩阵方程表示：</h4>
+                <p>\\(\\begin{pmatrix} 1 & 2 & -1 \\\\ 3 & -1 & 2 \\\\ 2 & 1 & 1 \\end{pmatrix} \\begin{pmatrix} x_1 \\\\ x_2 \\\\ x_3 \\end{pmatrix} = \\begin{pmatrix} 4 \\\\ 1 \\\\ 7 \\end{pmatrix}\\)</p>
+                
+                <p><strong>解的分析：</strong></p>
+                <ol>
+                    <li>构造增广矩阵进行行消元</li>
+                    <li>观察到第三个方程可以由前两个方程线性表示</li>
+                    <li>系统相容，但系数矩阵的秩小于变量个数</li>
+                </ol>
+                
+                <p><strong>结论：</strong>方程组有无穷多解，解空间为一维</p>
+                <p><strong>参数解：</strong>x₃为自由变量，x₁和x₂用x₃表示</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        function solvePractice3() {
+            const result = document.getElementById('practice3-result');
+            result.innerHTML = `
+                <h4>线性组合分析：</h4>
+                <p><strong>问题：</strong>是否存在系数 c₁, c₂, c₃ 使得：</p>
+                <p>\\(c_1\\begin{pmatrix} 1 \\\\ 2 \\\\ 3 \\end{pmatrix} + c_2\\begin{pmatrix} 2 \\\\ 1 \\\\ 1 \\end{pmatrix} + c_3\\begin{pmatrix} 1 \\\\ -1 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} 5 \\\\ 4 \\\\ 8 \\end{pmatrix}\\)</p>
+                
+                <p><strong>转化为矩阵方程：</strong></p>
+                <p>\\(\\begin{pmatrix} 1 & 2 & 1 \\\\ 2 & 1 & -1 \\\\ 3 & 1 & 2 \\end{pmatrix} \\begin{pmatrix} c_1 \\\\ c_2 \\\\ c_3 \\end{pmatrix} = \\begin{pmatrix} 5 \\\\ 4 \\\\ 8 \\end{pmatrix}\\)</p>
+                
+                <p><strong>求解结果：</strong></p>
+                <ul>
+                    <li>通过高斯消元法求得：c₁ = 1, c₂ = 2, c₃ = 0</li>
+                    <li>验证：1×v₁ + 2×v₂ + 0×v₃ = v₁ + 2v₂ = (5, 4, 5) ≠ (5, 4, 8)</li>
+                </ul>
+                
+                <p><strong>结论：</strong>向量 b 不能表示为给定向量组的线性组合</p>
+            `;
+            result.classList.add('show');
+            
+            if (window.MathJax) {
+                window.MathJax.typesetPromise([result]);
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学课件 - 收敛区间与收敛半径</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            /* 浅色主题变量 */
+            --primary-gradient-start: #667eea;
+            --primary-gradient-end: #764ba2;
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --main-bg: white;
+            --text-color: #333;
+            --text-color-light: #6c757d;
+            --nav-bg: #f8f9fa;
+            --nav-border: #e9ecef;
+            --button-border: #667eea;
+            --button-text: #667eea;
+            --button-hover-bg: #667eea;
+            --button-hover-text: white;
+            --concept-gradient-start: #f5f7fa;
+            --concept-gradient-end: #c3cfe2;
+            --definition-bg: white;
+            --definition-border: #667eea;
+            --theorem-bg: #fffbf0;
+            --theorem-border: #ffd700;
+            --example-bg: #f0f8ff;
+            --example-border: #4169e1;
+            --formula-bg: #f8f9fa;
+            --formula-border: #dee2e6;
+            --graph-bg: white;
+            --interactive-gradient-start: #e0c3fc;
+            --interactive-gradient-end: #8ec5fc;
+            --exercise-bg: #fff5f5;
+            --exercise-border: #ff6b6b;
+            --tip-bg: #d4edda;
+            --tip-border: #c3e6cb;
+            --animation-bg: #f8f9fa;
+            --canvas-axes: #333;
+            --shadow-color: rgba(0,0,0,0.3);
+            --shadow-light: rgba(0,0,0,0.1);
+            --shadow-lighter: rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] {
+            /* 深色主题变量 */
+            --primary-gradient-start: #8b9ef3;
+            --primary-gradient-end: #9d6fc9;
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #0f0f1e;
+            --main-bg: #1e1e2e;
+            --text-color: #e0e0e0;
+            --text-color-light: #a0a0a0;
+            --nav-bg: #2a2a3e;
+            --nav-border: #3a3a4e;
+            --button-border: #8b9ef3;
+            --button-text: #8b9ef3;
+            --button-hover-bg: #8b9ef3;
+            --button-hover-text: #1e1e2e;
+            --concept-gradient-start: #2a2a3e;
+            --concept-gradient-end: #323248;
+            --definition-bg: #2a2a3e;
+            --definition-border: #8b9ef3;
+            --theorem-bg: #3a3a2e;
+            --theorem-border: #ffd700;
+            --example-bg: #2a2e3a;
+            --example-border: #6189f1;
+            --formula-bg: #2a2a3e;
+            --formula-border: #3a3a4e;
+            --graph-bg: #2a2a3e;
+            --interactive-gradient-start: #3a2e4a;
+            --interactive-gradient-end: #2e3a4a;
+            --exercise-bg: #3a2a2a;
+            --exercise-border: #ff8b8b;
+            --tip-bg: #2a3a2e;
+            --tip-border: #4a5a4e;
+            --animation-bg: #2a2a3e;
+            --canvas-axes: #e0e0e0;
+            --shadow-color: rgba(0,0,0,0.5);
+            --shadow-light: rgba(0,0,0,0.3);
+            --shadow-lighter: rgba(0,0,0,0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--main-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow-color);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            color: white;
+            font-size: 16px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .theme-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(20deg);
+        }
+        
+        nav {
+            background: var(--nav-bg);
+            padding: 20px 40px;
+            border-bottom: 2px solid var(--nav-border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: var(--main-bg);
+            border: 2px solid var(--button-border);
+            border-radius: 25px;
+            color: var(--button-text);
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: var(--button-hover-bg);
+            color: var(--button-hover-text);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, var(--concept-gradient-start) 0%, var(--concept-gradient-end) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px var(--shadow-light);
+        }
+        
+        .concept-box h2 {
+            color: var(--button-border);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: var(--definition-bg);
+            border-left: 5px solid var(--definition-border);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px var(--shadow-lighter);
+        }
+        
+        .definition h3 {
+            color: var(--definition-border);
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: var(--theorem-bg);
+            border: 2px solid var(--theorem-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--theorem-border);
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: var(--example-bg);
+            border: 2px solid var(--example-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--example-border);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: var(--formula-bg);
+            border: 1px solid var(--formula-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+
+        /* 自定义滚动条样式 */
+        .formula::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .formula::-webkit-scrollbar-track {
+            background: var(--formula-border);
+            border-radius: 4px;
+        }
+
+        .formula::-webkit-scrollbar-thumb {
+            background: var(--button-border);
+            border-radius: 4px;
+        }
+
+        .formula::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gradient-end);
+        }
+
+        /* Firefox 滚动条样式 */
+        .formula {
+            scrollbar-width: thin;
+            scrollbar-color: var(--button-border) var(--formula-border);
+        }
+
+        /* 确保 MathJax 公式不被截断 */
+        .formula mjx-container {
+            display: inline-block !important;
+            max-width: none !important;
+        }
+        
+        .graph-container {
+            background: var(--graph-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px var(--shadow-light);
+        }
+        
+        .graph-container h3 {
+            color: var(--button-border);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, var(--interactive-gradient-start) 0%, var(--interactive-gradient-end) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: var(--formula-border);
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--button-border);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: var(--button-border);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: var(--exercise-bg);
+            border: 2px solid var(--exercise-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: var(--exercise-border);
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+
+        /* 交互式练习题样式 */
+        .exercise-status {
+            background: linear-gradient(135deg, var(--concept-gradient-start) 0%, var(--concept-gradient-end) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .score-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--button-border);
+        }
+
+        .score-value {
+            color: var(--exercise-border);
+            font-size: 1.8em;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 20px;
+            background: var(--formula-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--button-border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--button-border), var(--primary-gradient-end));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .interactive-question {
+            background: var(--main-bg);
+            border: 2px solid var(--button-border);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .interactive-question:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-light);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--nav-border);
+        }
+
+        .question-header h3 {
+            color: var(--button-border);
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .question-score {
+            background: var(--formula-bg);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--formula-border);
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .question-score.correct {
+            background: var(--tip-bg);
+            border-color: var(--tip-border);
+            color: #155724;
+        }
+
+        .question-score.incorrect {
+            background: var(--exercise-bg);
+            border-color: var(--exercise-border);
+            color: #721c24;
+        }
+
+        .question-score.partial {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+
+        .check-btn {
+            padding: 10px 20px;
+            background: var(--button-border);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-gradient-end);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .check-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .answer-options label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--formula-bg);
+            border: 2px solid var(--formula-border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .answer-options label:hover {
+            background: var(--concept-gradient-start);
+            border-color: var(--button-border);
+        }
+
+        .answer-options input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .answer-options label.correct {
+            background: var(--tip-bg);
+            border-color: var(--tip-border);
+        }
+
+        .answer-options label.incorrect {
+            background: var(--exercise-bg);
+            border-color: var(--exercise-border);
+        }
+
+        .feedback {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: var(--tip-bg);
+            border: 2px solid var(--tip-border);
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: var(--exercise-bg);
+            border: 2px solid var(--exercise-border);
+            color: #721c24;
+        }
+
+        .feedback.partial {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            color: #856404;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .exercise-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .reset-btn, .hint-btn {
+            padding: 12px 25px;
+            border: 2px solid var(--button-border);
+            border-radius: 25px;
+            background: var(--main-bg);
+            color: var(--button-text);
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover, .hint-btn:hover {
+            background: var(--button-hover-bg);
+            color: var(--button-hover-text);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .reset-btn {
+            border-color: var(--exercise-border);
+            color: var(--exercise-border);
+        }
+
+        .reset-btn:hover {
+            background: var(--exercise-border);
+            color: white;
+        }
+
+        /* 收敛区间可视化样式 */
+        .convergence-visual {
+            background: var(--main-bg);
+            border: 2px solid var(--button-border);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .number-line {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            margin: 30px 0;
+        }
+
+        .line {
+            position: absolute;
+            top: 30px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: var(--formula-border);
+            border-radius: 2px;
+        }
+
+        .convergence-interval {
+            position: absolute;
+            top: 26px;
+            height: 12px;
+            background: var(--button-border);
+            border-radius: 6px;
+        }
+
+        .point {
+            position: absolute;
+            top: 22px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--exercise-border);
+            border: 2px solid white;
+        }
+
+        .point.open {
+            background: white;
+            border: 2px solid var(--exercise-border);
+        }
+
+        .point-label {
+            position: absolute;
+            top: -25px;
+            left: -15px;
+            width: 30px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .exercise-status {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .progress-bar {
+                width: 100%;
+            }
+
+            .question-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .exercise-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .reset-btn, .hint-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .theme-icon {
+                font-size: 18px;
+            }
+        }
+        
+        footer {
+            background: var(--nav-bg);
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid var(--nav-border);
+            color: var(--text-color-light);
+        }
+        
+        .tip {
+            background: var(--tip-bg);
+            border: 1px solid var(--tip-border);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            background: var(--animation-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .series-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: var(--button-border);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .animation-btn:hover {
+            background: var(--primary-gradient-end);
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        /* MathJax 深色主题适配 */
+        [data-theme="dark"] mjx-container {
+            color: #e0e0e0 !important;
+        }
+
+        /* 方法步骤样式 */
+        .method-steps {
+            background: var(--formula-bg);
+            border: 2px solid var(--formula-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .method-steps h4 {
+            color: var(--button-border);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            margin: 15px 0;
+            padding: 10px;
+            background: var(--main-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--button-border);
+        }
+
+        .step-list li strong {
+            color: var(--button-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高等数学 - 收敛区间与收敛半径</h1>
+            <div class="subtitle">幂级数收敛性理论与计算方法</div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-icon" id="themeIcon">🌙</span>
+                <span id="themeText">深色模式</span>
+            </button>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">基本概念</button>
+            <button onclick="showSection('radius')">收敛半径</button>
+            <button onclick="showSection('interval')">收敛区间</button>
+            <button onclick="showSection('examples')">典型例题</button>
+            <button onclick="showSection('exercise')">练习题</button>
+            <button onclick="showSection('visualization')">可视化演示</button>
+        </nav>
+        
+        <main>
+            <!-- 基本概念部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚 幂级数基本概念</h2>
+                    <p>幂级数是函数项级数的重要类型，在数学分析和实际应用中具有重要地位。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.1：幂级数</h3>
+                    <p>形如</p>
+                    <div class="formula">
+                        \[ \sum_{n=0}^{\infty} a_n (x - x_0)^n = a_0 + a_1(x - x_0) + a_2(x - x_0)^2 + \cdots \]
+                    </div>
+                    <p>的级数称为<strong>幂级数</strong>，其中 \( a_n \) 为系数，\( x_0 \) 为展开中心。</p>
+                    <p>特别地，当 \( x_0 = 0 \) 时，得到标准形式：</p>
+                    <div class="formula">
+                        \[ \sum_{n=0}^{\infty} a_n x^n = a_0 + a_1 x + a_2 x^2 + \cdots \]
+                    </div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>阿贝尔定理（Abel's Theorem）</h3>
+                    <p>对于幂级数 \( \sum_{n=0}^{\infty} a_n x^n \)，存在 \( R \geq 0 \) 使得：</p>
+                    <ul style="margin: 15px 0; padding-left: 30px;">
+                        <li>当 \( |x| < R \) 时，级数<strong>绝对收敛</strong></li>
+                        <li>当 \( |x| > R \) 时，级数<strong>发散</strong></li>
+                        <li>当 \( |x| = R \) 时，级数<strong>可能收敛也可能发散</strong></li>
+                    </ul>
+                    <p>这个 \( R \) 称为幂级数的<strong>收敛半径</strong>。</p>
+                </div>
+
+                <div class="definition">
+                    <h3>定义 1.2：收敛区间与收敛域</h3>
+                    <p><strong>收敛区间：</strong>使幂级数收敛的所有 \( x \) 值构成的区间，形如 \( (x_0 - R, x_0 + R) \)</p>
+                    <p><strong>收敛域：</strong>收敛区间加上可能收敛的端点，具体形式可能是：</p>
+                    <ul style="margin: 15px 0; padding-left: 30px;">
+                        <li>\( (x_0 - R, x_0 + R) \) —— 开区间</li>
+                        <li>\( [x_0 - R, x_0 + R) \) —— 左闭右开</li>
+                        <li>\( (x_0 - R, x_0 + R] \) —— 左开右闭</li>
+                        <li>\( [x_0 - R, x_0 + R] \) —— 闭区间</li>
+                    </ul>
+                </div>
+                
+                <div class="tip">
+                    理解要点：收敛半径确定了幂级数收敛的基本范围，而端点的收敛性需要单独判断。
+                </div>
+            </div>
+            
+            <!-- 收敛半径部分 -->
+            <div class="section" id="radius">
+                <div class="concept-box">
+                    <h2>📐 收敛半径的计算</h2>
+                    <p>收敛半径的计算是分析幂级数的关键步骤，有多种计算方法。</p>
+                </div>
+                
+                <div class="method-steps">
+                    <h4>方法一：比值法（达朗贝尔公式）</h4>
+                    <p>当 \( \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| \) 存在时：</p>
+                    <div class="formula">
+                        \[ R = \lim_{n \to \infty} \left| \frac{a_n}{a_{n+1}} \right| \]
+                    </div>
+                    <ul class="step-list">
+                        <li><strong>步骤1：</strong>计算相邻系数的比值 \( \frac{a_{n+1}}{a_n} \)</li>
+                        <li><strong>步骤2：</strong>求极限 \( \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| \)</li>
+                        <li><strong>步骤3：</strong>收敛半径为该极限的倒数</li>
+                    </ul>
+                </div>
+                
+                <div class="method-steps">
+                    <h4>方法二：根值法（柯西-阿达马公式）</h4>
+                    <p>适用于所有幂级数：</p>
+                    <div class="formula">
+                        \[ \frac{1}{R} = \limsup_{n \to \infty} \sqrt[n]{|a_n|} \]
+                    </div>
+                    <ul class="step-list">
+                        <li><strong>步骤1：</strong>计算 \( \sqrt[n]{|a_n|} \)</li>
+                        <li><strong>步骤2：</strong>求上极限 \( \limsup_{n \to \infty} \sqrt[n]{|a_n|} \)</li>
+                        <li><strong>步骤3：</strong>收敛半径为该上极限的倒数</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h3>例题1：用比值法计算收敛半径</h3>
+                    <p>求 \( \sum_{n=1}^{\infty} \frac{x^n}{n \cdot 2^n} \) 的收敛半径。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>这里 \( a_n = \frac{1}{n \cdot 2^n} \)（\( n \geq 1 \)）</p>
+                    
+                    <div class="formula">
+                        \[ \frac{a_n}{a_{n+1}} = \frac{\frac{1}{n \cdot 2^n}}{\frac{1}{(n+1) \cdot 2^{n+1}}} = \frac{(n+1) \cdot 2^{n+1}}{n \cdot 2^n} = \frac{2(n+1)}{n} \]
+                    </div>
+                    
+                    <div class="formula">
+                        \[ R = \lim_{n \to \infty} \frac{2(n+1)}{n} = \lim_{n \to \infty} 2\left(1 + \frac{1}{n}\right) = 2 \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>例题2：特殊情况的处理</h3>
+                    <p>求 \( \sum_{n=0}^{\infty} \frac{x^n}{n!} \) 的收敛半径。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>这里 \( a_n = \frac{1}{n!} \)</p>
+                    
+                    <div class="formula">
+                        \[ \frac{a_n}{a_{n+1}} = \frac{\frac{1}{n!}}{\frac{1}{(n+1)!}} = \frac{(n+1)!}{n!} = n+1 \]
+                    </div>
+                    
+                    <div class="formula">
+                        \[ R = \lim_{n \to \infty} (n+1) = +\infty \]
+                    </div>
+                    
+                    <p>因此该级数对所有 \( x \in \mathbb{R} \) 都收敛。</p>
+                </div>
+                
+                <div class="tip">
+                    计算技巧：当系数涉及阶乘、指数函数时，比值法通常更方便；当系数较复杂时，可考虑根值法。
+                </div>
+            </div>
+            
+            <!-- 收敛区间部分 -->
+            <div class="section" id="interval">
+                <div class="concept-box">
+                    <h2>📊 收敛区间与收敛域的确定</h2>
+                    <p>确定收敛区间需要先计算收敛半径，再单独检查端点的收敛性。</p>
+                </div>
+                
+                <div class="method-steps">
+                    <h4>求解步骤</h4>
+                    <ul class="step-list">
+                        <li><strong>步骤1：</strong>计算收敛半径 \( R \)</li>
+                        <li><strong>步骤2：</strong>确定收敛区间 \( (x_0 - R, x_0 + R) \)</li>
+                        <li><strong>步骤3：</strong>检查左端点 \( x = x_0 - R \) 的收敛性</li>
+                        <li><strong>步骤4：</strong>检查右端点 \( x = x_0 + R \) 的收敛性</li>
+                        <li><strong>步骤5：</strong>确定最终的收敛域</li>
+                    </ul>
+                </div>
+
+                <div class="convergence-visual">
+                    <h3>收敛区间可视化</h3>
+                    <div class="number-line" id="convergence-demo">
+                        <div class="line"></div>
+                        <div class="convergence-interval" id="conv-interval"></div>
+                        <div class="point" id="left-point">
+                            <div class="point-label" id="left-label">x₀-R</div>
+                        </div>
+                        <div class="point" id="right-point">
+                            <div class="point-label" id="right-label">x₀+R</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="radius-slider">收敛半径 R: <span class="slider-value" id="radius-value">2</span></label>
+                        <input type="range" id="radius-slider" min="0.5" max="5" step="0.1" value="2">
+                    </div>
+                    <div class="slider-container">
+                        <label for="center-slider">中心 x₀: <span class="slider-value" id="center-value">0</span></label>
+                        <input type="range" id="center-slider" min="-3" max="3" step="0.5" value="0">
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="animation-btn" onclick="toggleLeftEndpoint()">切换左端点</button>
+                        <button class="animation-btn" onclick="toggleRightEndpoint()">切换右端点</button>
+                    </div>
+                    <p style="margin-top: 15px; font-size: 0.9em;">
+                        实心点表示端点收敛，空心点表示端点发散
+                    </p>
+                </div>
+                
+                <div class="example">
+                    <h3>例题：完整求解收敛域</h3>
+                    <p>求 \( \sum_{n=1}^{\infty} \frac{(-1)^n}{n \cdot 3^n}(x-3)^n \) 的收敛域。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    
+                    <p><strong>第一步：</strong>计算收敛半径</p>
+                    <p>这里 \( a_n = \frac{(-1)^n}{n \cdot 3^n} \)，中心 \( x_0 = 3 \)</p>
+                    <div class="formula">
+                        \[ R = \lim_{n \to \infty} \left| \frac{a_n}{a_{n+1}} \right| = \lim_{n \to \infty} \frac{n \cdot 3^n}{(n+1) \cdot 3^{n+1}} \cdot \frac{3(n+1)}{n} = 3 \]
+                    </div>
+                    
+                    <p><strong>第二步：</strong>收敛区间为 \( |x - 3| < 3 \)，即 \( (0, 6) \)</p>
+                    
+                    <p><strong>第三步：</strong>检查端点</p>
+                    <ul style="margin: 15px 0; padding-left: 30px;">
+                        <li>当 \( x = 0 \) 时：\( \sum_{n=1}^{\infty} \frac{(-1)^n \cdot (-3)^n}{n \cdot 3^n} = \sum_{n=1}^{\infty} \frac{1}{n} \)（调和级数，发散）</li>
+                        <li>当 \( x = 6 \) 时：\( \sum_{n=1}^{\infty} \frac{(-1)^n \cdot 3^n}{n \cdot 3^n} = \sum_{n=1}^{\infty} \frac{(-1)^n}{n} \)（交错调和级数，条件收敛）</li>
+                    </ul>
+                    
+                    <p><strong>结论：</strong>收敛域为 \( (0, 6] \)</p>
+                </div>
+                
+                <div class="tip">
+                    端点判断：常用级数收敛性判别法，如交错级数判别法（Leibniz判别法）、比较判别法等。
+                </div>
+            </div>
+            
+            <!-- 典型例题部分 -->
+            <div class="section" id="examples">
+                <div class="concept-box">
+                    <h2>📝 典型例题精讲</h2>
+                    <p>通过具体例题掌握收敛半径和收敛区间的求解方法。</p>
+                </div>
+                
+                <div class="example">
+                    <h3>例题1：标准幂级数</h3>
+                    <p>求 \( \sum_{n=1}^{\infty} \frac{(x-1)^n}{2^n} \) 的收敛区间。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>1. 计算收敛半径：\( a_n = \frac{1}{2^n} \)</p>
+                    <div class="formula">
+                        \[ R = \lim_{n \to \infty} \left| \frac{a_n}{a_{n+1}} \right| = \lim_{n \to \infty} \frac{2^{n+1}}{2^n} = 2 \]
+                    </div>
+                    
+                    <p>2. 收敛区间：\( |x-1| < 2 \)，即 \( (-1, 3) \)</p>
+                    
+                    <p>3. 检查端点：</p>
+                    <ul style="margin: 15px 0; padding-left: 30px;">
+                        <li>\( x = -1 \)：\( \sum_{n=1}^{\infty} \frac{(-2)^n}{2^n} = \sum_{n=1}^{\infty} (-1)^n \)（发散）</li>
+                        <li>\( x = 3 \)：\( \sum_{n=1}^{\infty} \frac{2^n}{2^n} = \sum_{n=1}^{\infty} 1 \)（发散）</li>
+                    </ul>
+                    
+                    <p><strong>收敛区间：</strong>\( (-1, 3) \)</p>
+                </div>
+                
+                <div class="example">
+                    <h3>例题2：含参数的收敛半径</h3>
+                    <p>若幂级数 \( \sum_{n=1}^{\infty} \frac{a^n}{n^2} x^n \) (其中 \( a > 0 \)) 的收敛半径为 \( \frac{1}{2} \)，求常数 \( a \)。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>系数为 \( \frac{a^n}{n^2} \)，使用根值法：</p>
+                    <div class="formula">
+                        \[ \lim_{n \to \infty} \sqrt[n]{\left|\frac{a^n}{n^2}\right|} = \lim_{n \to \infty} \frac{a}{\sqrt[n]{n^2}} = a \]
+                    </div>
+                    
+                    <p>因为 \( \lim_{n \to \infty} \sqrt[n]{n^2} = 1 \)</p>
+                    
+                    <p>所以 \( \frac{1}{R} = a \)，由题意 \( R = \frac{1}{2} \)</p>
+                    
+                    <p>因此 \( a = \frac{1}{R} = 2 \)</p>
+                </div>
+                
+                <div class="example">
+                    <h3>例题3：复杂系数的处理</h3>
+                    <p>求 \( \sum_{n=0}^{\infty} \frac{(-1)^n}{n!} x^n \) 的收敛域。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>1. 计算收敛半径：\( a_n = \frac{(-1)^n}{n!} \)</p>
+                    <div class="formula">
+                        \[ R = \lim_{n \to \infty} \left| \frac{a_n}{a_{n+1}} \right| = \lim_{n \to \infty} \frac{n!}{(n+1)!} \cdot \frac{(n+1)!}{n!} = \lim_{n \to \infty} (n+1) = +\infty \]
+                    </div>
+                    
+                    <p>2. 收敛半径为无穷大，因此对所有实数 \( x \) 都收敛。</p>
+                    
+                    <p><strong>收敛域：</strong>\( (-\infty, +\infty) \)</p>
+                    
+                    <p style="margin-top: 15px; font-style: italic;">
+                        注：这个级数实际上是 \( e^{-x} \) 的幂级数展开。
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 练习题部分 -->
+            <div class="section" id="exercise">
+                <div class="concept-box">
+                    <h2>🏃 交互式练习题</h2>
+                    <p>通过练习巩固收敛半径与收敛区间的计算方法</p>
+                </div>
+
+                <!-- 练习状态显示 -->
+                <div class="exercise-status">
+                    <div class="score-display">
+                        <span class="score-label">当前得分：</span>
+                        <span class="score-value" id="totalScore">0</span>
+                        <span class="score-total">/100</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <!-- 第一题 -->
+                <div class="interactive-question" data-question="1">
+                    <div class="question-header">
+                        <h3>题目 1 (20分)</h3>
+                        <div class="question-score" id="q1-score">未答题</div>
+                    </div>
+                    <div class="question-content">
+                        <p>幂级数 \( \sum_{n=1}^{\infty} \frac{(x-1)^n}{2^n} \) 的收敛区间为：</p>
+                        <div class="answer-options">
+                            <label><input type="radio" name="q1" value="A"> A. \( (-1, 1) \)</label>
+                            <label><input type="radio" name="q1" value="B"> B. \( (-2, 2) \)</label>
+                            <label><input type="radio" name="q1" value="C"> C. \( (-1, 3) \)</label>
+                            <label><input type="radio" name="q1" value="D"> D. \( (-3, 1) \)</label>
+                        </div>
+                        <button onclick="checkAnswer('1')" class="check-btn">提交答案</button>
+                        <div class="feedback" id="q1-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- 第二题 -->
+                <div class="interactive-question" data-question="2">
+                    <div class="question-header">
+                        <h3>题目 2 (20分)</h3>
+                        <div class="question-score" id="q2-score">未答题</div>
+                    </div>
+                    <div class="question-content">
+                        <p>幂级数 \( \sum_{n=1}^{\infty} \frac{(-1)^n}{n \cdot 3^n}(x-3)^n \) 的收敛域为：</p>
+                        <div class="answer-options">
+                            <label><input type="radio" name="q2" value="A"> A. \( (0, 6) \)</label>
+                            <label><input type="radio" name="q2" value="B"> B. \( [0, 6] \)</label>
+                            <label><input type="radio" name="q2" value="C"> C. \( [0, 6) \)</label>
+                            <label><input type="radio" name="q2" value="D"> D. \( (0, 6] \)</label>
+                        </div>
+                        <button onclick="checkAnswer('2')" class="check-btn">提交答案</button>
+                        <div class="feedback" id="q2-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- 第三题 -->
+                <div class="interactive-question" data-question="3">
+                    <div class="question-header">
+                        <h3>题目 3 (20分)</h3>
+                        <div class="question-score" id="q3-score">未答题</div>
+                    </div>
+                    <div class="question-content">
+                        <p>幂级数 \( \sum_{n=1}^{\infty} \frac{x^n}{n \cdot 2^n} \) 的收敛域为：</p>
+                        <div class="answer-options">
+                            <label><input type="radio" name="q3" value="A"> A. \( [-2, 2) \)</label>
+                            <label><input type="radio" name="q3" value="B"> B. \( (-2, 2) \)</label>
+                            <label><input type="radio" name="q3" value="C"> C. \( [-2, 2] \)</label>
+                            <label><input type="radio" name="q3" value="D"> D. \( (-∞, +∞) \)</label>
+                        </div>
+                        <button onclick="checkAnswer('3')" class="check-btn">提交答案</button>
+                        <div class="feedback" id="q3-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- 第四题 -->
+                <div class="interactive-question" data-question="4">
+                    <div class="question-header">
+                        <h3>题目 4 (20分)</h3>
+                        <div class="question-score" id="q4-score">未答题</div>
+                    </div>
+                    <div class="question-content">
+                        <p>若幂级数 \( \sum_{n=1}^{\infty} \frac{a^n}{n^2} x^n \) (其中 \( a > 0 \)) 的收敛半径为 \( \frac{1}{2} \)，则常数 \( a = \)：</p>
+                        <div class="answer-options">
+                            <label><input type="radio" name="q4" value="A"> A. \( \frac{1}{2} \)</label>
+                            <label><input type="radio" name="q4" value="B"> B. \( 1 \)</label>
+                            <label><input type="radio" name="q4" value="C"> C. \( 2 \)</label>
+                            <label><input type="radio" name="q4" value="D"> D. \( 4 \)</label>
+                        </div>
+                        <button onclick="checkAnswer('4')" class="check-btn">提交答案</button>
+                        <div class="feedback" id="q4-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- 第五题 -->
+                <div class="interactive-question" data-question="5">
+                    <div class="question-header">
+                        <h3>题目 5 (20分)</h3>
+                        <div class="question-score" id="q5-score">未答题</div>
+                    </div>
+                    <div class="question-content">
+                        <p>幂级数 \( \sum_{n=0}^{\infty} \frac{(-1)^n}{n} x^n \) 的收敛域为：</p>
+                        <div class="answer-options">
+                            <label><input type="radio" name="q5" value="A"> A. \( [-1, 1) \)</label>
+                            <label><input type="radio" name="q5" value="B"> B. \( (-1, 1] \)</label>
+                            <label><input type="radio" name="q5" value="C"> C. \( [-1, 1] \)</label>
+                            <label><input type="radio" name="q5" value="D"> D. \( (-1, 1) \)</label>
+                        </div>
+                        <button onclick="checkAnswer('5')" class="check-btn">提交答案</button>
+                        <div class="feedback" id="q5-feedback"></div>
+                    </div>
+                </div>
+
+                <!-- 重置按钮 -->
+                <div class="exercise-controls">
+                    <button onclick="resetAllAnswers()" class="reset-btn">重置所有答案</button>
+                    <button onclick="showAllHints()" class="hint-btn">显示所有提示</button>
+                </div>
+            </div>
+            
+            <!-- 可视化演示部分 -->
+            <div class="section" id="visualization">
+                <div class="concept-box">
+                    <h2>🎬 收敛性可视化演示</h2>
+                    <p>通过动态图形理解幂级数收敛半径和收敛区间的概念</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>幂级数收敛性演示</h3>
+                    <div class="math-display">
+                        \[ \sum_{n=0}^{\infty} a_n x^n \text{ 在不同 } x \text{ 值处的收敛性} \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="convergenceCanvas" class="series-animation"></canvas>
+                    </div>
+                    <div class="slider-container">
+                        <label for="series-type">选择幂级数类型:</label>
+                        <select id="series-type" onchange="changeSeries()">
+                            <option value="geometric">几何级数 ∑x^n</option>
+                            <option value="exponential">指数级数 ∑x^n/n!</option>
+                            <option value="rational">有理级数 ∑x^n/n</option>
+                            <option value="alternating">交错级数 ∑(-1)^n·x^n/n</option>
+                        </select>
+                    </div>
+                    <div class="slider-container">
+                        <label for="x-value">x 值: <span class="slider-value" id="x-value">0.5</span></label>
+                        <input type="range" id="x-value-slider" min="-3" max="3" step="0.1" value="0.5">
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startConvergenceAnimation()">开始演示</button>
+                        <button class="animation-btn" onclick="pauseConvergenceAnimation()">暂停</button>
+                        <button class="animation-btn" onclick="resetConvergenceAnimation()">重置</button>
+                    </div>
+                    <p>演示说明：观察在不同x值处级数部分和的变化，理解收敛半径的含义。</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>收敛半径计算过程演示</h3>
+                    <div class="math-display">
+                        \[ R = \lim_{n \to \infty} \left| \frac{a_n}{a_{n+1}} \right| \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="radiusCalculationCanvas" class="series-animation"></canvas>
+                    </div>
+                    <div class="slider-container">
+                        <label for="coeff-type">选择系数类型:</label>
+                        <select id="coeff-type" onchange="changeCoefficients()">
+                            <option value="simple">a_n = 1/2^n</option>
+                            <option value="factorial">a_n = 1/n!</option>
+                            <option value="polynomial">a_n = 1/n^2</option>
+                            <option value="mixed">a_n = n/3^n</option>
+                        </select>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startRadiusCalculation()">计算演示</button>
+                        <button class="animation-btn" onclick="resetRadiusCalculation()">重置</button>
+                    </div>
+                    <p>演示说明：展示比值法计算收敛半径的过程，观察比值序列的收敛性。</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 苏州经贸职业技术学院| 收敛区间与收敛半径专题</p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                enableMenu: false,
+                menuOptions: {
+                    settings: {
+                        texHints: true,
+                        semantics: false,
+                        zoom: 'NoZoom',
+                        zscale: '200%'
+                    }
+                }
+            },
+            chtml: {
+                displayAlign: 'left',
+                displayIndent: '0',
+                scale: 1,
+                minScale: 0.5,
+                maxScale: 2
+            }
+        };
+
+        // 主题切换功能
+        let currentTheme = 'light';
+
+        function initTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                currentTheme = 'dark';
+            }
+            applyTheme(currentTheme);
+        }
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = '浅色模式';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = '深色模式';
+            }
+            
+            // 重新绘制画布以适应主题
+            if (typeof redrawCanvases === 'function') {
+                redrawCanvases();
+            }
+        }
+
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
+
+        // 监听系统主题变化
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!currentTheme) {
+                    applyTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+
+            // 如果切换到可视化章节，初始化动画
+            if (sectionId === 'visualization') {
+                initVisualizations();
+            }
+
+            // 如果切换到收敛区间章节，初始化交互元素
+            if (sectionId === 'interval') {
+                initConvergenceDemo();
+            }
+        }
+
+        // 收敛区间可视化
+        let leftEndpointClosed = false;
+        let rightEndpointClosed = false;
+        let currentCenter = 0;
+
+        function initConvergenceDemo() {
+            const radiusSlider = document.getElementById('radius-slider');
+            const centerSlider = document.getElementById('center-slider');
+            
+            if (radiusSlider) {
+                radiusSlider.addEventListener('input', updateConvergenceVisualization);
+            }
+            
+            if (centerSlider) {
+                centerSlider.addEventListener('input', updateConvergenceVisualization);
+            }
+            
+            updateConvergenceVisualization();
+        }
+
+        function updateConvergenceVisualization() {
+            const radiusSlider = document.getElementById('radius-slider');
+            const centerSlider = document.getElementById('center-slider');
+            
+            if (!radiusSlider || !centerSlider) return;
+            
+            const radius = parseFloat(radiusSlider.value);
+            const center = parseFloat(centerSlider.value);
+            currentCenter = center;
+            
+            // 更新滑块值显示
+            document.getElementById('radius-value').textContent = radius;
+            document.getElementById('center-value').textContent = center;
+            
+            // 更新可视化
+            const interval = document.getElementById('conv-interval');
+            const leftPoint = document.getElementById('left-point');
+            const rightPoint = document.getElementById('right-point');
+            const leftLabel = document.getElementById('left-label');
+            const rightLabel = document.getElementById('right-label');
+            
+            // 计算位置（相对于数轴，考虑中心偏移）
+            const centerPercent = 50 + center * 5; // 中心位置，每单位5%
+            const radiusPercent = radius * 5; // 半径对应的百分比
+            
+            // 设置区间
+            interval.style.left = (centerPercent - radiusPercent) + '%';
+            interval.style.width = (2 * radiusPercent) + '%';
+            
+            // 设置端点
+            leftPoint.style.left = (centerPercent - radiusPercent - 1) + '%';
+            rightPoint.style.left = (centerPercent + radiusPercent - 1) + '%';
+            
+            // 更新标签
+            leftLabel.textContent = `${center - radius}`;
+            rightLabel.textContent = `${center + radius}`;
+            
+            // 更新端点样式
+            leftPoint.className = leftEndpointClosed ? 'point' : 'point open';
+            rightPoint.className = rightEndpointClosed ? 'point' : 'point open';
+        }
+
+        function toggleLeftEndpoint() {
+            leftEndpointClosed = !leftEndpointClosed;
+            updateConvergenceVisualization();
+        }
+
+        function toggleRightEndpoint() {
+            rightEndpointClosed = !rightEndpointClosed;
+            updateConvergenceVisualization();
+        }
+
+        // 可视化动画相关变量
+        let convergenceAnimationId;
+        let radiusCalculationId;
+        let currentSeriesType = 'geometric';
+        let currentCoeffType = 'simple';
+        let currentXValue = 0.5;
+
+        function initVisualizations() {
+            initConvergenceAnimation();
+            initRadiusCalculation();
+            
+            // 设置x值滑块监听器
+            const xSlider = document.getElementById('x-value-slider');
+            if (xSlider) {
+                xSlider.addEventListener('input', function() {
+                    currentXValue = parseFloat(this.value);
+                    document.getElementById('x-value').textContent = currentXValue;
+                });
+            }
+        }
+
+        function getThemeColors() {
+            const isDark = currentTheme === 'dark';
+            return {
+                axes: isDark ? '#e0e0e0' : '#333',
+                primary: isDark ? '#8b9ef3' : '#667eea',
+                secondary: isDark ? '#ff8b8b' : '#ff6b6b',
+                tertiary: isDark ? '#4fd1c7' : '#38d9a9',
+                fill: isDark ? 'rgba(139, 158, 243, 0.3)' : 'rgba(102, 126, 234, 0.3)',
+                background: isDark ? '#2a2a3e' : 'white',
+                text: isDark ? '#e0e0e0' : '#333',
+                grid: isDark ? '#3a3a4e' : '#e9ecef'
+            };
+        }
+
+        function initConvergenceAnimation() {
+            const canvas = document.getElementById('convergenceCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const colors = getThemeColors();
+
+            function drawAxes() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = colors.background;
+                ctx.fillRect(0, 0, width, height);
+                
+                ctx.beginPath();
+                ctx.strokeStyle = colors.axes;
+                ctx.lineWidth = 2;
+                
+                // X轴 (n)
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                
+                // Y轴 (部分和)
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                
+                ctx.stroke();
+                
+                // 标签
+                ctx.fillStyle = colors.text;
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('n', width - 20, height - margin + 20);
+                ctx.textAlign = 'right';
+                ctx.fillText('Sₙ', margin - 10, 20);
+            }
+
+            function getSeriesValue(n, x, type) {
+                switch(type) {
+                    case 'geometric':
+                        return Math.pow(x, n);
+                    case 'exponential':
+                        let factorial = 1;
+                        for(let i = 1; i <= n; i++) factorial *= i;
+                        return Math.pow(x, n) / factorial;
+                    case 'rational':
+                        return n === 0 ? 0 : Math.pow(x, n) / n;
+                    case 'alternating':
+                        return n === 0 ? 0 : Math.pow(-1, n) * Math.pow(x, n) / n;
+                    default:
+                        return Math.pow(x, n);
+                }
+            }
+
+            function getPartialSum(N, x, type) {
+                let sum = 0;
+                for(let n = 0; n <= N; n++) {
+                    sum += getSeriesValue(n, x, type);
+                }
+                return sum;
+            }
+
+            function drawPartialSums(N) {
+                drawAxes();
+                
+                const maxN = 30;
+                const x = currentXValue;
+                
+                // 计算合适的Y轴范围
+                let maxY = 5;
+                try {
+                    const testSum = getPartialSum(Math.min(N, maxN), x, currentSeriesType);
+                    maxY = Math.max(Math.abs(testSum) * 1.2, 2);
+                } catch(e) {
+                    maxY = 5;
+                }
+                
+                // 绘制部分和序列
+                ctx.beginPath();
+                ctx.strokeStyle = colors.primary;
+                ctx.lineWidth = 3;
+                
+                let lastY = height - margin;
+                for(let n = 0; n <= Math.min(N, maxN); n++) {
+                    try {
+                        const partialSum = getPartialSum(n, x, currentSeriesType);
+                        if (!isFinite(partialSum)) break;
+                        
+                        const px = margin + (n/maxN) * (width - 2*margin);
+                        const py = height - margin - (partialSum / maxY) * (height - 2*margin);
+                        
+                        if(n === 0) {
+                            ctx.moveTo(px, py);
+                        } else {
+                            ctx.lineTo(px, py);
+                        }
+                        lastY = py;
+                    } catch(e) {
+                        break;
+                    }
+                }
+                ctx.stroke();
+                
+                // 显示收敛信息
+                ctx.fillStyle = colors.text;
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'left';
+                
+                let convergenceText = '';
+                if (currentSeriesType === 'geometric') {
+                    convergenceText = Math.abs(x) < 1 ? `收敛到 ${(1/(1-x)).toFixed(3)}` : '发散';
+                } else if (currentSeriesType === 'exponential') {
+                    convergenceText = `收敛到 e^${x} ≈ ${Math.exp(x).toFixed(3)}`;
+                } else if (currentSeriesType === 'rational') {
+                    convergenceText = Math.abs(x) < 1 ? `收敛到 -ln(1-${x})` : '需检查';
+                }
+                
+                ctx.fillText(`x = ${x}, ${convergenceText}`, margin + 10, margin + 20);
+                ctx.fillText(`n = ${Math.min(N, maxN)}`, margin + 10, margin + 40);
+            }
+
+            window.startConvergenceAnimation = function() {
+                if(convergenceAnimationId) {
+                    clearInterval(convergenceAnimationId);
+                }
+                
+                let n = 0;
+                convergenceAnimationId = setInterval(() => {
+                    drawPartialSums(n);
+                    n += 1;
+                    if(n > 30) {
+                        clearInterval(convergenceAnimationId);
+                    }
+                }, 300);
+            };
+
+            window.pauseConvergenceAnimation = function() {
+                if(convergenceAnimationId) {
+                    clearInterval(convergenceAnimationId);
+                    convergenceAnimationId = null;
+                }
+            };
+
+            window.resetConvergenceAnimation = function() {
+                window.pauseConvergenceAnimation();
+                drawAxes();
+            };
+
+            drawAxes();
+        }
+
+        function initRadiusCalculation() {
+            const canvas = document.getElementById('radiusCalculationCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const colors = getThemeColors();
+
+            function getCoefficient(n, type) {
+                switch(type) {
+                    case 'simple':
+                        return 1 / Math.pow(2, n);
+                    case 'factorial':
+                        let factorial = 1;
+                        for(let i = 1; i <= n; i++) factorial *= i;
+                        return 1 / factorial;
+                    case 'polynomial':
+                        return 1 / (n * n);
+                    case 'mixed':
+                        return n / Math.pow(3, n);
+                    default:
+                        return 1 / Math.pow(2, n);
+                }
+            }
+
+            function getRatio(n, type) {
+                const an = getCoefficient(n, type);
+                const an1 = getCoefficient(n + 1, type);
+                return Math.abs(an / an1);
+            }
+
+            function drawCalculation(N) {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = colors.background;
+                ctx.fillRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = colors.axes;
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+                
+                const maxN = 20;
+                let maxRatio = 0;
+                
+                // 计算最大比值用于缩放
+                for(let n = 1; n <= maxN; n++) {
+                    try {
+                        const ratio = getRatio(n, currentCoeffType);
+                        if(isFinite(ratio)) {
+                            maxRatio = Math.max(maxRatio, ratio);
+                        }
+                    } catch(e) {
+                        // 忽略计算错误
+                    }
+                }
+                
+                if(maxRatio === 0) maxRatio = 5;
+                
+                // 绘制比值序列
+                ctx.beginPath();
+                ctx.strokeStyle = colors.primary;
+                ctx.lineWidth = 3;
+                
+                for(let n = 1; n <= Math.min(N, maxN); n++) {
+                    try {
+                        const ratio = getRatio(n, currentCoeffType);
+                        if(!isFinite(ratio)) break;
+                        
+                        const px = margin + (n/maxN) * (width - 2*margin);
+                        const py = height - margin - (ratio/maxRatio) * (height - 2*margin);
+                        
+                        if(n === 1) {
+                            ctx.moveTo(px, py);
+                        } else {
+                            ctx.lineTo(px, py);
+                        }
+                        
+                        // 绘制点
+                        ctx.beginPath();
+                        ctx.fillStyle = colors.secondary;
+                        ctx.arc(px, py, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.strokeStyle = colors.primary;
+                        ctx.lineWidth = 3;
+                        ctx.moveTo(px, py);
+                    } catch(e) {
+                        break;
+                    }
+                }
+                ctx.stroke();
+                
+                // 显示收敛半径
+                let theoreticalR = 0;
+                switch(currentCoeffType) {
+                    case 'simple': theoreticalR = 2; break;
+                    case 'factorial': theoreticalR = Infinity; break;
+                    case 'polynomial': theoreticalR = 1; break;
+                    case 'mixed': theoreticalR = 3; break;
+                }
+                
+                if(theoreticalR !== Infinity) {
+                    const y = height - margin - (theoreticalR/maxRatio) * (height - 2*margin);
+                    ctx.beginPath();
+                    ctx.strokeStyle = colors.tertiary;
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 5]);
+                    ctx.moveTo(margin, y);
+                    ctx.lineTo(width - margin, y);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+                
+                // 标签和说明
+                ctx.fillStyle = colors.text;
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('n', width - 20, height - margin + 20);
+                ctx.textAlign = 'right';
+                ctx.fillText('|aₙ/aₙ₊₁|', margin - 10, 20);
+                
+                ctx.textAlign = 'left';
+                ctx.font = '14px Arial';
+                ctx.fillText(`收敛半径 R = ${theoreticalR === Infinity ? '∞' : theoreticalR}`, margin + 10, margin + 20);
+                ctx.fillText(`计算到第 ${Math.min(N, maxN)} 项`, margin + 10, margin + 40);
+            }
+
+            window.startRadiusCalculation = function() {
+                if(radiusCalculationId) {
+                    clearInterval(radiusCalculationId);
+                }
+                
+                let n = 1;
+                radiusCalculationId = setInterval(() => {
+                    drawCalculation(n);
+                    n += 1;
+                    if(n > 20) {
+                        clearInterval(radiusCalculationId);
+                    }
+                }, 200);
+            };
+
+            window.resetRadiusCalculation = function() {
+                if(radiusCalculationId) {
+                    clearInterval(radiusCalculationId);
+                    radiusCalculationId = null;
+                }
+                drawCalculation(0);
+            };
+
+            drawCalculation(0);
+        }
+
+        function changeSeries() {
+            currentSeriesType = document.getElementById('series-type').value;
+            window.resetConvergenceAnimation();
+        }
+
+        function changeCoefficients() {
+            currentCoeffType = document.getElementById('coeff-type').value;
+            window.resetRadiusCalculation();
+        }
+
+        function redrawCanvases() {
+            const convergenceCanvas = document.getElementById('convergenceCanvas');
+            const radiusCanvas = document.getElementById('radiusCalculationCanvas');
+            
+            if (convergenceCanvas && convergenceCanvas.getContext) {
+                initConvergenceAnimation();
+            }
+            if (radiusCanvas && radiusCanvas.getContext) {
+                initRadiusCalculation();
+            }
+        }
+
+        // 交互式练习题功能
+        const exerciseData = {
+            totalScore: 0,
+            questionScores: {
+                '1': 0,
+                '2': 0,
+                '3': 0,
+                '4': 0,
+                '5': 0
+            },
+            maxScores: {
+                '1': 20,
+                '2': 20,
+                '3': 20,
+                '4': 20,
+                '5': 20
+            },
+            correctAnswers: {
+                '1': 'C',  // (-1, 3)
+                '2': 'D',  // (0, 6]
+                '3': 'A',  // [-2, 2)
+                '4': 'C',  // a = 2
+                '5': 'B'   // (-1, 1]
+            }
+        };
+
+        // 检查答案函数
+        function checkAnswer(questionId) {
+            const selectedOption = document.querySelector(`input[name="q${questionId}"]:checked`);
+            if (!selectedOption) {
+                showFeedback(`q${questionId}-feedback`, 'incorrect', '请选择一个答案！');
+                return;
+            }
+            
+            const userAnswer = selectedOption.value;
+            const correctAnswer = exerciseData.correctAnswers[questionId];
+            
+            if (userAnswer === correctAnswer) {
+                exerciseData.questionScores[questionId] = exerciseData.maxScores[questionId];
+                
+                let feedbackText = '';
+                switch(questionId) {
+                    case '1':
+                        feedbackText = '✅ 正确！收敛半径 R=2，中心 x₀=1，收敛区间为 |x-1|<2，即(-1,3)。';
+                        break;
+                    case '2':
+                        feedbackText = '✅ 正确！R=3，x=0处发散，x=6处条件收敛，收敛域为(0,6]。';
+                        break;
+                    case '3':
+                        feedbackText = '✅ 正确！R=2，x=-2处条件收敛，x=2处发散，收敛域为[-2,2)。';
+                        break;
+                    case '4':
+                        feedbackText = '✅ 正确！由根值法：\\( \\frac{1}{R} = a \\)，所以 \\( a = \\frac{1}{1/2} = 2 \\)。';
+                        break;
+                    case '5':
+                        feedbackText = '✅ 正确！R=1，x=-1处发散，x=1处条件收敛，收敛域为(-1,1]。';
+                        break;
+                }
+                
+                showFeedback(`q${questionId}-feedback`, 'correct', feedbackText);
+                updateQuestionScore(`q${questionId}-score`, 'correct', '20分');
+                
+                // 标记正确答案
+                const labels = document.querySelectorAll(`input[name="q${questionId}"]`);
+                labels.forEach(radio => {
+                    const label = radio.closest('label');
+                    if (radio.value === correctAnswer) {
+                        label.classList.add('correct');
+                    } else if (radio.checked) {
+                        label.classList.add('incorrect');
+                    }
+                });
+                
+            } else {
+                exerciseData.questionScores[questionId] = 0;
+                
+                let feedbackText = '';
+                switch(questionId) {
+                    case '1':
+                        feedbackText = '❌ 答案错误。提示：收敛半径R=2，中心在x=1处。';
+                        break;
+                    case '2':
+                        feedbackText = '❌ 答案错误。提示：需要检查端点x=0和x=6的收敛性。';
+                        break;
+                    case '3':
+                        feedbackText = '❌ 答案错误。提示：x=-2处级数为交错调和级数。';
+                        break;
+                    case '4':
+                        feedbackText = '❌ 答案错误。提示：用根值法，\\( \\frac{1}{R} = a \\)。';
+                        break;
+                    case '5':
+                        feedbackText = '❌ 答案错误。提示：注意n=0项的处理和端点判断。';
+                        break;
+                }
+                
+                showFeedback(`q${questionId}-feedback`, 'incorrect', feedbackText);
+                updateQuestionScore(`q${questionId}-score`, 'incorrect', '0分');
+                
+                // 标记答案
+                const labels = document.querySelectorAll(`input[name="q${questionId}"]`);
+                labels.forEach(radio => {
+                    const label = radio.closest('label');
+                    if (radio.value === correctAnswer) {
+                        label.classList.add('correct');
+                    } else if (radio.checked) {
+                        label.classList.add('incorrect');
+                    }
+                });
+            }
+            
+            updateTotalScore();
+        }
+
+        // 显示反馈信息
+        function showFeedback(elementId, type, message) {
+            const feedbackElement = document.getElementById(elementId);
+            feedbackElement.className = `feedback ${type} show`;
+            feedbackElement.innerHTML = message;
+            
+            // 如果消息包含LaTeX公式，重新渲染MathJax
+            if (message.includes('\\(') || message.includes('\\[')) {
+                if (typeof MathJax !== 'undefined') {
+                    MathJax.typesetPromise([feedbackElement]).then(() => {
+                        console.log('MathJax重新渲染完成');
+                    }).catch((err) => {
+                        console.error('MathJax渲染错误:', err);
+                    });
+                }
+            }
+        }
+
+        // 更新题目得分显示
+        function updateQuestionScore(elementId, type, score) {
+            const scoreElement = document.getElementById(elementId);
+            scoreElement.className = `question-score ${type}`;
+            scoreElement.textContent = score;
+        }
+
+        // 更新总分
+        function updateTotalScore() {
+            const total = Object.values(exerciseData.questionScores).reduce((sum, score) => sum + score, 0);
+            exerciseData.totalScore = total;
+            
+            document.getElementById('totalScore').textContent = Math.round(total);
+            
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${total}%`;
+            
+            // 更新进度条颜色
+            if (total >= 90) {
+                progressFill.style.background = 'linear-gradient(90deg, #28a745, #20c997)';
+            } else if (total >= 70) {
+                progressFill.style.background = 'linear-gradient(90deg, #ffc107, #fd7e14)';
+            } else {
+                progressFill.style.background = 'linear-gradient(90deg, var(--button-border), var(--primary-gradient-end))';
+            }
+        }
+
+        // 重置所有答案
+        function resetAllAnswers() {
+            // 重置得分
+            Object.keys(exerciseData.questionScores).forEach(key => {
+                exerciseData.questionScores[key] = 0;
+            });
+            
+            // 清除选择题
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 清除反馈
+            document.querySelectorAll('.feedback').forEach(feedback => {
+                feedback.className = 'feedback';
+                feedback.innerHTML = '';
+            });
+            
+            // 重置题目得分显示
+            document.querySelectorAll('.question-score').forEach(score => {
+                score.className = 'question-score';
+                score.textContent = '未答题';
+            });
+            
+            // 清除选择题标记
+            document.querySelectorAll('.answer-options label').forEach(label => {
+                label.classList.remove('correct', 'incorrect');
+            });
+            
+            updateTotalScore();
+        }
+
+        // 显示所有提示
+        function showAllHints() {
+            const hintMessages = {
+                'q1-feedback': '💡 提示：对于 \\( \\sum \\frac{(x-1)^n}{2^n} \\)，这是关于(x-1)的幂级数，收敛半径R=2，中心在x=1。',
+                'q2-feedback': '💡 提示：收敛半径R=3，需要分别检查端点x=0和x=6处的收敛性，注意交错级数的性质。',
+                'q3-feedback': '💡 提示：收敛半径R=2，在x=-2处为交错调和级数（条件收敛），在x=2处为调和级数（发散）。',
+                'q4-feedback': '💡 提示：使用根值法计算收敛半径，\\( \\frac{1}{R} = \\limsup \\sqrt[n]{|a_n|} = a \\)。',
+                'q5-feedback': '💡 提示：注意n=0项需要特殊处理，这实际上是从n=1开始的级数 \\( \\sum_{n=1}^{\\infty} \\frac{(-1)^n}{n} x^n \\)。'
+            };
+            
+            Object.entries(hintMessages).forEach(([id, message]) => {
+                const element = document.getElementById(id);
+                if (!element.classList.contains('show')) {
+                    showFeedback(id, 'partial', message);
+                }
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化主题
+            initTheme();
+            
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+            
+            // 初始化练习题
+            updateTotalScore();
+            
+            // 初始化收敛区间演示
+            initConvergenceDemo();
+        });
+    </script>
+</body>
+</html>

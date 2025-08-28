@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学课件 - [章节标题]</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Chart.js for Interactive Graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .graph-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .graph-container h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 40px;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高等数学 - 微积分基础</h1>
+            <div class="subtitle">第一章：极限与连续</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">引言</button>
+            <button onclick="showSection('concept')">核心概念</button>
+            <button onclick="showSection('theorem')">重要定理</button>
+            <button onclick="showSection('example')">例题解析</button>
+            <button onclick="showSection('graph')">图形演示</button>
+            <button onclick="showSection('exercise')">练习题</button>
+        </nav>
+        
+        <main>
+            <!-- 引言部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚 本章导读</h2>
+                    <p>极限是微积分的基础概念，它描述了当自变量趋近某个值时，函数值的变化趋势。本章将学习：</p>
+                    <ul style="margin: 20px 0; line-height: 2;">
+                        <li>数列极限的定义与性质</li>
+                        <li>函数极限的概念与计算方法</li>
+                        <li>无穷小与无穷大的比较</li>
+                        <li>函数的连续性与间断点</li>
+                    </ul>
+                </div>
+                
+                <div class="tip">
+                    学习建议：极限概念较为抽象，建议结合图形理解，多做练习题加深印象。
+                </div>
+            </div>
+            
+            <!-- 核心概念 -->
+            <div class="section" id="concept">
+                <div class="definition">
+                    <h3>定义 1.1：数列极限</h3>
+                    <p>设 {a<sub>n</sub>} 是一个数列，如果存在常数 A，使得对于任意给定的正数 ε，总存在正整数 N，当 n > N 时，恒有：</p>
+                    <div class="formula">
+                        \[|a_n - A| < \varepsilon\]
+                    </div>
+                    <p>则称常数 A 是数列 {a<sub>n</sub>} 的极限，记作：</p>
+                    <div class="formula">
+                        \[\lim_{n \to \infty} a_n = A\]
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.2：函数极限</h3>
+                    <p>设函数 f(x) 在点 x<sub>0</sub> 的某一去心邻域内有定义，如果存在常数 A，使得对于任意给定的正数 ε，总存在正数 δ，当 0 < |x - x<sub>0</sub>| < δ 时，恒有：</p>
+                    <div class="formula">
+                        \[|f(x) - A| < \varepsilon\]
+                    </div>
+                    <p>则称常数 A 是函数 f(x) 当 x 趋向于 x<sub>0</sub> 时的极限。</p>
+                </div>
+            </div>
+            
+            <!-- 重要定理 -->
+            <div class="section" id="theorem">
+                <div class="theorem">
+                    <h3>夹逼定理</h3>
+                    <p>如果数列 {x<sub>n</sub>}, {y<sub>n</sub>}, {z<sub>n</sub>} 满足：</p>
+                    <ol style="margin: 15px 0 15px 20px;">
+                        <li>从某项起，恒有 y<sub>n</sub> ≤ x<sub>n</sub> ≤ z<sub>n</sub></li>
+                        <li>lim y<sub>n</sub> = lim z<sub>n</sub> = a</li>
+                    </ol>
+                    <p>则 lim x<sub>n</sub> = a</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>两个重要极限</h3>
+                    <div class="formula">
+                        \[\lim_{x \to 0} \frac{\sin x}{x} = 1\]
+                    </div>
+                    <div class="formula">
+                        \[\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x = e\]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 例题解析 -->
+            <div class="section" id="example">
+                <div class="example">
+                    <h3>例 1：计算极限</h3>
+                    <p><strong>题目：</strong>计算 \(\lim_{x \to 0} \frac{\tan x - \sin x}{x^3}\)</p>
+                    <p><strong>解：</strong></p>
+                    <p>首先，我们将 tan x 和 sin x 展开：</p>
+                    <div class="formula">
+                        \[\tan x - \sin x = \sin x \left(\frac{1}{\cos x} - 1\right) = \sin x \cdot \frac{1 - \cos x}{\cos x}\]
+                    </div>
+                    <p>利用等价无穷小替换：当 x → 0 时：</p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>sin x ~ x</li>
+                        <li>1 - cos x ~ x²/2</li>
+                        <li>cos x → 1</li>
+                    </ul>
+                    <p>因此：</p>
+                    <div class="formula">
+                        \[\lim_{x \to 0} \frac{\tan x - \sin x}{x^3} = \lim_{x \to 0} \frac{x \cdot \frac{x^2/2}{1}}{x^3} = \frac{1}{2}\]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>例 2：证明数列收敛</h3>
+                    <p><strong>题目：</strong>证明数列 \(a_n = \frac{n^2 + 1}{n^2 + n + 1}\) 收敛并求其极限。</p>
+                    <p><strong>证明：</strong></p>
+                    <p>将分子分母同时除以 n²：</p>
+                    <div class="formula">
+                        \[a_n = \frac{1 + \frac{1}{n^2}}{1 + \frac{1}{n} + \frac{1}{n^2}}\]
+                    </div>
+                    <p>当 n → ∞ 时：</p>
+                    <div class="formula">
+                        \[\lim_{n \to \infty} a_n = \frac{1 + 0}{1 + 0 + 0} = 1\]
+                    </div>
+                    <p>因此数列收敛，极限为 1。</p>
+                </div>
+            </div>
+            
+            <!-- 图形演示 -->
+            <div class="section" id="graph">
+                <div class="graph-container">
+                    <h3>函数极限的几何意义</h3>
+                    <canvas id="limitGraph"></canvas>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h3>交互式演示：ε-δ 定义</h3>
+                    <div class="slider-container">
+                        <label>
+                            调整 ε 值：
+                            <span class="slider-value" id="epsilonValue">0.5</span>
+                        </label>
+                        <input type="range" id="epsilonSlider" min="0.1" max="1" step="0.1" value="0.5">
+                    </div>
+                    <div class="slider-container">
+                        <label>
+                            对应的 δ 值：
+                            <span class="slider-value" id="deltaValue">0.25</span>
+                        </label>
+                    </div>
+                    <canvas id="interactiveGraph"></canvas>
+                </div>
+            </div>
+            
+            <!-- 练习题 -->
+            <div class="section" id="exercise">
+                <div class="exercise">
+                    <h3>课后练习</h3>
+                    <ol>
+                        <li>
+                            计算下列极限：
+                            <div style="margin: 10px 0;">
+                                (a) \(\lim_{x \to 0} \frac{e^x - 1}{x}\)
+                            </div>
+                            <div style="margin: 10px 0;">
+                                (b) \(\lim_{x \to \infty} \frac{x^3 + 2x^2 - 1}{2x^3 - x + 3}\)
+                            </div>
+                        </li>
+                        <li>
+                            证明：如果 \(\lim_{n \to \infty} a_n = A\)，则 \(\lim_{n \to \infty} |a_n| = |A|\)
+                        </li>
+                        <li>
+                            判断函数 \(f(x) = \frac{x^2 - 4}{x - 2}\) 在 x = 2 处的连续性。
+                        </li>
+                        <li>
+                            利用夹逼定理证明：\(\lim_{n \to \infty} \frac{1}{n^2} + \frac{2}{n^2} + \cdots + \frac{n}{n^2} = \frac{1}{2}\)
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="tip">
+                    提示：第4题可以利用求和公式 1 + 2 + ... + n = n(n+1)/2
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 苏州经贸职业技术学院 | 高数专题</p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 如果是图形演示部分，绘制图形
+            if (sectionId === 'graph') {
+                drawLimitGraph();
+                drawInteractiveGraph();
+            }
+        }
+        
+        // 绘制极限图形
+        function drawLimitGraph() {
+            const canvas = document.getElementById('limitGraph');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 400;
+            
+            // 创建图表
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2],
+                    datasets: [{
+                        label: 'f(x) = sin(x)/x',
+                        data: [
+                            Math.sin(-2)/-2,
+                            Math.sin(-1.5)/-1.5,
+                            Math.sin(-1)/-1,
+                            Math.sin(-0.5)/-0.5,
+                            1, // 极限值
+                            Math.sin(0.5)/0.5,
+                            Math.sin(1)/1,
+                            Math.sin(1.5)/1.5,
+                            Math.sin(2)/2
+                        ],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'sin(x)/x 当 x→0 时的极限'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 绘制交互式图形
+        function drawInteractiveGraph() {
+            const canvas = document.getElementById('interactiveGraph');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 300;
+            
+            const epsilon = parseFloat(document.getElementById('epsilonSlider').value);
+            const delta = epsilon / 2;
+            
+            // 更新delta显示
+            document.getElementById('deltaValue').textContent = delta.toFixed(2);
+            
+            // 创建演示图
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'f(x) 在 x₀ 附近',
+                        data: generatePoints(),
+                        borderColor: '#667eea',
+                        backgroundColor: '#667eea',
+                        showLine: true,
+                        tension: 0.4
+                    }, {
+                        label: 'ε 范围',
+                        data: [
+                            {x: -2, y: 1 + epsilon},
+                            {x: 2, y: 1 + epsilon}
+                        ],
+                        borderColor: 'rgba(255, 0, 0, 0.5)',
+                        borderDash: [5, 5],
+                        showLine: true,
+                        pointRadius: 0
+                    }, {
+                        label: 'ε 范围下界',
+                        data: [
+                            {x: -2, y: 1 - epsilon},
+                            {x: 2, y: 1 - epsilon}
+                        ],
+                        borderColor: 'rgba(255, 0, 0, 0.5)',
+                        borderDash: [5, 5],
+                        showLine: true,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: -2,
+                            max: 2,
+                            title: {
+                                display: true,
+                                text: 'x'
+                            }
+                        },
+                        y: {
+                            min: 0,
+                            max: 2,
+                            title: {
+                                display: true,
+                                text: 'f(x)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 生成示例数据点
+        function generatePoints() {
+            const points = [];
+            for (let x = -2; x <= 2; x += 0.1) {
+                points.push({
+                    x: x,
+                    y: 1 + Math.sin(x * 2) * Math.exp(-x * x / 2) * 0.3
+                });
+            }
+            return points;
+        }
+        
+        // 监听滑块变化
+        document.getElementById('epsilonSlider').addEventListener('input', function(e) {
+            document.getElementById('epsilonValue').textContent = e.target.value;
+            drawInteractiveGraph();
+        });
+    </script>
+</body>
+</html>

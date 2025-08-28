@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学课件 - 定积分的几何意义</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .graph-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .graph-container h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 350px;
+            position: relative;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .integral-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .animation-btn:hover {
+            background: #5569c0;
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .geometry-explanation {
+            background: #e8f5e8;
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .geometry-explanation::before {
+            content: "几何意义";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #28a745;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .warning::before {
+            content: "⚠️ 注意";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffc107;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .animation-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高等数学 - 定积分的几何意义</h1>
+            <div class="subtitle">从黎曼和到面积计算的几何直观</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">基本概念</button>
+            <button onclick="showSection('geometry')">几何意义</button>
+            <button onclick="showSection('properties')">性质应用</button>
+            <button onclick="showSection('examples')">例题解析</button>
+            <button onclick="showSection('animation')">可视化演示</button>
+        </nav>
+        
+        <main>
+            <!-- 基本概念部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚 定积分的基本概念</h2>
+                    <p>定积分是通过极限过程定义的，它将曲线下的面积问题转化为数学分析问题。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.1：分割与黎曼和</h3>
+                    <p>设函数 \( f(x) \) 在区间 \([a,b]\) 上有界。对区间 \([a,b]\) 进行分割：</p>
+                    <div class="formula">
+                        \[ a = x_0 < x_1 < x_2 < \cdots < x_n = b \]
+                    </div>
+                    <p>在每个小区间 \([x_{i-1}, x_i]\) 上任取一点 \(\xi_i\)，则<strong>黎曼和</strong>定义为：</p>
+                    <div class="formula">
+                        \[ S = \sum_{i=1}^{n} f(\xi_i) \Delta x_i, \quad \Delta x_i = x_i - x_{i-1} \]
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.2：定积分</h3>
+                    <p>如果当分割的细度 \(\lambda = \max\{\Delta x_i\} \to 0\) 时，黎曼和的极限存在且与分割方式和 \(\xi_i\) 的选取无关，则称此极限为函数 \(f(x)\) 在 \([a,b]\) 上的<strong>定积分</strong>：</p>
+                    <div class="formula">
+                        \[ \int_a^b f(x) \mathrm{d}x = \lim_{\lambda \to 0} \sum_{i=1}^{n} f(\xi_i) \Delta x_i \]
+                    </div>
+                    <p>其中 \(a\) 称为积分下限，\(b\) 称为积分上限。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>定积分存在定理</h3>
+                    <p>如果函数 \(f(x)\) 在区间 \([a,b]\) 上连续，则定积分 \(\int_a^b f(x) \mathrm{d}x\) 存在。</p>
+                    <p><strong>推广：</strong>如果 \(f(x)\) 在 \([a,b]\) 上有界且只有有限个间断点，则定积分也存在。</p>
+                </div>
+                
+                <div class="geometry-explanation">
+                    <h3>定积分的直观理解</h3>
+                    <p>定积分可以理解为：</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>面积的精确值</strong>：曲线 \(y = f(x)\)、直线 \(x = a\)、\(x = b\) 和 \(x\) 轴所围成图形的面积</li>
+                        <li><strong>极限过程</strong>：无限细分区间，用矩形面积和逼近曲边图形面积</li>
+                        <li><strong>代数和</strong>：考虑 \(x\) 轴上方为正，下方为负的代数面积</li>
+                    </ul>
+                </div>
+                
+                <div class="tip">
+                    理解要点：定积分是通过"分割-近似-求和-取极限"的四步过程来精确计算曲边图形面积的数学方法。
+                </div>
+            </div>
+            
+            <!-- 几何意义部分 -->
+            <div class="section" id="geometry">
+                <div class="concept-box">
+                    <h2>🎯 定积分的几何意义</h2>
+                    <p>定积分的几何意义是其最直观和重要的解释，体现了数学分析与几何图形的完美结合。</p>
+                </div>
+                
+                <div class="geometry-explanation">
+                    <h3>1. 面积的几何意义</h3>
+                    <p>当 \(f(x) \geq 0\) 在 \([a,b]\) 上时：</p>
+                    <div class="formula">
+                        \[ \int_a^b f(x) \mathrm{d}x = \text{曲线} y = f(x) \text{与} x \text{轴在} [a,b] \text{上围成的面积} \]
+                    </div>
+                    <p><strong>几何解释：</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>定积分值等于曲边梯形的面积</li>
+                        <li>黎曼和对应于矩形面积的近似</li>
+                        <li>分割越细，近似越精确</li>
+                    </ul>
+                </div>
+                
+                <div class="warning">
+                    <h3>2. 有向面积（代数面积）</h3>
+                    <p>当函数 \(f(x)\) 在 \([a,b]\) 上有正有负时：</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>正面积</strong>：\(f(x) > 0\) 的部分，位于 \(x\) 轴上方</li>
+                        <li><strong>负面积</strong>：\(f(x) < 0\) 的部分，位于 \(x\) 轴下方</li>
+                        <li><strong>定积分值</strong> = 正面积 - 负面积（代数和）</li>
+                    </ul>
+                    <div class="formula">
+                        \[ \int_a^b f(x) \mathrm{d}x = S_+ - S_- \]
+                    </div>
+                    <p>其中 \(S_+\) 为正面积，\(S_-\) 为负面积的绝对值。</p>
+                </div>
+                
+                <div class="geometry-explanation">
+                    <h3>3. 黎曼和的几何意义</h3>
+                    <p>黎曼和 \(\sum_{i=1}^{n} f(\xi_i) \Delta x_i\) 的几何解释：</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>矩形近似</strong>：每一项 \(f(\xi_i) \Delta x_i\) 表示一个矩形的面积</li>
+                        <li><strong>底边</strong>：\(\Delta x_i\) 是矩形的宽度</li>
+                        <li><strong>高度</strong>：\(f(\xi_i)\) 是矩形的高度</li>
+                        <li><strong>总和</strong>：所有矩形面积之和近似曲边图形面积</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h3>几何意义示例</h3>
+                    <p><strong>例1：</strong>\(\int_0^2 x \mathrm{d}x = 2\)</p>
+                    <p>几何意义：直线 \(y = x\)、\(x\) 轴、\(x = 0\) 和 \(x = 2\) 围成的三角形面积为 \(\frac{1}{2} \times 2 \times 2 = 2\)。</p>
+                    
+                    <p><strong>例2：</strong>\(\int_{-1}^1 x \mathrm{d}x = 0\)</p>
+                    <p>几何意义：\(x\) 轴上方和下方的面积相等，代数和为零。</p>
+                </div>
+            </div>
+        
+            
+            <!-- 性质应用部分 -->
+            <div class="section" id="properties">
+                <div class="concept-box">
+                    <h2>🔧 定积分性质的几何意义</h2>
+                    <p>定积分的各种性质都有直观的几何解释，有助于深入理解积分概念。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>1. 线性性质</h3>
+                    <div class="formula">
+                        \[ \int_a^b [k_1f(x) + k_2g(x)] \mathrm{d}x = k_1\int_a^b f(x) \mathrm{d}x + k_2\int_a^b g(x) \mathrm{d}x \]
+                    </div>
+                    <p><strong>几何意义：</strong>面积的线性组合等于组合函数围成图形的面积。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>2. 区间可加性</h3>
+                    <div class="formula">
+                        \[ \int_a^b f(x) \mathrm{d}x = \int_a^c f(x) \mathrm{d}x + \int_c^b f(x) \mathrm{d}x \quad (a < c < b) \]
+                    </div>
+                    <p><strong>几何意义：</strong>总面积等于各部分面积之和，体现了面积的可加性。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>3. 保号性</h3>
+                    <p>若 \(f(x) \geq 0\) 在 \([a,b]\) 上，则 \(\int_a^b f(x) \mathrm{d}x \geq 0\)</p>
+                    <p><strong>几何意义：</strong>非负函数的积分非负，符合面积的非负性。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>4. 单调性</h3>
+                    <p>若 \(f(x) \leq g(x)\) 在 \([a,b]\) 上，则 \(\int_a^b f(x) \mathrm{d}x \leq \int_a^b g(x) \mathrm{d}x\)</p>
+                    <p><strong>几何意义：</strong>较低的曲线围成的面积较小。</p>
+                </div>
+                
+                <div class="geometry-explanation">
+                    <h3>5. 积分估值的几何意义</h3>
+                    <p>若 \(m \leq f(x) \leq M\) 在 \([a,b]\) 上，则</p>
+                    <div class="formula">
+                        \[ m(b-a) \leq \int_a^b f(x) \mathrm{d}x \leq M(b-a) \]
+                    </div>
+                    
+                    <p><strong>几何解释：</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>曲边图形面积被两个矩形面积夹逼</li>
+                        <li>下矩形面积：\(m(b-a)\)</li>
+                        <li>上矩形面积：\(M(b-a)\)</li>
+                        <li>真实面积在两者之间</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h3>性质应用示例</h3>
+                    <p><strong>例：</strong>估算 \(\int_1^2 \frac{1}{x} \mathrm{d}x\) 的值。</p>
+                    
+                    <p><strong>解：</strong>在 \([1,2]\) 上，\(\frac{1}{2} \leq \frac{1}{x} \leq 1\)</p>
+                    
+                    <p>由积分估值定理：</p>
+                    <div class="formula">
+                        \[ \frac{1}{2}(2-1) \leq \int_1^2 \frac{1}{x} \mathrm{d}x \leq 1(2-1) \]
+                    </div>
+                    <div class="formula">
+                        \[ \frac{1}{2} \leq \int_1^2 \frac{1}{x} \mathrm{d}x \leq 1 \]
+                    </div>
+                    
+                    <p><strong>几何意义：</strong>双曲线 \(y = \frac{1}{x}\) 在 \([1,2]\) 上与 \(x\) 轴围成的面积在 \(\frac{1}{2}\) 和 \(1\) 之间。</p>
+                </div>
+            </div>
+            
+            <!-- 例题解析部分 -->
+            <div class="section" id="examples">
+                <div class="example">
+                    <h3>例1：利用几何意义计算定积分</h3>
+                    <p>计算 \(\int_{-2}^2 \sqrt{4-x^2} \mathrm{d}x\)</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>函数 \(y = \sqrt{4-x^2}\) 表示上半圆，圆心在原点，半径为 2。</p>
+                    
+                    <p><strong>几何分析：</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>定义域：\(x^2 \leq 4\)，即 \(x \in [-2, 2]\)</li>
+                        <li>图形：上半圆弧与 \(x\) 轴围成的半圆</li>
+                        <li>面积：半圆面积 = \(\frac{1}{2}\pi r^2 = \frac{1}{2}\pi \times 2^2 = 2\pi\)</li>
+                    </ul>
+                    
+                    <p><strong>答案：</strong>\(\int_{-2}^2 \sqrt{4-x^2} \mathrm{d}x = 2\pi\)</p>
+                </div>
+                
+                <div class="example">
+                    <h3>例2：含有正负面积的积分</h3>
+                    <p>计算 \(\int_{-\pi}^{\pi} \sin x \mathrm{d}x\) 并解释其几何意义。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>1. 直接计算：</p>
+                    <div class="formula">
+                        \[ \int_{-\pi}^{\pi} \sin x \mathrm{d}x = [-\cos x]_{-\pi}^{\pi} = -\cos\pi - (-\cos(-\pi)) = -(-1) - (-(-1)) = 0 \]
+                    </div>
+                    
+                    <p>2. <strong>几何解释：</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>在 \([-\pi, 0]\) 上，\(\sin x \leq 0\)，产生负面积</li>
+                        <li>在 \([0, \pi]\) 上，\(\sin x \geq 0\)，产生正面积</li>
+                        <li>由于正弦函数的对称性，正负面积相等</li>
+                        <li>定积分值 = 正面积 - 负面积 = 0</li>
+                    </ul>
+                    
+                    <p><strong>注意：</strong>虽然积分值为0，但实际的总面积是 \(2 \times \int_0^{\pi} \sin x \mathrm{d}x = 4\)。</p>
+                </div>
+                
+                <div class="example">
+                    <h3>例3：分段函数的积分</h3>
+                    <p>设 \(f(x) = \begin{cases} x+1, & 0 \leq x \leq 1 \\ 2-x, & 1 < x \leq 2 \end{cases}\)，计算 \(\int_0^2 f(x) \mathrm{d}x\)。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>1. 分段计算：</p>
+                    <div class="formula">
+                        \begin{align}
+                        \int_0^2 f(x) \mathrm{d}x &= \int_0^1 (x+1) \mathrm{d}x + \int_1^2 (2-x) \mathrm{d}x \\
+                        &= \left[\frac{x^2}{2} + x\right]_0^1 + \left[2x - \frac{x^2}{2}\right]_1^2 \\
+                        &= \frac{3}{2} + \frac{3}{2} = 3
+                        \end{align}
+                    </div>
+                    
+                    <p>2. <strong>几何意义：</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>第一段：梯形面积，底边为1，两腰高为1和2</li>
+                        <li>第二段：三角形面积，底边为1，高为1</li>
+                        <li>总面积 = \(\frac{1+2}{2} \times 1 + \frac{1 \times 1}{2} = 1.5 + 1.5 = 3\)</li>
+                    </ul>
+                </div>
+                
+                <div class="example">
+                    <h3>例4：积分平均值的应用</h3>
+                    <p>求函数 \(f(x) = x^2\) 在区间 \([0, 3]\) 上的积分平均值。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>积分平均值公式：</p>
+                    <div class="formula">
+                        \[ \overline{f} = \frac{1}{b-a} \int_a^b f(x) \mathrm{d}x = \frac{1}{3-0} \int_0^3 x^2 \mathrm{d}x \]
+                    </div>
+                    
+                    <p>计算定积分：</p>
+                    <div class="formula">
+                        \[ \int_0^3 x^2 \mathrm{d}x = \left[\frac{x^3}{3}\right]_0^3 = 9 \]
+                    </div>
+                    
+                    <p>所以平均值为：</p>
+                    <div class="formula">
+                        \[ \overline{f} = \frac{9}{3} = 3 \]
+                    </div>
+                    
+                    <p><strong>几何意义：</strong>存在高度为3的矩形，其面积等于抛物线 \(y = x^2\) 与 \(x\) 轴在 \([0,3]\) 上围成的面积。</p>
+                </div>
+            </div>
+            
+            <!-- 可视化演示部分 -->
+            <div class="section" id="animation">
+                <div class="concept-box">
+                    <h2>🎬 定积分几何意义可视化</h2>
+                    <p>通过动画演示深入理解定积分的几何本质和计算过程</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>黎曼和逼近演示</h3>
+                    <div class="math-display">
+                        \[ \int_a^b f(x) dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(\xi_i) \Delta x_i \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="riemannCanvas" class="integral-animation"></canvas>
+                    </div>
+                    <div class="slider-container">
+                        <label for="nRectangles">矩形数量 n: <span id="nValue" class="slider-value">4</span></label>
+                        <input type="range" id="nRectangles" min="4" max="100" step="4" value="4" oninput="updateRiemann()">
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="animateRiemann()">动画演示</button>
+                        <button class="animation-btn" onclick="resetRiemann()">重置</button>
+                        <button class="animation-btn" onclick="toggleMethod()">切换方法</button>
+                    </div>
+                    <p>演示说明：观察随着矩形数量增加，黎曼和如何逼近定积分的精确值。可以切换左端点、右端点和中点法。</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>正负面积演示</h3>
+                    <div class="math-display">
+                        \[ \int_a^b f(x) dx = S_+ - S_- \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="signedAreaCanvas"></canvas>
+                    </div>
+                    <div class="slider-container">
+                        <label for="upperLimit">积分上限: <span id="limitValue" class="slider-value">π</span></label>
+                        <input type="range" id="upperLimit" min="1" max="20" step="1" value="10" oninput="updateSignedArea()">
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="showPositiveArea()">显示正面积</button>
+                        <button class="animation-btn" onclick="showNegativeArea()">显示负面积</button>
+                        <button class="animation-btn" onclick="showNetArea()">显示净面积</button>
+                    </div>
+                    <p>演示说明：展示函数在x轴上方和下方的面积如何影响定积分的值。正面积为绿色，负面积为红色。</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>积分中值定理演示</h3>
+                    <div class="math-display">
+                        \[ \int_a^b f(x) dx = f(\xi)(b-a) \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="meanValueCanvas"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="findMeanValue()">寻找平均值</button>
+                        <button class="animation-btn" onclick="showMeanRectangle()">显示等面积矩形</button>
+                        <button class="animation-btn" onclick="resetMeanValue()">重置</button>
+                    </div>
+                    <p>演示说明：演示积分中值定理，找到一个矩形使其面积等于曲边图形面积。</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 苏州经贸职业技术学院 | 定积分几何意义专题</p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+
+            // 如果切换到动画章节，初始化动画
+            if (sectionId === 'animation') {
+                initAnimations();
+            }
+        }
+
+        // 动画相关变量
+        let riemannAnimationId;
+        let areaAnimationId;
+        let currentMethod = 'left'; // 'left', 'right', 'middle'
+
+        // 初始化所有动画
+        function initAnimations() {
+            initRiemannAnimation();
+            initSignedAreaAnimation();
+            initMeanValueAnimation();
+            initAreaFunctionAnimation();
+        }
+
+        // 黎曼和动画
+        function initRiemannAnimation() {
+            const canvas = document.getElementById('riemannCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+
+            function f(x) {
+                return 0.5 * x * x + 0.5; // f(x) = 0.5x² + 0.5
+            }
+
+            function drawAxes() {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                
+                // X轴
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                
+                // Y轴
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+                
+                // 刻度标签
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('0', margin, height - margin + 15);
+                ctx.fillText('2', width - margin, height - margin + 15);
+                ctx.textAlign = 'right';
+                ctx.fillText('0', margin - 5, height - margin + 5);
+                ctx.fillText('2.5', margin - 5, margin + 5);
+            }
+
+            function drawFunction() {
+                // 绘制函数曲线 f(x) = 0.5x² + 0.5
+                ctx.beginPath();
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
+                
+                for (let x = 0; x <= 2; x += 0.05) {
+                    const px = margin + x * graphWidth / 2;
+                    const py = height - margin - f(x) * graphHeight / 2.5;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+            }
+
+            function drawRiemannSum(n) {
+                drawAxes();
+                drawFunction();
+                
+                const a = 0, b = 2;
+                const dx = (b - a) / n;
+                let sum = 0;
+                
+                // 绘制矩形
+                ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 1;
+                
+                for (let i = 0; i < n; i++) {
+                    const x_left = a + i * dx;
+                    const x_right = a + (i + 1) * dx;
+                    let xi;
+                    
+                    // 根据方法选择xi
+                    switch(currentMethod) {
+                        case 'left':
+                            xi = x_left;
+                            break;
+                        case 'right':
+                            xi = x_right;
+                            break;
+                        case 'middle':
+                            xi = (x_left + x_right) / 2;
+                            break;
+                    }
+                    
+                    const height_rect = f(xi);
+                    sum += height_rect * dx;
+                    
+                    // 绘制矩形
+                    const px_left = margin + x_left * graphWidth / 2;
+                    const px_right = margin + x_right * graphWidth / 2;
+                    const py_bottom = height - margin;
+                    const py_top = height - margin - height_rect * graphHeight / 2.5;
+                    
+                    ctx.fillRect(px_left, py_top, px_right - px_left, py_bottom - py_top);
+                    ctx.strokeRect(px_left, py_top, px_right - px_left, py_bottom - py_top);
+                }
+                
+                // 显示黎曼和值
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`黎曼和 ≈ ${sum.toFixed(4)}`, width / 2, 30);
+                ctx.fillText(`精确值 = ${(8/3).toFixed(4)}`, width / 2, 50);
+                ctx.fillText(`误差 = ${Math.abs(sum - 8/3).toFixed(4)}`, width / 2, 70);
+            }
+
+            window.updateRiemann = function() {
+                const slider = document.getElementById('nRectangles');
+                const valueDisplay = document.getElementById('nValue');
+                const n = parseInt(slider.value);
+                
+                valueDisplay.textContent = n;
+                drawRiemannSum(n);
+            };
+
+            window.animateRiemann = function() {
+                let n = 4;
+                const maxN = 100;
+                
+                function animate() {
+                    drawRiemannSum(n);
+                    n += 4;
+                    
+                    if (n <= maxN) {
+                        document.getElementById('nRectangles').value = n;
+                        document.getElementById('nValue').textContent = n;
+                        riemannAnimationId = setTimeout(animate, 300);
+                    }
+                }
+                animate();
+            };
+
+            window.resetRiemann = function() {
+                if (riemannAnimationId) {
+                    clearTimeout(riemannAnimationId);
+                }
+                document.getElementById('nRectangles').value = 4;
+                document.getElementById('nValue').textContent = '4';
+                drawRiemannSum(4);
+            };
+
+            window.toggleMethod = function() {
+                const methods = ['left', 'right', 'middle'];
+                const currentIndex = methods.indexOf(currentMethod);
+                currentMethod = methods[(currentIndex + 1) % methods.length];
+                
+                const n = parseInt(document.getElementById('nRectangles').value);
+                drawRiemannSum(n);
+                
+                // 更新按钮文本
+                const button = event.target;
+                const methodNames = {'left': '左端点法', 'right': '右端点法', 'middle': '中点法'};
+                button.textContent = `当前: ${methodNames[currentMethod]}`;
+            };
+
+            // 初始绘制
+            drawRiemannSum(4);
+        }
+
+        // 正负面积动画
+        function initSignedAreaAnimation() {
+            const canvas = document.getElementById('signedAreaCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+
+            function f(x) {
+                return Math.sin(x); // 正弦函数
+            }
+
+            function drawAxes() {
+                ctx.clearRect(0, 0, width, height);
+                
+                ctx.beginPath();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height / 2);
+                ctx.lineTo(width - margin, height / 2);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+                
+                // 标记π
+                const piX = margin + Math.PI * graphWidth / (2 * Math.PI);
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('π', piX, height / 2 + 20);
+                ctx.fillText('2π', width - margin, height / 2 + 20);
+            }
+
+            function drawFunction(upperLimit) {
+                drawAxes();
+                
+                // 绘制正弦函数
+                ctx.beginPath();
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
+                
+                for (let x = 0; x <= upperLimit; x += 0.05) {
+                    const px = margin + x * graphWidth / (2 * Math.PI);
+                    const py = height / 2 - f(x) * graphHeight / 4;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+            }
+
+            window.updateSignedArea = function() {
+                const slider = document.getElementById('upperLimit');
+                const valueDisplay = document.getElementById('limitValue');
+                const limit = slider.value * Math.PI / 10;
+                
+                valueDisplay.textContent = (limit / Math.PI).toFixed(1) + 'π';
+                drawFunction(limit);
+            };
+
+            window.showPositiveArea = function() {
+                const limit = document.getElementById('upperLimit').value * Math.PI / 10;
+                drawFunction(limit);
+                
+                // 填充正面积
+                ctx.fillStyle = 'rgba(40, 167, 69, 0.5)';
+                
+                for (let x = 0; x <= limit; x += 0.05) {
+                    if (f(x) > 0) {
+                        const px = margin + x * graphWidth / (2 * Math.PI);
+                        const py_top = height / 2 - f(x) * graphHeight / 4;
+                        const py_bottom = height / 2;
+                        
+                        ctx.fillRect(px, py_top, graphWidth / (2 * Math.PI) * 0.05, py_bottom - py_top);
+                    }
+                }
+            };
+
+            window.showNegativeArea = function() {
+                const limit = document.getElementById('upperLimit').value * Math.PI / 10;
+                drawFunction(limit);
+                
+                // 填充负面积
+                ctx.fillStyle = 'rgba(220, 53, 69, 0.5)';
+                
+                for (let x = 0; x <= limit; x += 0.05) {
+                    if (f(x) < 0) {
+                        const px = margin + x * graphWidth / (2 * Math.PI);
+                        const py_top = height / 2;
+                        const py_bottom = height / 2 - f(x) * graphHeight / 4;
+                        
+                        ctx.fillRect(px, py_top, graphWidth / (2 * Math.PI) * 0.05, py_bottom - py_top);
+                    }
+                }
+            };
+
+            window.showNetArea = function() {
+                showPositiveArea();
+                showNegativeArea();
+                
+                // 计算净面积
+                const limit = document.getElementById('upperLimit').value * Math.PI / 10;
+                const netArea = -Math.cos(limit) + 1;
+                
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`净面积 = ${netArea.toFixed(3)}`, width / 2, 30);
+            };
+
+            // 初始绘制
+            updateSignedArea();
+        }
+
+        // 积分中值定理动画
+        function initMeanValueAnimation() {
+            const canvas = document.getElementById('meanValueCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+
+            function f(x) {
+                return x * x + 1; // f(x) = x² + 1
+            }
+
+            function drawAxes() {
+                ctx.clearRect(0, 0, width, height);
+                
+                ctx.beginPath();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+            }
+
+            function drawFunction() {
+                // 绘制函数曲线
+                ctx.beginPath();
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
+                
+                for (let x = 0; x <= 2; x += 0.05) {
+                    const px = margin + x * graphWidth / 2;
+                    const py = height - margin - (f(x) - 1) * graphHeight / 4;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+            }
+
+            function drawArea() {
+                // 绘制曲线下面积
+                ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+                ctx.beginPath();
+                ctx.moveTo(margin, height - margin);
+                
+                for (let x = 0; x <= 2; x += 0.05) {
+                    const px = margin + x * graphWidth / 2;
+                    const py = height - margin - (f(x) - 1) * graphHeight / 4;
+                    ctx.lineTo(px, py);
+                }
+                
+                ctx.lineTo(width - margin, height - margin);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            window.findMeanValue = function() {
+                drawAxes();
+                drawFunction();
+                drawArea();
+                
+                // 计算积分值和平均值
+                const integral = 14/3; // ∫₀² (x² + 1) dx = [x³/3 + x]₀² = 8/3 + 2 = 14/3
+                const meanValue = integral / 2; // 平均值 = 积分值 / 区间长度
+                
+                // 绘制平均值线
+                const meanY = height - margin - (meanValue - 1) * graphHeight / 4;
+                ctx.beginPath();
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.moveTo(margin, meanY);
+                ctx.lineTo(width - margin, meanY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // 显示平均值
+                ctx.fillStyle = '#333';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`平均值 = ${meanValue.toFixed(3)}`, width / 2, 30);
+            };
+
+            window.showMeanRectangle = function() {
+                drawAxes();
+                drawFunction();
+                
+                const meanValue = 14/6; // 平均值
+                const meanY = height - margin - (meanValue - 1) * graphHeight / 4;
+                
+                // 绘制等面积矩形
+                ctx.fillStyle = 'rgba(255, 107, 107, 0.3)';
+                ctx.fillRect(margin, meanY, graphWidth, height - margin - meanY);
+                
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(margin, meanY, graphWidth, height - margin - meanY);
+                
+                ctx.fillStyle = '#333';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('等面积矩形', width / 2, 30);
+                ctx.fillText(`面积 = ${(14/3).toFixed(3)}`, width / 2, 50);
+            };
+
+            window.resetMeanValue = function() {
+                drawAxes();
+                drawFunction();
+            };
+
+            // 初始绘制
+            drawAxes();
+            drawFunction();
+        }
+
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学课件 - 函数的定义域与值域</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            /* 浅色主题变量 */
+            --primary-gradient-start: #667eea;
+            --primary-gradient-end: #764ba2;
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --main-bg: white;
+            --text-color: #333;
+            --text-color-light: #6c757d;
+            --nav-bg: #f8f9fa;
+            --nav-border: #e9ecef;
+            --button-border: #667eea;
+            --button-text: #667eea;
+            --button-hover-bg: #667eea;
+            --button-hover-text: white;
+            --concept-gradient-start: #f5f7fa;
+            --concept-gradient-end: #c3cfe2;
+            --definition-bg: white;
+            --definition-border: #667eea;
+            --theorem-bg: #fffbf0;
+            --theorem-border: #ffd700;
+            --example-bg: #f0f8ff;
+            --example-border: #4169e1;
+            --formula-bg: #f8f9fa;
+            --formula-border: #dee2e6;
+            --graph-bg: white;
+            --interactive-gradient-start: #e0c3fc;
+            --interactive-gradient-end: #8ec5fc;
+            --exercise-bg: #fff5f5;
+            --exercise-border: #ff6b6b;
+            --tip-bg: #d4edda;
+            --tip-border: #c3e6cb;
+            --animation-bg: #f8f9fa;
+            --canvas-axes: #333;
+            --shadow-color: rgba(0,0,0,0.3);
+            --shadow-light: rgba(0,0,0,0.1);
+            --shadow-lighter: rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] {
+            /* 深色主题变量 */
+            --primary-gradient-start: #8b9ef3;
+            --primary-gradient-end: #9d6fc9;
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #0f0f1e;
+            --main-bg: #1e1e2e;
+            --text-color: #e0e0e0;
+            --text-color-light: #a0a0a0;
+            --nav-bg: #2a2a3e;
+            --nav-border: #3a3a4e;
+            --button-border: #8b9ef3;
+            --button-text: #8b9ef3;
+            --button-hover-bg: #8b9ef3;
+            --button-hover-text: #1e1e2e;
+            --concept-gradient-start: #2a2a3e;
+            --concept-gradient-end: #323248;
+            --definition-bg: #2a2a3e;
+            --definition-border: #8b9ef3;
+            --theorem-bg: #3a3a2e;
+            --theorem-border: #ffd700;
+            --example-bg: #2a2e3a;
+            --example-border: #6189f1;
+            --formula-bg: #2a2a3e;
+            --formula-border: #3a3a4e;
+            --graph-bg: #2a2a3e;
+            --interactive-gradient-start: #3a2e4a;
+            --interactive-gradient-end: #2e3a4a;
+            --exercise-bg: #3a2a2a;
+            --exercise-border: #ff8b8b;
+            --tip-bg: #2a3a2e;
+            --tip-border: #4a5a4e;
+            --animation-bg: #2a2a3e;
+            --canvas-axes: #e0e0e0;
+            --shadow-color: rgba(0,0,0,0.5);
+            --shadow-light: rgba(0,0,0,0.3);
+            --shadow-lighter: rgba(0,0,0,0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--main-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow-color);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            color: white;
+            font-size: 16px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .theme-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(20deg);
+        }
+        
+        nav {
+            background: var(--nav-bg);
+            padding: 20px 40px;
+            border-bottom: 2px solid var(--nav-border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: var(--main-bg);
+            border: 2px solid var(--button-border);
+            border-radius: 25px;
+            color: var(--button-text);
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: var(--button-hover-bg);
+            color: var(--button-hover-text);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, var(--concept-gradient-start) 0%, var(--concept-gradient-end) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px var(--shadow-light);
+        }
+        
+        .concept-box h2 {
+            color: var(--button-border);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: var(--definition-bg);
+            border-left: 5px solid var(--definition-border);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px var(--shadow-lighter);
+        }
+        
+        .definition h3 {
+            color: var(--definition-border);
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: var(--theorem-bg);
+            border: 2px solid var(--theorem-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--theorem-border);
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: var(--example-bg);
+            border: 2px solid var(--example-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--example-border);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: var(--formula-bg);
+            border: 1px solid var(--formula-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+
+        /* 自定义滚动条样式 */
+        .formula::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .formula::-webkit-scrollbar-track {
+            background: var(--formula-border);
+            border-radius: 4px;
+        }
+
+        .formula::-webkit-scrollbar-thumb {
+            background: var(--button-border);
+            border-radius: 4px;
+        }
+
+        .formula::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gradient-end);
+        }
+
+        /* Firefox 滚动条样式 */
+        .formula {
+            scrollbar-width: thin;
+            scrollbar-color: var(--button-border) var(--formula-border);
+        }
+
+        /* 确保 MathJax 公式不被截断 */
+        .formula mjx-container {
+            display: inline-block !important;
+            max-width: none !important;
+        }
+        
+        .graph-container {
+            background: var(--graph-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px var(--shadow-light);
+        }
+        
+        .graph-container h3 {
+            color: var(--button-border);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, var(--interactive-gradient-start) 0%, var(--interactive-gradient-end) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: var(--formula-border);
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--button-border);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: var(--button-border);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: var(--exercise-bg);
+            border: 2px solid var(--exercise-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: var(--exercise-border);
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: var(--nav-bg);
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid var(--nav-border);
+            color: var(--text-color-light);
+        }
+        
+        .tip {
+            background: var(--tip-bg);
+            border: 1px solid var(--tip-border);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            background: var(--animation-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .integral-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: var(--button-border);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .animation-btn:hover {
+            background: var(--primary-gradient-end);
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        /* MathJax 深色主题适配 */
+        [data-theme="dark"] mjx-container {
+            color: #e0e0e0 !important;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .animation-container {
+                height: 200px;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .theme-icon {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高等数学 - 函数的定义域与值域</h1>
+            <div class="subtitle">函数分析的基础概念与求解方法</div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-icon" id="themeIcon">🌙</span>
+                <span id="themeText">深色模式</span>
+            </button>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">基本概念</button>
+            <button onclick="showSection('formula')">求解方法</button>
+            <button onclick="showSection('method')">特殊函数</button>
+            <button onclick="showSection('example')">例题解析</button>
+            <button onclick="showSection('exercise')">练习题</button>
+            <button onclick="showSection('animation')">动画演示</button>
+        </nav>
+        
+        <main>
+            <!-- 基本概念部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚 函数定义域与值域的基本概念</h2>
+                    <p>定义域和值域是函数的基本属性，决定了函数的适用范围和输出范围。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.1：函数的定义域</h3>
+                    <p>函数的定义域是自变量所有可取值的集合，通常表示为 \( D(f) \) 或 \( \text{dom}(f) \)。</p>
+                    <div class="formula">
+                        \[ D(f) = \{ x \mid f(x) \text{ 有定义} \} \]
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.2：函数的值域</h3>
+                    <p>函数的值域是函数所有可能取值的集合，通常表示为 \( R(f) \) 或 \( \text{ran}(f) \)。</p>
+                    <div class="formula">
+                        \[ R(f) = \{ y \mid y = f(x), x \in D(f) \} \]
+                    </div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>函数三要素</h3>
+                    <p>函数由以下三个要素完全确定：</p>
+                    <ol>
+                        <li>定义域 \( D(f) \)</li>
+                        <li>值域 \( R(f) \)</li>
+                        <li>对应法则 \( f \)</li>
+                    </ol>
+                    <p>这三个要素缺一不可，共同决定了一个完整的函数。</p>
+                </div>
+                
+                <div class="graph-container">
+                    <h3>定义域与值域图示</h3>
+                    <canvas id="domainRangeCanvas"></canvas>
+                </div>
+                
+                <div class="tip">
+                    理解要点：定义域是输入的范围，值域是输出的范围，两者共同描述了函数的基本特征。
+                </div>
+            </div>
+            
+            <!-- 求解方法部分 -->
+            <div class="section" id="formula">
+                <div class="concept-box">
+                    <h2>🔍 定义域与值域的求解方法</h2>
+                    <p>掌握不同类型函数定义域和值域的求解技巧是函数分析的基础。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义域求解原则</h3>
+                    <p>求定义域的基本原则：</p>
+                    <ul>
+                        <li>分母不能为零</li>
+                        <li>偶次方根的被开方数非负</li>
+                        <li>对数函数的真数大于零</li>
+                        <li>反三角函数有特定定义域</li>
+                        <li>实际应用问题要符合实际情况</li>
+                    </ul>
+                </div>
+                
+                <div class="definition">
+                    <h3>值域求解方法</h3>
+                    <p>求值域的常用方法：</p>
+                    <ol>
+                        <li>观察法：直接观察函数特征</li>
+                        <li>反函数法：求反函数的定义域</li>
+                        <li>配方法：二次函数配方</li>
+                        <li>判别式法：转化为二次方程</li>
+                        <li>导数法：通过单调性求极值</li>
+                        <li>不等式法：利用基本不等式</li>
+                    </ol>
+                </div>
+                
+                <div class="example">
+                    <h3>示例：求函数定义域</h3>
+                    <p>求函数 \( f(x) = \sqrt{\frac{x-1}{x^2-4}} + \ln(3-x) \) 的定义域：</p>
+                    <p><strong>解：</strong></p>
+                    <ol>
+                        <li>分母 \( x^2-4 \neq 0 \) ⇒ \( x \neq \pm 2 \)</li>
+                        <li>分式 \( \frac{x-1}{x^2-4} \geq 0 \) ⇒ 解不等式得 \( x \in (-\infty, -2) \cup [1, 2) \)</li>
+                        <li>对数 \( 3-x > 0 \) ⇒ \( x < 3 \)</li>
+                    </ol>
+                    <p>综合得：\( D(f) = (-\infty, -2) \cup [1, 2) \)</p>
+                </div>
+            </div>
+            
+            <!-- 特殊函数部分 -->
+            <div class="section" id="method">
+                <div class="concept-box">
+                    <h2>🔄 特殊函数的定义域与值域</h2>
+                    <p>复合函数、分段函数等特殊类型函数有其特定的定义域和值域求解方法。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>复合函数定义域</h3>
+                    <p>对于复合函数 \( f(g(x)) \)，定义域需满足：</p>
+                    <div class="formula">
+                        \[ D(f \circ g) = \{ x \mid x \in D(g) \text{ 且 } g(x) \in D(f) \} \]
+                    </div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>分段函数</h3>
+                    <p>分段函数的定义域是各段定义域的并集，值域是各段值域的并集。</p>
+                    <p>例如：</p>
+                    <div class="formula">
+                        \[ f(x) = \begin{cases} 
+                        x^2 + 1, & x < 0 \\
+                        2x - 1, & x \geq 0 
+                        \end{cases} \]
+                    </div>
+                    <p>定义域：\( (-\infty, +\infty) \)</p>
+                    <p>值域：\( [1, +\infty) \cup [-1, +\infty) = [-1, +\infty) \)</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>反函数关系</h3>
+                    <p>函数与其反函数的定义域和值域关系：</p>
+                    <div class="formula">
+                        \[ D(f) = R(f^{-1}), \quad R(f) = D(f^{-1}) \]
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    重要提示：求反函数定义域时，需先确定原函数的值域。
+                </div>
+            </div>
+            
+            <!-- 例题解析部分 -->
+            <div class="section" id="example">
+                <div class="example">
+                    <h3>例1：二次函数的值域</h3>
+                    <p>求函数 \( f(x) = -x^2 + 4x - 3 \) 在区间 \([0, 3]\) 上的值域。</p>
+                    <p><strong>解：</strong></p>
+                    <ol>
+                        <li>配方：\( f(x) = -(x^2 - 4x + 3) = -(x-1)(x-3) = -(x-2)^2 + 1 \)</li>
+                        <li>顶点：(2,1)，开口向下</li>
+                        <li>在区间 [0,3] 上：
+                            <ul>
+                                <li>最小值：端点 \( f(0) = -3 \), \( f(3) = 0 \)</li>
+                                <li>最大值：顶点 \( f(2) = 1 \)</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p>值域：\( [-3, 1] \)</p>
+                </div>
+                
+                <div class="example">
+                    <h3>例2：分式函数的值域</h3>
+                    <p>求函数 \( f(x) = \frac{2x+3}{x-1} \) 的值域。</p>
+                    <p><strong>解：</strong></p>
+                    <ol>
+                        <li>定义域：\( x \neq 1 \)</li>
+                        <li>分离常数：
+                            \[ f(x) = \frac{2(x-1) + 5}{x-1} = 2 + \frac{5}{x-1} \]
+                        </li>
+                        <li>当 \( x \to 1 \) 时，\( f(x) \to \pm \infty \)</li>
+                        <li>当 \( x \to \pm \infty \) 时，\( f(x) \to 2 \)</li>
+                        <li>值域：\( (-\infty, 2) \cup (2, +\infty) \)</li>
+                    </ol>
+                    <p>验证：设 \( y = \frac{2x+3}{x-1} \)，解得 \( x = \frac{y+3}{y-2} \)，故 \( y \neq 2 \)</p>
+                </div>
+            </div>
+            
+            <!-- 练习题部分 -->
+            <div class="section" id="exercise">
+                <div class="exercise">
+                    <h3>定义域与值域练习题</h3>
+                    <ol>
+                        <li>
+                            求下列函数的定义域：
+                            <div style="margin: 10px 0;">
+                                (a) \( f(x) = \sqrt{4-x^2} + \frac{1}{\ln(x-1)} \)
+                            </div>
+                            <div style="margin: 10px 0;">
+                                (b) \( f(x) = \arcsin\left(\frac{x-1}{2}\right) + \sqrt{9-x^2} \)
+                            </div>
+                        </li>
+                        <li>
+                            求下列函数的值域：
+                            <div style="margin: 10px 0;">
+                                (a) \( f(x) = \frac{x^2 + 1}{x^2 - x + 1} \)
+                            </div>
+                            <div style="margin: 10px 0;">
+                                (b) \( f(x) = 2\sin x - \cos 2x \)
+                            </div>
+                        </li>
+                        <li>
+                            设函数 \( f(x) = \begin{cases} 
+                            x+1, & x < 0 \\
+                            x^2, & 0 \leq x < 2 \\
+                            4, & x \geq 2 
+                            \end{cases} \)，求其定义域和值域
+                        </li>
+                        <li>
+                            若函数 \( f(x) = \sqrt{ax^2 + 4x + 3} \) 的定义域为全体实数，求参数 \( a \) 的范围
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="tip">
+                    提示：第1题注意对数函数和根号函数的限制条件；第2题(a)可使用判别式法，(b)可化为三角函数形式。
+                </div>
+                
+                <div class="exercise">
+                    <h3>参考答案</h3>
+                    <ol>
+                        <li>
+                            (a) \( (1,2) \) <br>
+                            (b) \( [-1,3] \)
+                        </li>
+                        <li>
+                            (a) \( \left[\frac{2}{3}, 2\right] \) <br>
+                            (b) \( [-3, \frac{9}{8}] \)
+                        </li>
+                        <li>定义域：\( \mathbb{R} \)，值域：\( (-\infty, 1) \cup [0,4] \)</li>
+                        <li>\( a \geq \frac{4}{3} \)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- 动画演示部分 -->
+            <div class="section" id="animation">
+                <div class="concept-box">
+                    <h2>🎬 定义域与值域动画演示</h2>
+                    <p>通过动画直观理解定义域与值域的概念</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>函数定义域与值域可视化</h3>
+                    <div class="math-display">
+                        \[ f(x) = x^2 - 4x + 3 \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="quadraticCanvas" class="integral-animation"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startQuadraticAnimation()">开始演示</button>
+                        <button class="animation-btn" onclick="resetQuadraticAnimation()">重置</button>
+                    </div>
+                    <p>演示说明：动画展示了二次函数定义域和值域的求解过程。</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>复合函数定义域可视化</h3>
+                    <div class="math-display">
+                        \[ f(x) = \ln(\sqrt{4-x^2}) \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="compositeCanvas" class="integral-animation"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startCompositeAnimation()">开始演示</button>
+                        <button class="animation-btn" onclick="pauseCompositeAnimation()">暂停</button>
+                    </div>
+                    <p>演示说明：动画展示了复合函数定义域的求解过程。</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 苏州经贸职业技术学院 | 函数的定义域与值域专题</p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+
+        // 主题切换功能
+        let currentTheme = 'light';
+
+        function initTheme() {
+            // 尝试从存储中获取主题偏好（在实际环境中使用）
+            // const savedTheme = localStorage.getItem('theme');
+            // if (savedTheme) {
+            //     currentTheme = savedTheme;
+            // }
+            
+            // 检查系统主题偏好
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                currentTheme = 'dark';
+            }
+            
+            applyTheme(currentTheme);
+        }
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = '浅色模式';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = '深色模式';
+            }
+            
+            // 重新渲染画布以适应主题
+            if (typeof redrawCanvases === 'function') {
+                redrawCanvases();
+            }
+            
+            // 尝试保存主题偏好（在实际环境中使用）
+            // try {
+            //     localStorage.setItem('theme', theme);
+            // } catch (e) {
+            //     console.log('Unable to save theme preference');
+            // }
+        }
+
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
+
+        // 监听系统主题变化
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!currentTheme) {  // 只有在用户没有手动设置时才响应系统变化
+                    applyTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+
+            // 如果切换到动画章节，初始化动画
+            if (sectionId === 'animation') {
+                initAnimations();
+            }
+        }
+
+        // 绘制定义域与值域示意图
+        function drawDomainRangeDiagram() {
+            const canvas = document.getElementById('domainRangeCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+            const colors = getThemeColors();
+
+            // 设置背景
+            ctx.fillStyle = colors.background;
+            ctx.fillRect(0, 0, width, height);
+            
+            // 绘制坐标轴
+            ctx.beginPath();
+            ctx.strokeStyle = colors.axes;
+            ctx.lineWidth = 2;
+            
+            // X轴
+            ctx.moveTo(margin, height - margin);
+            ctx.lineTo(width - margin, height - margin);
+            
+            // Y轴
+            ctx.moveTo(margin, margin);
+            ctx.lineTo(margin, height - margin);
+            ctx.stroke();
+            
+            // 绘制函数曲线 y = x^2
+            ctx.beginPath();
+            ctx.strokeStyle = colors.primary;
+            ctx.lineWidth = 3;
+            
+            for (let x = -2; x <= 2; x += 0.1) {
+                const px = margin + (x + 2) * graphWidth / 4;
+                const py = height - margin - (x*x) * graphHeight / 4;
+                
+                if (x === -2) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+            
+            // 绘制定义域 [-1,1]
+            ctx.beginPath();
+            ctx.strokeStyle = colors.secondary;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 3]);
+            ctx.moveTo(margin + (1) * graphWidth / 4, height - margin);
+            ctx.lineTo(margin + (1) * graphWidth / 4, margin);
+            ctx.moveTo(margin + (3) * graphWidth / 4, height - margin);
+            ctx.lineTo(margin + (3) * graphWidth / 4, margin);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // 绘制值域 [0,1]
+            ctx.beginPath();
+            ctx.strokeStyle = '#00aa00';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 3]);
+            ctx.moveTo(margin, height - margin - (0) * graphHeight / 4);
+            ctx.lineTo(width - margin, height - margin - (0) * graphHeight / 4);
+            ctx.moveTo(margin, height - margin - (1) * graphHeight / 4);
+            ctx.lineTo(width - margin, height - margin - (1) * graphHeight / 4);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // 填充定义域区域
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+            ctx.fillRect(margin + (1) * graphWidth / 4, height - margin, 
+                         (3 - 1) * graphWidth / 4, -graphHeight);
+            
+            // 填充值域区域
+            ctx.fillStyle = 'rgba(0, 170, 0, 0.2)';
+            ctx.fillRect(margin, height - margin - (1) * graphHeight / 4, 
+                         graphWidth, (1 - 0) * graphHeight / 4);
+            
+            // 添加标签
+            ctx.fillStyle = colors.text;
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            
+            // 定义域标签
+            ctx.fillText('定义域', margin + graphWidth / 2, height - margin + 20);
+            ctx.fillText('[-1,1]', margin + graphWidth / 2, height - margin + 40);
+            
+            // 值域标签
+            ctx.save();
+            ctx.translate(margin - 20, height - margin - graphHeight / 8);
+            ctx.rotate(-Math.PI/2);
+            ctx.fillText('值域 [0,1]', 0, 0);
+            ctx.restore();
+            
+            // 坐标轴标签
+            ctx.fillText('x', width - margin + 10, height - margin);
+            ctx.fillText('y', margin, margin - 10);
+        }
+
+        // 获取当前主题的颜色
+        function getThemeColors() {
+            const isDark = currentTheme === 'dark';
+            return {
+                axes: isDark ? '#e0e0e0' : '#333',
+                primary: isDark ? '#8b9ef3' : '#667eea',
+                secondary: isDark ? '#ff8b8b' : '#ff6b6b',
+                fill: isDark ? 'rgba(139, 158, 243, 0.3)' : 'rgba(102, 126, 234, 0.3)',
+                background: isDark ? '#2a2a3e' : 'white',
+                text: isDark ? '#e0e0e0' : '#333'
+            };
+        }
+
+        // 二次函数动画
+        function initQuadraticAnimation() {
+            const canvas = document.getElementById('quadraticCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+            const colors = getThemeColors();
+
+            let quadraticAnimationId = null;
+            let quadraticStartTime = null;
+
+            function drawQuadratic(progress) {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 设置背景
+                ctx.fillStyle = colors.background;
+                ctx.fillRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = colors.axes;
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+
+                // 绘制函数曲线 f(x) = x^2 - 4x + 3
+                ctx.beginPath();
+                ctx.strokeStyle = colors.primary;
+                ctx.lineWidth = 3;
+                
+                const maxX = 1 + progress * 3; // 从x=1到x=4
+                
+                for (let x = 0; x <= maxX; x += 0.1) {
+                    const px = margin + x * graphWidth / 5;
+                    const py = height - margin - (x*x - 4*x + 3) * graphHeight / 8;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+                
+                // 显示顶点
+                if (progress > 0.3) {
+                    const vertexX = 2;
+                    const vertexY = -1;
+                    const px = margin + vertexX * graphWidth / 5;
+                    const py = height - margin - vertexY * graphHeight / 8;
+                    
+                    ctx.beginPath();
+                    ctx.fillStyle = colors.secondary;
+                    ctx.arc(px, py, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // 绘制值域范围
+                    if (progress > 0.6) {
+                        ctx.strokeStyle = '#00aa00';
+                        ctx.lineWidth = 2;
+                        ctx.setLineDash([5, 3]);
+                        ctx.beginPath();
+                        ctx.moveTo(margin, py);
+                        ctx.lineTo(px, py);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                        
+                        ctx.fillStyle = '#00aa00';
+                        ctx.fillText('最小值', px - 20, py - 15);
+                    }
+                }
+                
+                // 绘制定义域
+                if (progress > 0.4) {
+                    const domainStart = 1;
+                    const domainEnd = 3;
+                    const startPx = margin + domainStart * graphWidth / 5;
+                    const endPx = margin + domainEnd * graphWidth / 5;
+                    
+                    // 绘制定义域区域
+                    ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+                    ctx.fillRect(startPx, height - margin, endPx - startPx, -graphHeight);
+                    
+                    // 绘制定义域边界
+                    ctx.strokeStyle = colors.secondary;
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(startPx, height - margin);
+                    ctx.lineTo(startPx, margin);
+                    ctx.moveTo(endPx, height - margin);
+                    ctx.lineTo(endPx, margin);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    
+                    if (progress > 0.7) {
+                        ctx.fillStyle = colors.secondary;
+                        ctx.textAlign = 'center';
+                        ctx.fillText(`定义域: [${domainStart}, ${domainEnd}]`, margin + graphWidth / 2, height - margin + 30);
+                    }
+                }
+                
+                // 显示值域
+                if (progress > 0.8) {
+                    ctx.fillStyle = '#00aa00';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('值域: [-1, 3]', margin + graphWidth / 2, margin - 10);
+                }
+            }
+
+            function animateQuadratic(timestamp) {
+                if (!quadraticStartTime) quadraticStartTime = timestamp;
+                const elapsed = timestamp - quadraticStartTime;
+                const duration = 5000;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                drawQuadratic(progress);
+                
+                if (progress < 1) {
+                    quadraticAnimationId = requestAnimationFrame(animateQuadratic);
+                }
+            }
+
+            window.startQuadraticAnimation = function() {
+                if (quadraticAnimationId) {
+                    cancelAnimationFrame(quadraticAnimationId);
+                }
+                quadraticStartTime = null;
+                quadraticAnimationId = requestAnimationFrame(animateQuadratic);
+            };
+
+            window.resetQuadraticAnimation = function() {
+                if (quadraticAnimationId) {
+                    cancelAnimationFrame(quadraticAnimationId);
+                    quadraticAnimationId = null;
+                }
+                
+                // 绘制空坐标轴
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = colors.background;
+                ctx.fillRect(0, 0, width, height);
+                
+                ctx.beginPath();
+                ctx.strokeStyle = colors.axes;
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+            };
+
+            // 初始绘制
+            resetQuadraticAnimation();
+        }
+
+        // 复合函数动画
+        function initCompositeAnimation() {
+            const canvas = document.getElementById('compositeCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+            const colors = getThemeColors();
+
+            let compositeAnimationId = null;
+            let compositeStartTime = null;
+
+            function drawComposite(progress) {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 设置背景
+                ctx.fillStyle = colors.background;
+                ctx.fillRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = colors.axes;
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+
+                // 绘制定义域限制
+                const step = Math.min(progress * 3, 1);
+                
+                // 步骤1：内层函数 √(4-x²) 的限制
+                if (step >= 0.3) {
+                    ctx.strokeStyle = colors.secondary;
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 3]);
+                    
+                    // 绘制圆 x² + y² = 4
+                    const centerX = margin + graphWidth / 2;
+                    const centerY = height - margin;
+                    const radius = graphWidth / 4;
+                    
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, Math.PI, 0);
+                    ctx.stroke();
+                    
+                    // 填充定义域区域 [-2,2]
+                    ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+                    ctx.fillRect(margin, height - margin, graphWidth, -radius);
+                    
+                    if (step >= 0.6) {
+                        ctx.fillStyle = colors.secondary;
+                        ctx.textAlign = 'center';
+                        ctx.fillText('内层定义域: [-2, 2]', margin + graphWidth / 2, height - margin + 30);
+                    }
+                }
+                
+                // 步骤2：外层函数 ln(u) 的限制
+                if (step >= 1.0) {
+                    ctx.strokeStyle = '#00aa00';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 3]);
+                    
+                    // 绘制水平线 u > 0
+                    const u0 = height - margin - radius / 2;
+                    ctx.beginPath();
+                    ctx.moveTo(margin, u0);
+                    ctx.lineTo(width - margin, u0);
+                    ctx.stroke();
+                    
+                    // 填充值域区域 (0, ∞)
+                    ctx.fillStyle = 'rgba(0, 170, 0, 0.2)';
+                    ctx.fillRect(margin, u0, graphWidth, -(graphHeight - margin - u0));
+                    
+                    ctx.fillStyle = '#00aa00';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('外层定义域: u > 0', margin + graphWidth / 2, u0 - 10);
+                }
+                
+                // 步骤3：复合函数定义域
+                if (step >= 1.5) {
+                    // 计算复合函数的定义域：4-x² > 0 ⇒ -2 < x < 2
+                    // 同时 u = √(4-x²) > 0 是自动满足的
+                    ctx.fillStyle = 'rgba(139, 92, 246, 0.3)';
+                    ctx.beginPath();
+                    ctx.moveTo(margin, height - margin);
+                    ctx.lineTo(margin + graphWidth / 2, height - margin - radius);
+                    ctx.lineTo(margin + graphWidth, height - margin);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#8b5cf6';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('复合函数定义域: (-2, 2)', margin + graphWidth / 2, height - margin - radius - 10);
+                }
+                
+                // 显示当前步骤说明
+                ctx.fillStyle = colors.text;
+                ctx.textAlign = 'center';
+                
+                if (step < 0.3) {
+                    ctx.fillText('分析复合函数: f(x) = ln(√(4-x²))', width/2, margin + 10);
+                } else if (step < 1.0) {
+                    ctx.fillText('步骤1: 内层函数 √(4-x²) 要求 4-x² ≥ 0', width/2, margin + 10);
+                } else if (step < 1.5) {
+                    ctx.fillText('步骤2: 外层函数 ln(u) 要求 u > 0', width/2, margin + 10);
+                } else {
+                    ctx.fillText('步骤3: 复合函数定义域是两者的交集', width/2, margin + 10);
+                }
+            }
+
+            function animateComposite(timestamp) {
+                if (!compositeStartTime) compositeStartTime = timestamp;
+                const elapsed = timestamp - compositeStartTime;
+                const progress = elapsed / 1000; // 每秒一个步骤
+                
+                drawComposite(progress);
+                
+                if (progress < 2.0) {
+                    compositeAnimationId = requestAnimationFrame(animateComposite);
+                }
+            }
+
+            window.startCompositeAnimation = function() {
+                if (compositeAnimationId) {
+                    cancelAnimationFrame(compositeAnimationId);
+                }
+                compositeStartTime = null;
+                compositeAnimationId = requestAnimationFrame(animateComposite);
+            };
+
+            window.pauseCompositeAnimation = function() {
+                if (compositeAnimationId) {
+                    cancelAnimationFrame(compositeAnimationId);
+                    compositeAnimationId = null;
+                }
+            };
+
+            // 初始绘制
+            drawComposite(0);
+        }
+
+        // 重新绘制所有画布（主题切换时调用）
+        function redrawCanvases() {
+            drawDomainRangeDiagram();
+            if (typeof initQuadraticAnimation === 'function') {
+                initQuadraticAnimation();
+            }
+            if (typeof initCompositeAnimation === 'function') {
+                initCompositeAnimation();
+            }
+        }
+
+        // 初始化所有动画
+        function initAnimations() {
+            initQuadraticAnimation();
+            initCompositeAnimation();
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化主题
+            initTheme();
+            
+            // 初始化定义域值域示意图
+            drawDomainRangeDiagram();
+            
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

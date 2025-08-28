@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微积分导论 - 面积与切线问题</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .graph-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .graph-container h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .integral-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .animation-btn:hover {
+            background: #5569c0;
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .animation-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>微积分导论 - 面积与切线问题</h1>
+            <div class="subtitle">微积分的核心概念与历史发展</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">基本概念</button>
+            <button onclick="showSection('area')">面积问题</button>
+            <button onclick="showSection('tangent')">切线问题</button>
+            <button onclick="showSection('relation')">两者关系</button>
+            <button onclick="showSection('application')">应用实例</button>
+            <button onclick="showSection('animation')">动画演示</button>
+        </nav>
+        
+        <main>
+            <!-- 基本概念部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚 微积分的基本概念</h2>
+                    <p>微积分与你以前学习过的数学知识有根本的不同：相比之下，微积分不是静态的，而是动态的。它与变化和运动有关，处理了数学量之间的趋近关系。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>什么是微积分</h3>
+                    <p>我们周围的世界正在连续地发生变化：人口增加、咖啡变凉、石块下落、化学物质相互反应、货币价值波动等。微积分能够分析这些连续变化的量或过程。</p>
+                    <p>微积分建立在代数和解析几何的基础上，但极大地推进了这些领域的发展。它的应用几乎延伸到人类活动的任何领域。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>微积分的核心问题</h3>
+                    <p>微积分的核心是涉及函数图像的两个关键问题：</p>
+                    <ol>
+                        <li>面积问题 - 如何计算曲边图形的面积</li>
+                        <li>切线问题 - 如何求曲线上某点的切线斜率</li>
+                    </ol>
+                    <p>这两个问题看似不同，但通过微积分基本定理建立了深刻的联系。</p>
+                </div>
+                
+                <div class="tip">
+                    理解要点：微积分是研究变化和运动的数学工具，通过极限概念解决面积和切线问题。
+                </div>
+            </div>
+            
+            <!-- 面积问题部分 -->
+            <div class="section" id="area">
+                <div class="concept-box">
+                    <h2>📐 面积问题</h2>
+                    <p>微积分的起源至少可以追溯到2500年前的古希腊人，他们使用"穷竭法"求面积。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>穷竭法</h3>
+                    <p>古希腊人知道如何通过将一个多边形分成多个三角形，并将这些三角形的面积相加得到多边形的面积A。</p>
+                    <p>而要计算出一个曲边图形的面积则更加困难。古希腊人的穷竭法是在曲边图形内作内接多边形，在曲边图形外作外接多边形，然后增加多边形的边数。</p>
+                </div>
+                
+                <div class="example">
+                    <h3>圆的面积</h3>
+                    <p>设A为内接正n边形的面积。随着n的增大，A越来越接近圆的面积。我们称圆的面积A是内接多边形面积的极限，记为：</p>
+                    <div class="formula">
+                        \[ A=\lim_{n\rightarrow+\infty} A_{n} \]
+                    </div>
+                    <p>欧多克索斯(Eudoxus，公元前5世纪)用穷竭法证明了圆的面积公式：$A=\pi r^2$。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>现代积分方法</h3>
+                    <p>用若干个矩形的面积之和来近似曲边区域的面积。如果用n个矩形$R_{1},R_{2},\cdots,R_{n}$来近似f的图像下方区域的面积A，那么近似面积是：</p>
+                    <div class="formula">
+                        \[ A_{n}=R_{1}+R_{2}+\cdots+R_{n} \]
+                    </div>
+                    <p>当增加矩形的数量(减小每个矩形的宽)时，A是这些矩形面积之和的极限：</p>
+                    <div class="formula">
+                        \[ A=\lim\limits_{n\rightarrow+\infty} A_{n} \]
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    面积问题是微积分中积分学的核心问题。这个问题很重要，因为函数图像下方的面积对于不同的函数有着不同的含义。
+                </div>
+            </div>
+            
+            <!-- 切线问题部分 -->
+            <div class="section" id="tangent">
+                <div class="concept-box">
+                    <h2>📏 切线问题</h2>
+                    <p>考虑方程为$y=f(x)$的曲线，求它在点P处的切线的方程。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>切线的定义</h3>
+                    <p>切线可以看作在点P处与曲线相接触并沿曲线在点P处的方向延长的直线。</p>
+                    <p>因为点P在切线上，所以如果知道切线的斜率m，就可以求出切线的方程。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>切线斜率的求法</h3>
+                    <p>在曲线上取点P附近的一个点Q，计算割线PQ的斜率$m_{PQ}$，以此作为m的近似值。</p>
+                    <p>当Q沿曲线向P移动时，割线PQ渐渐旋转并接近其极限位置，即切线$\ell$，这表明割线斜率$m_{PQ}$越来越接近切线斜率m：</p>
+                    <div class="formula">
+                        \[ m=\lim_{Q\to P}m_{PQ} \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>斜率公式</h3>
+                    <p>如果P是点$(a,f(a))$，Q是点$(x,f(x))$，那么：</p>
+                    <div class="formula">
+                        \[ m_{PQ}=\frac{f(x)-f(a)}{x-a} \]
+                    </div>
+                    <p>因为当Q趋于P时，x趋于a，所以切线斜率的表达式为：</p>
+                    <div class="formula">
+                        \[ m=\lim_{x\rightarrow a}\frac{f(x)-f(a)}{x-a} \]
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    切线问题产生了微积分的微分学。切线问题很重要，因为函数图像的切线的斜率在不同的情景中有不同的含义。
+                </div>
+            </div>
+            
+            <!-- 两者关系部分 -->
+            <div class="section" id="relation">
+                <div class="concept-box">
+                    <h2>🔗 面积问题与切线问题的关系</h2>
+                    <p>面积问题和切线问题看似非常不同，但令人惊讶的是，它们是密切相关的。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>微积分基本定理</h3>
+                    <p>这两个问题之间的关系是微积分的核心发现，并被恰当地命名为微积分基本定理。</p>
+                    <p>微积分基本定理大大简化了面积问题的解决过程，即不必用矩形近似并计算相应的极限就能求出面积。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>历史意义</h3>
+                    <p>艾萨克·牛顿(1642-1727)和戈特弗里德·莱布尼茨(1646-1716)是微积分的发明人，因为他们首先认识到微积分基本定理的重要性，并把它作为解决实际问题的工具。</p>
+                </div>
+                
+                <div class="tip">
+                    微积分基本定理建立了积分学和微分学之间的桥梁，是数学史上最伟大的发现之一。
+                </div>
+            </div>
+            
+            <!-- 应用实例部分 -->
+            <div class="section" id="application">
+                <div class="concept-box">
+                    <h2>🚀 微积分的应用实例</h2>
+                    <p>微积分被应用于各种各样的情景中，下面列出一些可以使用微积分解决的问题：</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>实际问题示例</h3>
+                    <ol>
+                        <li>如何设计一列安全平稳的过山车？</li>
+                        <li>飞机应该在距离机场多远处开始下降？</li>
+                        <li>如何解释观察者看彩虹最高点的仰角总是$42^\circ$？</li>
+                        <li>如何估计古埃及人建造胡夫金字塔所做的功？</li>
+                        <li>物体必须以多大的速度发射，才能摆脱地球的引力？</li>
+                        <li>如何解释海冰厚度随时间的变化，以及为什么冰的裂缝会"愈合"？</li>
+                        <li>向上抛的球达到最高点和从最高点回到原高度，哪个过程所用的时间更长？</li>
+                        <li>激光打印机上的字母，是如何通过曲线拟合设计出来的？</li>
+                        <li>如何解释行星和卫星在椭圆形轨道上运动这一现象？</li>
+                        <li>如何在水电站的各台涡轮机之间分配水流，使得水电站的发电量最大？</li>
+                    </ol>
+                </div>
+                
+                <div class="tip">
+                    这些应用展示了微积分在科学、工程和日常生活中的广泛用途。
+                </div>
+            </div>
+            
+            <!-- 动画演示部分 -->
+            <div class="section" id="animation">
+                <div class="concept-box">
+                    <h2>🎬 动画演示</h2>
+                    <p>通过动画直观理解面积问题和切线问题的概念</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>面积问题的可视化</h3>
+                    <div class="math-display">
+                        \[ A=\lim_{n\rightarrow+\infty} A_{n} \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="areaCanvas" class="integral-animation"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startAreaAnimation()">开始演示</button>
+                        <button class="animation-btn" onclick="resetAreaAnimation()">重置</button>
+                    </div>
+                    <p>演示说明：动画展示了用矩形逼近曲线下面积的过程，随着矩形数量的增加，近似面积越来越接近真实面积。</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>切线问题的可视化</h3>
+                    <div class="math-display">
+                        \[ m=\lim_{x\rightarrow a}\frac{f(x)-f(a)}{x-a} \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="tangentCanvas"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startTangentAnimation()">开始演示</button>
+                        <button class="animation-btn" onclick="pauseTangentAnimation()">暂停</button>
+                    </div>
+                    <p>演示说明：动画展示了割线逐渐接近切线位置的过程，演示了导数作为切线斜率的概念。</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>微积分基本定理演示</h3>
+                    <div class="math-display">
+                        \[ \frac{d}{dx}\int_a^x f(t)dt = f(x) \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="ftcCanvas"></canvas>
+                    </div>
+                    <div class="slider-container">
+                        <label for="xValue">x值: <span id="xValueDisplay">a</span></label>
+                        <input type="range" id="xValueSlider" min="0" max="100" value="0" oninput="updateFTCAnimation()">
+                    </div>
+                    <p>演示说明：拖动滑块改变x值，观察积分函数和导数函数之间的关系。</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025  苏州经贸职业技术学院|面积与切线问题专题 </p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+
+            // 如果切换到动画章节，初始化动画
+            if (sectionId === 'animation') {
+                initAnimations();
+            }
+        }
+
+        // 动画相关变量
+        let areaAnimationId;
+        let tangentAnimationId;
+        let ftcAnimationId;
+
+        // 初始化所有动画
+        function initAnimations() {
+            initAreaAnimation();
+            initTangentAnimation();
+            initFTCAnimation();
+        }
+
+        // 面积问题动画
+        function initAreaAnimation() {
+            const canvas = document.getElementById('areaCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+
+            function drawAxes() {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                
+                // X轴
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                
+                // Y轴
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                
+                // 箭头
+                ctx.moveTo(width - margin, height - margin);
+                ctx.lineTo(width - margin - 10, height - margin - 5);
+                ctx.lineTo(width - margin - 10, height - margin + 5);
+                ctx.closePath();
+                
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin - 5, margin + 10);
+                ctx.lineTo(margin + 5, margin + 10);
+                ctx.closePath();
+                
+                ctx.stroke();
+                
+                // 绘制刻度
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                
+                // X轴刻度
+                for (let i = 0; i <= 5; i++) {
+                    const x = margin + i * graphWidth / 5;
+                    ctx.beginPath();
+                    ctx.moveTo(x, height - margin);
+                    ctx.lineTo(x, height - margin + 5);
+                    ctx.stroke();
+                    ctx.fillText(i, x, height - margin + 10);
+                }
+                
+                // Y轴刻度
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                for (let i = 0; i <= 5; i++) {
+                    const y = height - margin - i * graphHeight / 5;
+                    ctx.beginPath();
+                    ctx.moveTo(margin, y);
+                    ctx.lineTo(margin - 5, y);
+                    ctx.stroke();
+                    ctx.fillText(i, margin - 10, y);
+                }
+            }
+
+            function drawAreaApproximation(n) {
+                drawAxes();
+                
+                // 绘制函数曲线 f(x) = (x-2.5)^2 / 2 + 1
+                ctx.beginPath();
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
+                
+                for (let x = 0; x <= 5; x += 0.05) {
+                    const px = margin + x * graphWidth / 5;
+                    const py = height - margin - (Math.pow(x-2.5, 2)/2 + 1) * graphHeight / 5;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+                
+                // 绘制矩形近似
+                if (n > 0) {
+                    const rectWidth = 5 / n;
+                    let totalArea = 0;
+                    
+                    for (let i = 0; i < n; i++) {
+                        const x = i * rectWidth;
+                        const midX = x + rectWidth / 2;
+                        const heightVal = (Math.pow(midX-2.5, 2)/2 + 1) * graphHeight / 5;
+                        
+                        const px = margin + x * graphWidth / 5;
+                        const py = height - margin - heightVal;
+                        
+                        ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+                        ctx.fillRect(px, py, rectWidth * graphWidth / 5, heightVal);
+                        
+                        ctx.strokeStyle = '#667eea';
+                        ctx.strokeRect(px, py, rectWidth * graphWidth / 5, heightVal);
+                        
+                        totalArea += (Math.pow(midX-2.5, 2)/2 + 1) * rectWidth;
+                    }
+                    
+                    // 显示当前近似面积
+                    ctx.fillStyle = '#333';
+                    ctx.font = '14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`n = ${n}, 近似面积 = ${totalArea.toFixed(2)}`, width / 2, margin - 10);
+                }
+            }
+
+            // 动画控制
+            let areaStartTime = null;
+            let currentN = 0;
+            const maxN = 20;
+
+            function animateArea(timestamp) {
+                if (!areaStartTime) areaStartTime = timestamp;
+                const elapsed = timestamp - areaStartTime;
+                const duration = 3000;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                currentN = Math.floor(progress * maxN);
+                drawAreaApproximation(currentN);
+                
+                if (progress < 1) {
+                    areaAnimationId = requestAnimationFrame(animateArea);
+                }
+            }
+
+            window.startAreaAnimation = function() {
+                if (areaAnimationId) {
+                    cancelAnimationFrame(areaAnimationId);
+                }
+                areaStartTime = null;
+                currentN = 0;
+                areaAnimationId = requestAnimationFrame(animateArea);
+            };
+
+            window.resetAreaAnimation = function() {
+                if (areaAnimationId) {
+                    cancelAnimationFrame(areaAnimationId);
+                    areaAnimationId = null;
+                }
+                drawAxes();
+            };
+
+            // 初始绘制坐标轴
+            drawAxes();
+        }
+
+        // 切线问题动画
+        function initTangentAnimation() {
+            const canvas = document.getElementById('tangentCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+
+            let tangentStartTime = null;
+
+            function drawTangent(progress) {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+
+                // 绘制函数曲线 f(x) = (x-2)^3 / 4 + 2
+                ctx.beginPath();
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
+                
+                for (let x = 0; x <= 4; x += 0.1) {
+                    const px = margin + x * graphWidth / 4;
+                    const py = height - margin - (Math.pow(x-2, 3)/4 + 2) * graphHeight / 6;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+                
+                // 固定点P在x=1.5处
+                const a = 1.5;
+                const fa = (Math.pow(a-2, 3)/4 + 2);
+                const px = margin + a * graphWidth / 4;
+                const py = height - margin - fa * graphHeight / 6;
+                
+                // 绘制点P
+                ctx.beginPath();
+                ctx.fillStyle = '#ff6b6b';
+                ctx.arc(px, py, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 根据progress计算Q点的位置
+                const qx = a + (3.5 - a) * (1 - progress);
+                const fqx = (Math.pow(qx-2, 3)/4 + 2);
+                const qpx = margin + qx * graphWidth / 4;
+                const qpy = height - margin - fqx * graphHeight / 6;
+                
+                // 绘制点Q
+                ctx.beginPath();
+                ctx.fillStyle = '#00aa00';
+                ctx.arc(qpx, qpy, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 绘制割线PQ
+                ctx.beginPath();
+                ctx.strokeStyle = '#00aa00';
+                ctx.lineWidth = 2;
+                ctx.moveTo(px, py);
+                ctx.lineTo(qpx, qpy);
+                ctx.stroke();
+                
+                // 绘制切线(当progress接近1时)
+                if (progress > 0.95) {
+                    const slope = 3 * Math.pow(a-2, 2)/4;
+                    const tangentLength = 100;
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#ff6b6b';
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(px - tangentLength, py - slope * -tangentLength * graphHeight / graphWidth);
+                    ctx.lineTo(px + tangentLength, py - slope * tangentLength * graphHeight / graphWidth);
+                    ctx.stroke();
+                    
+                    // 显示斜率公式
+                    ctx.fillStyle = '#333';
+                    ctx.font = '14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`斜率 m = ${slope.toFixed(2)}`, px + 80, py - 20);
+                }
+                
+                // 显示割线斜率
+                const mPQ = (fqx - fa) / (qx - a);
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`割线斜率 mPQ = ${mPQ.toFixed(2)}`, (px + qpx)/2, (py + qpy)/2 - 15);
+            }
+
+            function animateTangent(timestamp) {
+                if (!tangentStartTime) tangentStartTime = timestamp;
+                const elapsed = timestamp - tangentStartTime;
+                const duration = 3000;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                drawTangent(progress);
+                
+                if (progress < 1) {
+                    tangentAnimationId = requestAnimationFrame(animateTangent);
+                }
+            }
+
+            window.startTangentAnimation = function() {
+                if (tangentAnimationId) {
+                    cancelAnimationFrame(tangentAnimationId);
+                }
+                tangentStartTime = null;
+                tangentAnimationId = requestAnimationFrame(animateTangent);
+            };
+
+            window.pauseTangentAnimation = function() {
+                if (tangentAnimationId) {
+                    cancelAnimationFrame(tangentAnimationId);
+                    tangentAnimationId = null;
+                }
+            };
+
+            // 初始绘制
+            drawTangent(0);
+        }
+
+        // 微积分基本定理动画
+        function initFTCAnimation() {
+            const canvas = document.getElementById('ftcCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+
+            function drawFTC(xValue) {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+                
+                // 映射x值到0-4范围
+                const x = xValue / 25; // 因为滑块最大值是100
+                
+                // 绘制函数曲线 f(x) = sin(x) + 1.5
+                ctx.beginPath();
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 3;
+                
+                for (let t = 0; t <= 4; t += 0.1) {
+                    const pt = margin + t * graphWidth / 4;
+                    const py = height - margin - (Math.sin(t) + 1.5) * graphHeight / 4;
+                    
+                    if (t === 0) {
+                        ctx.moveTo(pt, py);
+                    } else {
+                        ctx.lineTo(pt, py);
+                    }
+                }
+                ctx.stroke();
+                
+                // 绘制积分区域
+                if (x > 0) {
+                    ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
+                    ctx.beginPath();
+                    ctx.moveTo(margin, height - margin);
+                    
+                    for (let t = 0; t <= x; t += 0.05) {
+                        const pt = margin + t * graphWidth / 4;
+                        const py = height - margin - (Math.sin(t) + 1.5) * graphHeight / 4;
+                        ctx.lineTo(pt, py);
+                    }
+                    
+                    ctx.lineTo(margin + x * graphWidth / 4, height - margin);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // 标记x值
+                    const px = margin + x * graphWidth / 4;
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#ff6b6b';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([5, 5]);
+                    ctx.moveTo(px, margin);
+                    ctx.lineTo(px, height - margin);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    
+                    // 绘制积分函数 F(x) = ∫₀ˣ f(t) dt
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#ff6b6b';
+                    ctx.lineWidth = 3;
+                    
+                    for (let t = 0; t <= 4; t += 0.1) {
+                        const pt = margin + t * graphWidth / 4;
+                        // 近似计算积分值
+                        let integral = 0;
+                        for (let u = 0; u <= t; u += 0.01) {
+                            integral += (Math.sin(u) + 1.5) * 0.01;
+                        }
+                        const py = height - margin - integral * graphHeight / 4;
+                        
+                        if (t === 0) {
+                            ctx.moveTo(pt, py);
+                        } else {
+                            ctx.lineTo(pt, py);
+                        }
+                    }
+                    ctx.stroke();
+                    
+                    // 显示当前x值和f(x)值
+                    ctx.fillStyle = '#333';
+                    ctx.font = '14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`x = ${x.toFixed(2)}, f(x) = ${(Math.sin(x) + 1.5).toFixed(2)}`, 
+                                width / 2, margin - 10);
+                }
+            }
+
+            window.updateFTCAnimation = function() {
+                const slider = document.getElementById('xValueSlider');
+                const valueDisplay = document.getElementById('xValueDisplay');
+                const value = slider.value;
+                
+                valueDisplay.textContent = value / 25;
+                drawFTC(value);
+            };
+
+            // 初始绘制
+            updateFTCAnimation();
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+            
+            // 默认显示基本概念章节
+            document.getElementById('intro').classList.add('active');
+        });
+    </script>
+</body>
+</html>

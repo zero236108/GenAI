@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学课件 - 幂指函数求导与求极限</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+      <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .graph-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .graph-container h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .integral-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .animation-btn:hover {
+            background: #5569c0;
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .animation-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高等数学 - 幂指函数求导与求极限</h1>
+            <div class="subtitle">特殊函数的微分与极限计算方法</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">基本概念</button>
+            <button onclick="showSection('transform')">对数转换法</button>
+            <button onclick="showSection('derivative')">求导技巧</button>
+            <button onclick="showSection('limit')">极限计算</button>
+            <button onclick="showSection('example')">典型例题</button>
+            <button onclick="showSection('exercise')">练习题</button>
+        </nav>
+        
+        <main>
+            <!-- 基本概念部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚📚 幂指函数的基本概念</h2>
+                    <p>幂指函数是形如 \( f(x)^{g(x)} \) 的函数，兼具幂函数和指数函数的特性。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.1：幂指函数</h3>
+                    <p>设 \( f(x) > 0 \)，\( g(x) \) 为任意函数，则称形如</p>
+                    <div class="formula">
+                        \[ y = f(x)^{g(x)} \]
+                    </div>
+                    <p>的函数为幂指函数。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>幂指函数的性质</h3>
+                    <p>幂指函数可以通过对数恒等式转化为指数形式：</p>
+                    <div class="formula">
+                        \[ f(x)^{g(x)} = e^{g(x) \ln f(x)} \]
+                    </div>
+                    <p>这一性质是幂指函数求导和求极限的基础。</p>
+                </div>
+                
+                <div class="tip">
+                    理解要点：幂指函数的定义域要求 \( f(x) > 0 \)，这是对数转换的前提条件。
+                </div>
+            </div>
+            
+            <!-- 对数转换法部分 -->
+            <div class="section" id="transform">
+                <div class="concept-box">
+                    <h2>🔧🔧 对数转换法</h2>
+                    <p>通过取对数将幂指函数转化为乘积形式，是处理幂指函数的基本方法。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>转换步骤</h3>
+                    <ol>
+                        <li>设 \( y = f(x)^{g(x)} \)</li>
+                        <li>两边取自然对数：\( \ln y = g(x) \ln f(x) \)</li>
+                        <li>转化为指数形式：\( y = e^{g(x) \ln f(x)} \)</li>
+                    </ol>
+                </div>
+                
+                <div class="example">
+                    <h3>转换示例</h3>
+                    <p>将函数 \( y = x^{\sin x} \) 转换为指数形式：</p>
+                    <div class="formula">
+                        \[ \ln y = \sin x \ln x \]
+                        \[ y = e^{\sin x \ln x} \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 求导技巧部分 -->
+            <div class="section" id="derivative">
+                <div class="concept-box">
+                    <h2>🛠🛠🛠️ 幂指函数的求导技巧</h2>
+                    <p>利用对数转换后的形式，可以方便地求幂指函数的导数。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>求导公式</h3>
+                    <p>设 \( y = f(x)^{g(x)} \)，则其导数为：</p>
+                    <div class="formula">
+                        \[ y' = f(x)^{g(x)} \left[ g'(x) \ln f(x) + g(x) \frac{f'(x)}{f(x)} \right] \]
+                    </div>
+                    <p>或等价地：</p>
+                    <div class="formula">
+                        \[ \frac{dy}{dx} = e^{g(x) \ln f(x)} \left[ g'(x) \ln f(x) + g(x) \frac{f'(x)}{f(x)} \right] \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>求导示例</h3>
+                    <p>求函数 \( y = x^x \) 的导数：</p>
+                    <p><strong>解：</strong></p>
+                    <div class="formula">
+                        \[ \ln y = x \ln x \]
+                        \[ \frac{y'}{y} = \ln x + x \cdot \frac{1}{x} = \ln x + 1 \]
+                        \[ y' = x^x (\ln x + 1) \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 极限计算部分 -->
+            <div class="section" id="limit">
+                <div class="concept-box">
+                    <h2>📈📉 幂指函数的极限计算</h2>
+                    <p>幂指函数的极限计算通常转化为 \( e^{\lim (\cdots)} \) 的形式。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>极限计算步骤</h3>
+                    <ol>
+                        <li>设极限形式为 \( \lim f(x)^{g(x)} \)</li>
+                        <li>转化为 \( e^{\lim g(x) \ln f(x)} \)</li>
+                        <li>计算指数部分的极限 \( \lim g(x) \ln f(x) \)</li>
+                        <li>得到最终结果</li>
+                    </ol>
+                </div>
+                
+                <div class="example">
+                    <h3>极限计算示例</h3>
+                    <p>计算极限 \( \lim_{x \to 0^+} x^x \)：</p>
+                    <p><strong>解：</strong></p>
+                    <div class="formula">
+                        \[ \lim_{x \to 0^+} x^x = e^{\lim_{x \to 0^+} x \ln x} \]
+                        \[ \lim_{x \to 0^+} x \ln x = \lim_{x \to 0^+} \frac{\ln x}{1/x} = \lim_{x \to 0^+} \frac{1/x}{-1/x^2} = \lim_{x \to 0^+} (-x) = 0 \]
+                        \[ \therefore \lim_{x \to 0^+} x^x = e^0 = 1 \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 典型例题部分 -->
+            <div class="section" id="example">
+                <div class="example">
+                    <h3>例题1：复合幂指函数</h3>
+                    <p>求函数 \( y = (1 + x)^{1/x} \) 在 \( x \to 0 \) 时的极限。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <div class="formula">
+                        \[ \lim_{x \to 0} (1 + x)^{1/x} = e^{\lim_{x \to 0} \frac{\ln(1+x)}{x}} \]
+                        \[ \lim_{x \to 0} \frac{\ln(1+x)}{x} = 1 \]
+                        \[ \therefore \lim_{x \to 0} (1 + x)^{1/x} = e^1 = e \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>例题2：复杂幂指函数求导</h3>
+                    <p>求函数 \( y = (\sin x)^{\cos x} \) 的导数。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <div class="formula">
+                        \[ \ln y = \cos x \ln \sin x \]
+                        \[ \frac{y'}{y} = -\sin x \ln \sin x + \cos x \cdot \frac{\cos x}{\sin x} \]
+                        \[ y' = (\sin x)^{\cos x} \left[ -\sin x \ln \sin x + \frac{\cos^2 x}{\sin x} \right] \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 练习题部分 -->
+            <div class="section" id="exercise">
+                <div class="exercise">
+                    <h3>幂指函数练习题</h3>
+                    <ol>
+                        <li>
+                            求下列函数的导数：
+                            <div style="margin: 10px 0;">
+                                (a) \( y = x^{\ln x} \)
+                            </div>
+                            <div style="margin: 10px 0;">
+                                (b) \( y = (x^2 + 1)^{\sin x} \)
+                            </div>
+                        </li>
+                        <li>
+                            计算下列极限：
+                            <div style="margin: 10px 0;">
+                                (a) \( \lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x \)
+                            </div>
+                            <div style="margin: 10px 0;">
+                                (b) \( \lim_{x \to 0} (1 + 2x)^{3/x} \)
+                            </div>
+                        </li>
+                        <li>
+                            证明：当 \( x \to 0 \) 时，\( (1 + x)^{a/x} \to e^a \)（a为常数）
+                        </li>
+                        <li>
+                            讨论函数 \( y = x^{1/x} \) 在 \( x > 0 \) 时的极值
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="tip">
+                    提示：第4题可以先取对数，再求导分析极值点。
+                </div>
+                
+                <div class="exercise">
+                    <h3>参考答案</h3>
+                    <ol>
+                        <li>
+                            (a) \( x^{\ln x - 1} (1 + \ln x) \) <br>
+                            (b) \( (x^2 + 1)^{\sin x} \left[ \cos x \ln(x^2 + 1) + \frac{2x \sin x}{x^2 + 1} \right] \)
+                        </li>
+                        <li>
+                            (a) \( e \) <br>
+                            (b) \( e^6 \)
+                        </li>
+                        <li>提示：使用对数转换法</li>
+                        <li>在 \( x = e \) 处取得最大值 \( e^{1/e} \)</li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 苏州经贸职业技术学院 | 幂指函数专题</p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

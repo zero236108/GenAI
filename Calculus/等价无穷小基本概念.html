@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学课件 - 等价无穷小</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .graph-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .graph-container h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .integral-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .animation-btn:hover {
+            background: #5569c0;
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .animation-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高等数学 - 等价无穷小</h1>
+            <div class="subtitle">极限计算中的重要工具</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">基本概念</button>
+            <button onclick="showSection('basic')">基本型</button>
+            <button onclick="showSection('advanced')">进阶型</button>
+            <button onclick="showSection('example')">例题解析</button>
+            <button onclick="showSection('exercise')">练习题</button>
+        </nav>
+        
+        <main>
+            <!-- 基本概念部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚📚 等价无穷小的基本概念</h2>
+                    <p>等价无穷小是极限计算中的重要工具，它可以帮助我们简化复杂的极限计算。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.1：等价无穷小</h3>
+                    <p>设当 \( x \to x_0 \) 时，\( \alpha(x) \) 和 \( \beta(x) \) 都是无穷小量，若满足</p>
+                    <div class="formula">
+                        \[ \lim_{x \to x_0} \frac{\alpha(x)}{\beta(x)} = 1 \]
+                    </div>
+                    <p>则称 \( \alpha(x) \) 与 \( \beta(x) \) 是等价无穷小，记作 \( \alpha(x) \sim \beta(x) \)。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>等价无穷小替换定理</h3>
+                    <p>设当 \( x \to x_0 \) 时，\( \alpha(x) \sim \alpha_1(x) \)，\( \beta(x) \sim \beta_1(x) \)，且 \( \lim_{x \to x_0} \frac{\alpha_1(x)}{\beta_1(x)} \) 存在，则</p>
+                    <div class="formula">
+                        \[ \lim_{x \to x_0} \frac{\alpha(x)}{\beta(x)} = \lim_{x \to x_0} \frac{\alpha_1(x)}{\beta_1(x)} \]
+                    </div>
+                    <p>这表明在求极限时，可以将分子或分母中的无穷小量替换为其等价无穷小。</p>
+                </div>
+                
+                <div class="tip">
+                    理解要点：等价无穷小替换只能在乘除法中使用，不能在加减法中使用。
+                </div>
+            </div>
+            
+            <!-- 基本型等价无穷小部分 -->
+            <div class="section" id="basic">
+                <div class="concept-box">
+                    <h2>🔧🔧 基本型等价无穷小</h2>
+                    <p>当 \( x \to 0 \) 时，以下是最常用的等价无穷小关系。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>三角函数与反三角函数</h3>
+                    <div class="formula">
+                        \[ \sin x \sim x \]
+                        \[ \tan x \sim x \]
+                        \[ \arcsin x \sim x \]
+                        \[ \arctan x \sim x \]
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>指数与对数函数</h3>
+                    <div class="formula">
+                        \[ e^x - 1 \sim x \]
+                        \[ \ln(1 + x) \sim x \]
+                        \[ \ln\left(x+\sqrt{1 + x^2}\right) \sim x \]
+                        \[ a^x - 1 \sim x \ln a \quad (a > 0, a \neq 1) \]
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>幂函数与三角函数</h3>
+                    <div class="formula">
+                        \[ 1 - \cos x \sim \frac{1}{2}x^2 \]
+                        \[ 1 - \cos^\alpha x \sim \frac{\alpha}{2}x^2 \quad (\alpha \neq 0) \]
+                        \[ (1 + x)^\alpha - 1 \sim \alpha x \quad (\alpha \neq 0) \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>复合函数示例</h3>
+                    <p>对于 \( (1 + x)^x - 1 \)：</p>
+                    <div class="formula">
+                        \[ (1 + x)^x = e^{x \ln(1 + x)} \]
+                        \[ (1 + x)^x - 1 = e^{x \ln(1 + x)} - 1 \sim x^2 \]
+                    </div>
+                    <p>因为 \( x \ln(1 + x) \sim x^2 \)，且 \( e^u - 1 \sim u \) 当 \( u \to 0 \)。</p>
+                </div>
+            </div>
+            
+            <!-- 进阶型等价无穷小部分 -->
+            <div class="section" id="advanced">
+                <div class="concept-box">
+                    <h2>🛠🛠🛠️ 差函数型等价无穷小</h2>
+                    <p>当 \( x \to 0 \) 时，不同类型函数相减的等价无穷小关系。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>三角函数差型</h3>
+                    <div class="formula">
+                        \[ x - \sin x \sim \frac{1}{6}x^3 \]
+                        \[ x - \arcsin x \sim -\frac{1}{6}x^3 \]
+                        \[ x - \tan x \sim -\frac{1}{3}x^3 \]
+                        \[ x - \arctan x \sim \frac{1}{3}x^3 \]
+                    </div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>指数对数差型</h3>
+                    <div class="formula">
+                        \[ x - \ln(1 + x) \sim \frac{1}{2}x^2 \]
+                        \[ e^x - 1 - x \sim \frac{1}{2}x^2 \]
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    记忆技巧：差函数的阶数通常比原函数高一阶，系数与泰勒展开式相关。
+                </div>
+            </div>
+            
+            <!-- 例题解析部分 -->
+            <div class="section" id="example">
+                <div class="example">
+                    <h3>例1：基本等价无穷小的应用</h3>
+                    <p>计算极限：</p>
+                    <div class="formula">
+                        \[ \lim_{x \to 0} \frac{\sin 3x}{\ln(1 + 2x)} \]
+                    </div>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>当 \( x \to 0 \) 时：</p>
+                    <div class="formula">
+                        \[ \sin 3x \sim 3x \]
+                        \[ \ln(1 + 2x) \sim 2x \]
+                    </div>
+                    <p>因此：</p>
+                    <div class="formula">
+                        \[ \lim_{x \to 0} \frac{\sin 3x}{\ln(1 + 2x)} = \lim_{x \to 0} \frac{3x}{2x} = \frac{3}{2} \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>例2：差函数型无穷小的应用</h3>
+                    <p>计算极限：</p>
+                    <div class="formula">
+                        \[ \lim_{x \to 0} \frac{x - \sin x}{x^3} \]
+                    </div>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>直接使用差函数的等价无穷小：</p>
+                    <div class="formula">
+                        \[ x - \sin x \sim \frac{1}{6}x^3 \]
+                    </div>
+                    <p>因此：</p>
+                    <div class="formula">
+                        \[ \lim_{x \to 0} \frac{x - \sin x}{x^3} = \lim_{x \to 0} \frac{\frac{1}{6}x^3}{x^3} = \frac{1}{6} \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 练习题部分 -->
+            <div class="section" id="exercise">
+                <div class="exercise">
+                    <h3>等价无穷小练习题</h3>
+                    <ol>
+                        <li>
+                            计算下列极限：
+                            <div style="margin: 10px 0;">
+                                (a) \( \lim_{x \to 0} \frac{\tan 5x}{\sin 3x} \)
+                            </div>
+                            <div style="margin: 10px 0;">
+                                (b) \( \lim_{x \to 0} \frac{e^{2x} - 1}{\ln(1 + 3x)} \)
+                            </div>
+                        </li>
+                        <li>
+                            计算极限：
+                            \[ \lim_{x \to 0} \frac{x - \arctan x}{x^3} \]
+                        </li>
+                        <li>
+                            计算极限：
+                            \[ \lim_{x \to 0} \frac{1 - \cos x^2}{x^2 \sin x^2} \]
+                        </li>
+                        <li>
+                            证明：当 \( x \to 0 \) 时，
+                            \[ \sqrt{1 + x} - \sqrt{1 - x} \sim x \]
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="tip">
+                    提示：第3题可以结合 \( 1 - \cos u \sim \frac{1}{2}u^2 \) 和 \( \sin u \sim u \) 来处理。
+                </div>
+                
+                <div class="exercise">
+                    <h3>参考答案</h3>
+                    <ol>
+                        <li>
+                            (a) \( \dfrac{5}{3} \) <br>
+                            (b) \( \dfrac{2}{3} \)
+                        </li>
+                        <li>\( \dfrac{1}{3} \)</li>
+                        <li>\( \dfrac{1}{2} \)</li>
+                        <li>提示：有理化后使用等价无穷小替换</li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2024 高等数学课件 | 等价无穷小专题</p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

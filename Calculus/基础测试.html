@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微积分预备知识测试系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax Configuration -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --algebra-color: #ef4444;
+            --geometry-color: #10b981;
+            --function-color: #3b82f6;
+            --trigonometry-color: #8b5cf6;
+            --dark-bg: #1e293b;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-xl);
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+
+
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tab-btn i {
+            font-size: 1.2em;
+        }
+
+        /* Content Panels */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Test Module Styles */
+        .test-section {
+            margin-bottom: 30px;
+        }
+
+        .module-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .module-select-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .module-select-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .module-select-card.selected {
+            border-color: var(--primary-color);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #f6f8fb 0%, #f1f5f9 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .question-module {
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .question-module.algebra { background: var(--algebra-color); }
+        .question-module.geometry { background: var(--geometry-color); }
+        .question-module.function { background: var(--function-color); }
+        .question-module.trigonometry { background: var(--trigonometry-color); }
+
+        .question-difficulty {
+            background: var(--text-secondary);
+            color: white;
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .question-difficulty.easy { background: var(--success-color); }
+        .question-difficulty.medium { background: var(--warning-color); }
+        .question-difficulty.hard { background: var(--error-color); }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .math-expression {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1em;
+            margin: 10px 0;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        }
+
+        .option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .option.user-selected.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .option.user-selected.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .option-indicator {
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-indicator {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .option.correct .option-indicator {
+            border-color: var(--success-color);
+            background: var(--success-color);
+            color: white;
+        }
+
+        .option.incorrect .option-indicator {
+            border-color: var(--error-color);
+            background: var(--error-color);
+            color: white;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            font-size: 0.95em;
+            color: var(--text-primary);
+        }
+
+        .explanation-box h5 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        /* Button Styles */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            color: var(--text-primary);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Knowledge Module Styles */
+        .knowledge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .knowledge-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .knowledge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .knowledge-header {
+            color: white;
+            padding: 25px;
+            position: relative;
+        }
+
+        .knowledge-header.algebra { background: linear-gradient(135deg, var(--algebra-color), #dc2626); }
+        .knowledge-header.geometry { background: linear-gradient(135deg, var(--geometry-color), #059669); }
+        .knowledge-header.function { background: linear-gradient(135deg, var(--function-color), #2563eb); }
+        .knowledge-header.trigonometry { background: linear-gradient(135deg, var(--trigonometry-color), #7c3aed); }
+
+        .knowledge-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .knowledge-header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .knowledge-content {
+            padding: 25px;
+        }
+
+        .topic-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .topic-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-list li:before {
+            content: "✓";
+            color: var(--success-color);
+            font-weight: bold;
+            width: 16px;
+        }
+
+        .formula-box {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .example-box {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px dashed var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .importance-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .importance-level.high {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .importance-level.medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .importance-level.essential {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        /* Result Section */
+        .result-container {
+            background: linear-gradient(135deg, #f6f8fb 0%, #f1f5f9 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+        }
+
+        .score-message {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .module-breakdown {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .module-result {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .module-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .module-result-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .module-result-score {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .weakness-recommendations {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .weakness-recommendations h4 {
+            color: var(--warning-color);
+            margin-bottom: 15px;
+        }
+
+        /* Review Mode Styles */
+        .review-mode {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid var(--warning-color);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .review-mode h3 {
+            color: var(--warning-color);
+            margin-bottom: 10px;
+        }
+
+        .review-navigation {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .review-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: var(--transition);
+        }
+
+        .review-btn:hover {
+            background: var(--light-bg);
+        }
+
+        .review-btn.active {
+            background: var(--warning-color);
+            color: white;
+            border-color: var(--warning-color);
+        }
+
+        .review-btn.correct {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .review-btn.incorrect {
+            background: var(--error-color);
+            color: white;
+            border-color: var(--error-color);
+        }
+
+        /* Practice Mode Styles */
+        .practice-header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .practice-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .practice-stat {
+            text-align: center;
+        }
+
+        .practice-stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .practice-stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+
+
+            .tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .knowledge-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .result-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .review-navigation {
+                flex-wrap: wrap;
+            }
+
+            .practice-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-graduation-cap"></i> 微积分预备知识测试系统</h1>
+            <p>系统评估代数、解析几何、函数、三角学四大核心领域的掌握程度</p>
+        </div>
+
+
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('test')">
+                <i class="fas fa-clipboard-check"></i> 综合测试
+            </button>
+            <button class="tab-btn" onclick="switchTab('knowledge')">
+                <i class="fas fa-book-open"></i> 知识体系
+            </button>
+            <button class="tab-btn" onclick="switchTab('practice')">
+                <i class="fas fa-dumbbell"></i> 专项练习
+            </button>
+        </div>
+
+        <!-- Test Module -->
+        <div id="test" class="tab-content active">
+            <div class="card">
+                <h2 id="testTitle"><i class="fas fa-clipboard-list"></i> 微积分预备知识综合测试</h2>
+                <p id="testDescription" style="color: var(--text-secondary); margin-bottom: 20px;">
+                    本测试涵盖学习微积分前必须掌握的四大核心领域，共22道题目，建议用时30分钟
+                </p>
+
+                <!-- Review Mode Header -->
+                <div id="reviewModeHeader" class="review-mode" style="display: none;">
+                    <h3><i class="fas fa-eye"></i> 答案解析模式</h3>
+                    <p>查看错误题目和详细解析</p>
+                    <div class="review-navigation">
+                        <span>快速跳转：</span>
+                        <div id="reviewQuickNav"></div>
+                    </div>
+                </div>
+
+                <!-- Practice Mode Header -->
+                <div id="practiceModeHeader" class="practice-header" style="display: none;">
+                    <h2><i class="fas fa-dumbbell"></i> <span id="practiceModuleName">专项练习</span></h2>
+                    <div class="practice-stats">
+                        <div class="practice-stat">
+                            <div class="practice-stat-value" id="practiceCorrect">0</div>
+                            <div class="practice-stat-label">答对</div>
+                        </div>
+                        <div class="practice-stat">
+                            <div class="practice-stat-value" id="practiceTotal">0</div>
+                            <div class="practice-stat-label">题目总数</div>
+                        </div>
+                        <div class="practice-stat">
+                            <div class="practice-stat-value" id="practiceAccuracy">0%</div>
+                            <div class="practice-stat-label">准确率</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="testContainer">
+                    <!-- Questions will be dynamically loaded here -->
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> 上一题
+                    </button>
+                    <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">
+                        <i class="fas fa-arrow-right"></i> 下一题
+                    </button>
+                    <button class="btn btn-success" onclick="submitTest()" id="submitBtn" style="display: none;">
+                        <i class="fas fa-check-circle"></i> 提交测试
+                    </button>
+                    <button class="btn btn-secondary" onclick="exitPractice()" id="exitPracticeBtn" style="display: none;">
+                        <i class="fas fa-times"></i> 退出练习
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div id="resultSection" style="display: none;">
+                <div class="result-container">
+                    <h2><i class="fas fa-trophy"></i> 测试结果分析</h2>
+                    <div class="score-display" id="scoreDisplay">0%</div>
+                    <div class="score-message" id="scoreMessage"></div>
+                    
+                    <div class="result-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="correctCount">0</div>
+                            <div class="stat-label">答对题数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalQuestions">22</div>
+                            <div class="stat-label">总题数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="timeSpent">0</div>
+                            <div class="stat-label">用时(分钟)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="readinessLevel">未知</div>
+                            <div class="stat-label">微积分准备度</div>
+                        </div>
+                    </div>
+
+                    <div class="module-breakdown">
+                        <h3>各模块得分详情</h3>
+                        <div id="moduleResults"></div>
+                    </div>
+
+                    <div id="weaknessRecommendations" class="weakness-recommendations" style="display: none;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> 建议加强的知识点</h4>
+                        <div id="recommendationsList"></div>
+                    </div>
+
+                    <div class="btn-group" style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="resetTest()">
+                            <i class="fas fa-redo"></i> 重新测试
+                        </button>
+                        <button class="btn btn-secondary" onclick="reviewAnswers()">
+                            <i class="fas fa-eye"></i> 查看解析
+                        </button>
+                        <button class="btn btn-success" onclick="switchTab('knowledge')">
+                            <i class="fas fa-book"></i> 复习知识点
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Module -->
+        <div id="knowledge" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-book-open"></i> 微积分预备知识体系</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                    掌握这四大核心领域的知识，是学好微积分的基础
+                </p>
+
+                <div class="knowledge-grid">
+                    <!-- Algebra -->
+                    <div class="knowledge-card">
+                        <div class="knowledge-header algebra">
+                            <h3><i class="fas fa-square-root-alt"></i> 代数基础</h3>
+                            <p>实数运算、方程求解、不等式处理</p>
+                        </div>
+                        <div class="knowledge-content">
+                            <ul class="topic-list">
+                                <li>实数的性质与运算法则</li>
+                                <li>指数与对数运算</li>
+                                <li>多项式运算与因式分解</li>
+                                <li>有理分式的化简</li>
+                                <li>一元二次方程求解</li>
+                                <li>不等式与绝对值</li>
+                            </ul>
+                            
+                            <div class="formula-box">
+                                <strong>核心公式：</strong><br>
+                                • $a^m \times a^n = a^{m+n}$<br>
+                                • $\log(xy) = \log x + \log y$<br>
+                                • $|a| = \sqrt{a^2}$<br>
+                                • $x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$
+                            </div>
+                            
+                            <div class="example-box">
+                                <strong>关键概念：</strong><br>
+                                解不等式 $|2x-3| < 5$<br>
+                                $\Leftrightarrow -5 < 2x-3 < 5$<br>
+                                $\Leftrightarrow -2 < 2x < 8$<br>
+                                $\Leftrightarrow -1 < x < 4$
+                            </div>
+                            
+                            <div class="importance-level essential">对微积分：极其重要</div>
+                        </div>
+                    </div>
+
+                    <!-- Analytic Geometry -->
+                    <div class="knowledge-card">
+                        <div class="knowledge-header geometry">
+                            <h3><i class="fas fa-vector-square"></i> 解析几何</h3>
+                            <p>坐标系统、直线与圆锥曲线</p>
+                        </div>
+                        <div class="knowledge-content">
+                            <ul class="topic-list">
+                                <li>直角坐标系与点的表示</li>
+                                <li>距离公式与中点公式</li>
+                                <li>直线方程的各种形式</li>
+                                <li>圆的标准方程与一般方程</li>
+                                <li>抛物线、椭圆、双曲线基础</li>
+                            </ul>
+                            
+                            <div class="formula-box">
+                                <strong>基本公式：</strong><br>
+                                • 距离：$d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$<br>
+                                • 中点：$M = \left(\frac{x_1+x_2}{2}, \frac{y_1+y_2}{2}\right)$<br>
+                                • 直线：$y = kx + b$<br>
+                                • 圆：$(x-h)^2 + (y-k)^2 = r^2$
+                            </div>
+                            
+                            <div class="example-box">
+                                <strong>应用实例：</strong><br>
+                                求过点$(1,2)$且垂直于直线$y=2x+1$的直线方程<br>
+                                斜率 $k = -\frac{1}{2}$（垂直线斜率乘积为$-1$）<br>
+                                方程：$y - 2 = -\frac{1}{2}(x - 1)$
+                            </div>
+                            
+                            <div class="importance-level high">对微积分：很重要</div>
+                        </div>
+                    </div>
+
+                    <!-- Functions -->
+                    <div class="knowledge-card">
+                        <div class="knowledge-header function">
+                            <h3><i class="fas fa-function"></i> 函数理论</h3>
+                            <p>函数性质、复合函数、反函数</p>
+                        </div>
+                        <div class="knowledge-content">
+                            <ul class="topic-list">
+                                <li>函数的定义与表示方法</li>
+                                <li>定义域与值域的确定</li>
+                                <li>函数的单调性、奇偶性、周期性</li>
+                                <li>复合函数与反函数</li>
+                                <li>基本初等函数及其性质</li>
+                                <li>函数图像的变换</li>
+                            </ul>
+                            
+                            <div class="formula-box">
+                                <strong>重要概念：</strong><br>
+                                • 复合函数：$(f \circ g)(x) = f(g(x))$<br>
+                                • 反函数：$y = f(x) \Leftrightarrow x = f^{-1}(y)$<br>
+                                • 奇函数：$f(-x) = -f(x)$<br>
+                                • 偶函数：$f(-x) = f(x)$
+                            </div>
+                            
+                            <div class="example-box">
+                                <strong>图像变换：</strong><br>
+                                $y = f(x) \rightarrow y = f(x-h) + k$<br>
+                                表示图像向右平移$h$个单位，向上平移$k$个单位
+                            </div>
+                            
+                            <div class="importance-level essential">对微积分：极其重要</div>
+                        </div>
+                    </div>
+
+                    <!-- Trigonometry -->
+                    <div class="knowledge-card">
+                        <div class="knowledge-header trigonometry">
+                            <h3><i class="fas fa-wave-square"></i> 三角学</h3>
+                            <p>三角函数、恒等式、三角方程</p>
+                        </div>
+                        <div class="knowledge-content">
+                            <ul class="topic-list">
+                                <li>三角函数的定义（直角三角形、单位圆）</li>
+                                <li>基本三角恒等式</li>
+                                <li>三角函数的图像与性质</li>
+                                <li>两角和差公式</li>
+                                <li>反三角函数</li>
+                            </ul>
+                            
+                            <div class="formula-box">
+                                <strong>基本恒等式：</strong><br>
+                                • $\sin^2\theta + \cos^2\theta = 1$<br>
+                                • $\tan\theta = \frac{\sin\theta}{\cos\theta}$<br>
+                                • $\sin(A \pm B) = \sin A \cos B \pm \cos A \sin B$<br>
+                                • $\cos(A \pm B) = \cos A \cos B \mp \sin A \sin B$
+                            </div>
+                            
+                            <div class="example-box">
+                                <strong>特殊角度值：</strong><br>
+                                $\sin 30° = \frac{1}{2}$, $\cos 30° = \frac{\sqrt{3}}{2}$<br>
+                                $\sin 45° = \frac{\sqrt{2}}{2}$, $\cos 45° = \frac{\sqrt{2}}{2}$<br>
+                                $\sin 60° = \frac{\sqrt{3}}{2}$, $\cos 60° = \frac{1}{2}$
+                            </div>
+                            
+                            <div class="importance-level essential">对微积分：极其重要</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Module -->
+        <div id="practice" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-dumbbell"></i> 专项练习</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                    针对各个模块进行专项训练，强化薄弱环节
+                </p>
+
+                <div class="module-selector">
+                    <div class="module-select-card" onclick="startPractice('algebra')">
+                        <div style="color: var(--algebra-color); font-size: 2em; margin-bottom: 10px;">
+                            <i class="fas fa-square-root-alt"></i>
+                        </div>
+                        <h4>代数专练</h4>
+                        <p>6道题目</p>
+                    </div>
+
+                    <div class="module-select-card" onclick="startPractice('geometry')">
+                        <div style="color: var(--geometry-color); font-size: 2em; margin-bottom: 10px;">
+                            <i class="fas fa-vector-square"></i>
+                        </div>
+                        <h4>几何专练</h4>
+                        <p>5道题目</p>
+                    </div>
+
+                    <div class="module-select-card" onclick="startPractice('function')">
+                        <div style="color: var(--function-color); font-size: 2em; margin-bottom: 10px;">
+                            <i class="fas fa-function"></i>
+                        </div>
+                        <h4>函数专练</h4>
+                        <p>6道题目</p>
+                    </div>
+
+                    <div class="module-select-card" onclick="startPractice('trigonometry')">
+                        <div style="color: var(--trigonometry-color); font-size: 2em; margin-bottom: 10px;">
+                            <i class="fas fa-wave-square"></i>
+                        </div>
+                        <h4>三角专练</h4>
+                        <p>5道题目</p>
+                    </div>
+                </div>
+
+                <div id="practiceContainer" style="display: none;">
+                    <!-- Practice questions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global State Management
+        const appState = {
+            currentTab: 'test',
+            currentQuestion: 0,
+            answers: {},
+            testStartTime: Date.now(),
+            testCompleted: false,
+            practiceMode: false,
+            reviewMode: false,
+            currentModule: '',
+            incorrectQuestions: [],
+            questions: [
+                // Algebra Questions (6)
+                {
+                    id: 1,
+                    module: "algebra",
+                    difficulty: "easy",
+                    question: "计算：(-2)³ × 2² = ?",
+                    options: ["-32", "-16", "16", "32"],
+                    correct: 0,
+                    explanation: "(-2)³ = -8，2² = 4，所以 (-2)³ × 2² = -8 × 4 = -32"
+                },
+                {
+                    id: 2,
+                    module: "algebra",
+                    difficulty: "medium",
+                    question: "如果 log₂(x) = 3，那么 x = ?",
+                    options: ["6", "8", "9", "16"],
+                    correct: 1,
+                    explanation: "log₂(x) = 3 意味着 2³ = x，所以 x = 8"
+                },
+                {
+                    id: 3,
+                    module: "algebra",
+                    difficulty: "medium",
+                    question: "因式分解：x² - 5x + 6 = ?",
+                    options: ["(x-2)(x-3)", "(x-1)(x-6)", "(x+2)(x+3)", "(x-2)(x+3)"],
+                    correct: 0,
+                    explanation: "寻找两个数，它们的乘积是6，和是5。2×3=6，2+3=5，所以是(x-2)(x-3)"
+                },
+                {
+                    id: 4,
+                    module: "algebra",
+                    difficulty: "medium",
+                    question: "不等式 |x - 3| < 2 的解集是？",
+                    options: ["(1, 5)", "(-∞, 1) ∪ (5, +∞)", "[1, 5]", "(3, 5)"],
+                    correct: 0,
+                    explanation: "|x - 3| < 2 等价于 -2 < x - 3 < 2，即 1 < x < 5"
+                },
+                {
+                    id: 5,
+                    module: "algebra",
+                    difficulty: "hard",
+                    question: "若 2^(x+1) = 8^(x-1)，则 x = ?",
+                    options: ["2", "3", "4", "5"],
+                    correct: 0,
+                    explanation: "2^(x+1) = (2³)^(x-1) = 2^(3x-3)，所以 x+1 = 3x-3，解得 x = 2"
+                },
+                {
+                    id: 6,
+                    module: "algebra",
+                    difficulty: "hard",
+                    question: "化简：√(x² - 4x + 4) (x < 2)",
+                    options: ["x - 2", "2 - x", "x + 2", "4 - x"],
+                    correct: 1,
+                    explanation: "x² - 4x + 4 = (x-2)²，当 x < 2 时，x-2 < 0，所以 √((x-2)²) = |x-2| = 2-x"
+                },
+                
+                // Geometry Questions (5)
+                {
+                    id: 7,
+                    module: "geometry",
+                    difficulty: "easy",
+                    question: "点 A(3, 4) 到原点的距离是？",
+                    options: ["3", "4", "5", "7"],
+                    correct: 2,
+                    explanation: "距离公式：d = √(3² + 4²) = √(9 + 16) = √25 = 5"
+                },
+                {
+                    id: 8,
+                    module: "geometry",
+                    difficulty: "medium",
+                    question: "直线 2x + 3y = 6 的斜率是？",
+                    options: ["-2/3", "-3/2", "2/3", "3/2"],
+                    correct: 0,
+                    explanation: "将方程化为斜截式：y = -2x/3 + 2，斜率为 -2/3"
+                },
+                {
+                    id: 9,
+                    module: "geometry",
+                    difficulty: "medium",
+                    question: "圆心在原点，半径为 3 的圆的方程是？",
+                    options: ["x² + y² = 3", "x² + y² = 9", "(x-3)² + (y-3)² = 9", "x + y = 3"],
+                    correct: 1,
+                    explanation: "圆心在原点(0,0)，半径为r的圆的标准方程是 x² + y² = r²，所以是 x² + y² = 9"
+                },
+                {
+                    id: 10,
+                    module: "geometry",
+                    difficulty: "hard",
+                    question: "两直线 x + 2y = 5 和 2x - y = 0 的交点坐标是？",
+                    options: ["(1, 2)", "(2, 1)", "(1, 1)", "(2, 2)"],
+                    correct: 0,
+                    explanation: "联立方程组求解：x + 2y = 5，2x - y = 0。解得 x = 1, y = 2"
+                },
+                {
+                    id: 11,
+                    module: "geometry",
+                    difficulty: "hard",
+                    question: "抛物线 y = x² - 4x + 3 的顶点坐标是？",
+                    options: ["(2, -1)", "(2, 1)", "(-2, -1)", "(-2, 1)"],
+                    correct: 0,
+                    explanation: "完成平方：y = (x-2)² - 1，顶点为 (2, -1)"
+                },
+                
+                // Function Questions (6)
+                {
+                    id: 12,
+                    module: "function",
+                    difficulty: "easy",
+                    question: "函数 f(x) = x² - 1 的定义域是？",
+                    options: ["[1, +∞)", "(-1, 1)", "(-∞, +∞)", "[0, +∞)"],
+                    correct: 2,
+                    explanation: "多项式函数的定义域是全体实数 (-∞, +∞)"
+                },
+                {
+                    id: 13,
+                    module: "function",
+                    difficulty: "medium",
+                    question: "若 f(x) = 2x + 1，则 f(f(x)) = ?",
+                    options: ["4x + 2", "4x + 3", "2x + 2", "2x + 3"],
+                    correct: 1,
+                    explanation: "f(f(x)) = f(2x + 1) = 2(2x + 1) + 1 = 4x + 2 + 1 = 4x + 3"
+                },
+                {
+                    id: 14,
+                    module: "function",
+                    difficulty: "medium",
+                    question: "函数 f(x) = x³ 是什么类型的函数？",
+                    options: ["偶函数", "奇函数", "既奇又偶", "非奇非偶"],
+                    correct: 1,
+                    explanation: "f(-x) = (-x)³ = -x³ = -f(x)，满足奇函数定义"
+                },
+                {
+                    id: 15,
+                    module: "function",
+                    difficulty: "hard",
+                    question: "函数 y = log₂(x - 1) 的定义域是？",
+                    options: ["(1, +∞)", "[1, +∞)", "(0, +∞)", "(-∞, +∞)"],
+                    correct: 0,
+                    explanation: "对数函数要求真数大于0，所以 x - 1 > 0，即 x > 1"
+                },
+                {
+                    id: 16,
+                    module: "function",
+                    difficulty: "hard",
+                    question: "若函数 f(x) = ax + b 满足 f(1) = 3，f(2) = 5，则 f(x) = ?",
+                    options: ["2x + 1", "x + 2", "3x", "2x - 1"],
+                    correct: 0,
+                    explanation: "由 f(1) = a + b = 3 和 f(2) = 2a + b = 5，解得 a = 2, b = 1，所以 f(x) = 2x + 1"
+                },
+                {
+                    id: 17,
+                    module: "function",
+                    difficulty: "hard",
+                    question: "函数 f(x) = 1/x 的反函数是？",
+                    options: ["f⁻¹(x) = x", "f⁻¹(x) = -x", "f⁻¹(x) = 1/x", "f⁻¹(x) = x²"],
+                    correct: 2,
+                    explanation: "设 y = 1/x，则 x = 1/y，所以反函数为 f⁻¹(x) = 1/x"
+                },
+                
+                // Trigonometry Questions (5)
+                {
+                    id: 18,
+                    module: "trigonometry",
+                    difficulty: "easy",
+                    question: "sin(π/6) 的值是？",
+                    options: ["1/2", "√2/2", "√3/2", "1"],
+                    correct: 0,
+                    explanation: "sin(π/6) = sin(30°) = 1/2"
+                },
+                {
+                    id: 19,
+                    module: "trigonometry",
+                    difficulty: "medium",
+                    question: "在单位圆中，cos(π/3) = ?",
+                    options: ["1/2", "√2/2", "√3/2", "1"],
+                    correct: 0,
+                    explanation: "cos(π/3) = cos(60°) = 1/2"
+                },
+                {
+                    id: 20,
+                    module: "trigonometry",
+                    difficulty: "medium",
+                    question: "化简：sin²x + cos²x = ?",
+                    options: ["1", "0", "sin(2x)", "cos(2x)"],
+                    correct: 0,
+                    explanation: "这是基本三角恒等式：sin²x + cos²x = 1"
+                },
+                {
+                    id: 21,
+                    module: "trigonometry",
+                    difficulty: "hard",
+                    question: "sin(π/4 + π/6) = ?",
+                    options: ["(√6 + √2)/4", "(√6 - √2)/4", "(√3 + 1)/2", "√3/2"],
+                    correct: 0,
+                    explanation: "sin(π/4 + π/6) = sin(π/4)cos(π/6) + cos(π/4)sin(π/6) = (√2/2)(√3/2) + (√2/2)(1/2) = (√6 + √2)/4"
+                },
+                {
+                    id: 22,
+                    module: "trigonometry",
+                    difficulty: "hard",
+                    question: "若 tan(x) = 1，且 0 < x < π/2，则 x = ?",
+                    options: ["π/6", "π/4", "π/3", "π/2"],
+                    correct: 1,
+                    explanation: "tan(π/4) = 1，所以 x = π/4"
+                }
+            ]
+        };
+
+        // Module question counts
+        const moduleQuestionCounts = {
+            algebra: 6,
+            geometry: 5,
+            function: 6,
+            trigonometry: 5
+        };
+
+        // Initialize the application
+        window.onload = function() {
+            renderQuestion();
+        };
+
+        // Tab Switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+
+            // Update tab content
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+
+            appState.currentTab = tabName;
+
+            // Reset modes when switching tabs
+            if (tabName !== 'test') {
+                exitAllModes();
+            }
+        }
+
+        // Test Module Functions
+        function renderQuestion() {
+            const container = document.getElementById('testContainer');
+            const question = appState.questions[appState.currentQuestion];
+            
+            const isReviewMode = appState.reviewMode;
+            const userAnswer = appState.answers[question.id];
+            const isAnswered = userAnswer !== undefined;
+            const isCorrect = userAnswer === question.correct;
+
+            let questionHtml = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <span class="question-number">题目 ${appState.currentQuestion + 1}/${appState.questions.length}</span>
+                        <span class="question-module ${question.module}">
+                            ${getModuleName(question.module)}
+                        </span>
+                        <span class="question-difficulty ${question.difficulty}">
+                            ${getDifficultyName(question.difficulty)}
+                        </span>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    ${question.mathExpression ? `<div class="math-expression">${question.mathExpression}</div>` : ''}
+                    <div class="options">
+            `;
+
+            question.options.forEach((option, index) => {
+                let optionClass = '';
+                let iconContent = '';
+                
+                if (isReviewMode && isAnswered) {
+                    if (index === question.correct) {
+                        optionClass += ' correct';
+                        iconContent = '<i class="fas fa-check"></i>';
+                    }
+                    if (index === userAnswer && userAnswer !== question.correct) {
+                        optionClass += ' user-selected incorrect';
+                        iconContent = '<i class="fas fa-times"></i>';
+                    }
+                    if (index === userAnswer && userAnswer === question.correct) {
+                        optionClass += ' user-selected correct';
+                        iconContent = '<i class="fas fa-check"></i>';
+                    }
+                } else if (userAnswer === index) {
+                    optionClass += ' selected';
+                    iconContent = '<i class="fas fa-check"></i>';
+                }
+
+                questionHtml += `
+                    <div class="option ${optionClass}" ${!isReviewMode ? `onclick="selectAnswer(${question.id}, ${index})"` : ''}>
+                        <div class="option-indicator">
+                            ${iconContent}
+                        </div>
+                        <span>${option}</span>
+                    </div>
+                `;
+            });
+
+            questionHtml += '</div>';
+
+            // Add explanation in review mode
+            if (isReviewMode && isAnswered) {
+                const resultText = isCorrect ? '回答正确！' : '回答错误！';
+                const resultClass = isCorrect ? 'success-color' : 'error-color';
+                
+                questionHtml += `
+                    <div class="explanation-box">
+                        <h5 style="color: var(--${resultClass});">
+                            <i class="fas fa-${isCorrect ? 'check-circle' : 'times-circle'}"></i> 
+                            ${resultText}
+                        </h5>
+                        <strong>解析：</strong>${question.explanation}
+                    </div>
+                `;
+            }
+
+            questionHtml += '</div>';
+            container.innerHTML = questionHtml;
+            
+            updateNavigationButtons();
+            
+            if (appState.practiceMode) {
+                updatePracticeStats();
+            }
+        }
+
+        function getModuleName(module) {
+            const names = {
+                algebra: '代数基础',
+                geometry: '解析几何',
+                function: '函数理论',
+                trigonometry: '三角学'
+            };
+            return names[module];
+        }
+
+        function getDifficultyName(difficulty) {
+            const names = {
+                easy: '基础',
+                medium: '中等',
+                hard: '较难'
+            };
+            return names[difficulty];
+        }
+
+        function selectAnswer(questionId, answerIndex) {
+            if (appState.reviewMode) return; // Disable selection in review mode
+            
+            appState.answers[questionId] = answerIndex;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (appState.currentQuestion < appState.questions.length - 1) {
+                appState.currentQuestion++;
+                renderQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (appState.currentQuestion > 0) {
+                appState.currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+
+            prevBtn.disabled = appState.currentQuestion === 0;
+            
+            if (appState.currentQuestion === appState.questions.length - 1) {
+                if (!appState.reviewMode && !appState.testCompleted) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'inline-flex';
+                } else {
+                    nextBtn.style.display = 'inline-flex';
+                    submitBtn.style.display = 'none';
+                }
+            } else {
+                nextBtn.style.display = 'inline-flex';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+
+
+        function updatePracticeStats() {
+            if (!appState.practiceMode) return;
+            
+            const answered = appState.questions.filter(q => appState.answers[q.id] !== undefined).length;
+            const correct = appState.questions.filter(q => appState.answers[q.id] === q.correct).length;
+            const total = appState.questions.length;
+            const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+            
+            document.getElementById('practiceCorrect').textContent = correct;
+            document.getElementById('practiceTotal').textContent = total;
+            document.getElementById('practiceAccuracy').textContent = `${accuracy}%`;
+        }
+
+        function submitTest() {
+            if (Object.keys(appState.answers).length < appState.questions.length) {
+                if (!confirm('你还有未回答的题目，确定要提交吗？')) {
+                    return;
+                }
+            }
+
+            appState.testCompleted = true;
+            const timeSpent = Math.round((Date.now() - appState.testStartTime) / 60000); // Convert to minutes
+            
+            // Calculate overall score
+            let correct = 0;
+            appState.incorrectQuestions = [];
+            
+            appState.questions.forEach(question => {
+                if (appState.answers[question.id] === question.correct) {
+                    correct++;
+                } else if (appState.answers[question.id] !== undefined) {
+                    appState.incorrectQuestions.push(question.id - 1); // Store question index
+                }
+            });
+
+            const score = Math.round((correct / appState.questions.length) * 100);
+
+            // Calculate module scores
+            const moduleScores = {};
+            Object.keys(moduleQuestionCounts).forEach(module => {
+                const moduleQuestions = appState.questions.filter(q => q.module === module);
+                const moduleCorrect = moduleQuestions.filter(q => appState.answers[q.id] === q.correct).length;
+                moduleScores[module] = {
+                    correct: moduleCorrect,
+                    total: moduleQuestionCounts[module],
+                    percentage: Math.round((moduleCorrect / moduleQuestionCounts[module]) * 100)
+                };
+            });
+
+            displayResults(score, correct, timeSpent, moduleScores);
+        }
+
+        function displayResults(score, correct, timeSpent, moduleScores) {
+            document.getElementById('testContainer').style.display = 'none';
+            document.querySelector('#test .btn-group').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+
+            document.getElementById('scoreDisplay').textContent = `${score}%`;
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('timeSpent').textContent = timeSpent;
+
+            // Determine readiness level
+            let readinessLevel, message;
+            if (score >= 85) {
+                readinessLevel = '优秀';
+                message = '恭喜！你已经完全准备好学习微积分了！你的数学基础非常扎实。';
+            } else if (score >= 70) {
+                readinessLevel = '良好';
+                message = '很好！你基本准备好学习微积分了，建议复习一下薄弱环节。';
+            } else if (score >= 60) {
+                readinessLevel = '及格';
+                message = '你有一定的基础，但建议先加强预备知识再学习微积分。';
+            } else {
+                readinessLevel = '需加强';
+                message = '建议系统学习预备知识后再开始微积分学习。';
+            }
+
+            document.getElementById('readinessLevel').textContent = readinessLevel;
+            document.getElementById('scoreMessage').textContent = message;
+
+            // Display module breakdown
+            const moduleResults = document.getElementById('moduleResults');
+            const moduleNames = {
+                algebra: '代数基础',
+                geometry: '解析几何', 
+                function: '函数理论',
+                trigonometry: '三角学'
+            };
+
+            const moduleColors = {
+                algebra: 'var(--algebra-color)',
+                geometry: 'var(--geometry-color)',
+                function: 'var(--function-color)',
+                trigonometry: 'var(--trigonometry-color)'
+            };
+
+            let moduleResultsHtml = '';
+            let weaknesses = [];
+
+            Object.keys(moduleScores).forEach(module => {
+                const data = moduleScores[module];
+                const color = moduleColors[module];
+                
+                moduleResultsHtml += `
+                    <div class="module-result">
+                        <div class="module-result-header">
+                            <div class="module-result-name">
+                                <div style="width: 16px; height: 16px; background: ${color}; border-radius: 50%;"></div>
+                                ${moduleNames[module]}
+                            </div>
+                            <div class="module-result-score" style="color: ${color};">
+                                ${data.correct}/${data.total} (${data.percentage}%)
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                if (data.percentage < 70) {
+                    weaknesses.push({
+                        module: moduleNames[module],
+                        score: data.percentage
+                    });
+                }
+            });
+
+            moduleResults.innerHTML = moduleResultsHtml;
+
+            // Show weakness recommendations
+            if (weaknesses.length > 0) {
+                const recommendationsContainer = document.getElementById('weaknessRecommendations');
+                const recommendationsList = document.getElementById('recommendationsList');
+                
+                let recommendationsHtml = '<ul>';
+                weaknesses.forEach(weakness => {
+                    recommendationsHtml += `<li>加强 <strong>${weakness.module}</strong> 的学习 (当前得分: ${weakness.score}%)</li>`;
+                });
+                recommendationsHtml += '</ul>';
+                
+                recommendationsList.innerHTML = recommendationsHtml;
+                recommendationsContainer.style.display = 'block';
+            }
+
+
+        }
+
+        function resetTest() {
+            appState.currentQuestion = 0;
+            appState.answers = {};
+            appState.testStartTime = Date.now();
+            appState.testCompleted = false;
+            appState.reviewMode = false;
+            appState.incorrectQuestions = [];
+
+            exitAllModes();
+            
+            document.getElementById('testContainer').style.display = 'block';
+            document.querySelector('#test .btn-group').style.display = 'flex';
+            document.getElementById('resultSection').style.display = 'none';
+
+            renderQuestion();
+        }
+
+        function reviewAnswers() {
+            if (appState.incorrectQuestions.length === 0) {
+                alert('恭喜！你没有答错任何题目！');
+                return;
+            }
+
+            appState.reviewMode = true;
+            appState.currentQuestion = 0;
+
+            // Show review mode header
+            const reviewHeader = document.getElementById('reviewModeHeader');
+            reviewHeader.style.display = 'block';
+
+            // Create quick navigation for incorrect questions
+            const quickNav = document.getElementById('reviewQuickNav');
+            let navHtml = '';
+            
+            appState.questions.forEach((question, index) => {
+                const userAnswer = appState.answers[question.id];
+                const isAnswered = userAnswer !== undefined;
+                const isCorrect = userAnswer === question.correct;
+                
+                let btnClass = 'review-btn';
+                if (index === appState.currentQuestion) btnClass += ' active';
+                if (isAnswered) {
+                    btnClass += isCorrect ? ' correct' : ' incorrect';
+                }
+                
+                navHtml += `<button class="${btnClass}" onclick="jumpToQuestion(${index})">
+                    ${index + 1}
+                </button>`;
+            });
+            
+            quickNav.innerHTML = navHtml;
+
+            // Hide result section and show test container
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('testContainer').style.display = 'block';
+            document.querySelector('#test .btn-group').style.display = 'flex';
+
+            renderQuestion();
+        }
+
+        function jumpToQuestion(questionIndex) {
+            appState.currentQuestion = questionIndex;
+            renderQuestion();
+            
+            // Update quick navigation active state
+            const navButtons = document.querySelectorAll('#reviewQuickNav .review-btn');
+            navButtons.forEach((btn, index) => {
+                btn.classList.toggle('active', index === questionIndex);
+            });
+        }
+
+        function exitAllModes() {
+            appState.practiceMode = false;
+            appState.reviewMode = false;
+            appState.currentModule = '';
+
+            // Hide mode headers
+            document.getElementById('reviewModeHeader').style.display = 'none';
+            document.getElementById('practiceModeHeader').style.display = 'none';
+            
+            // Hide practice exit button
+            document.getElementById('exitPracticeBtn').style.display = 'none';
+
+            // Reset to original questions if in practice mode
+            if (appState.originalQuestions) {
+                appState.questions = [...appState.originalQuestions];
+                delete appState.originalQuestions;
+            }
+
+            // Reset UI
+            document.getElementById('testTitle').innerHTML = '<i class="fas fa-clipboard-list"></i> 微积分预备知识综合测试';
+            document.getElementById('testDescription').textContent = '本测试涵盖学习微积分前必须掌握的四大核心领域，共22道题目，建议用时30分钟';
+        }
+
+        // Practice Module Functions
+        function startPractice(module) {
+            const practiceQuestions = appState.questions.filter(q => q.module === module);
+            
+            // Switch to practice mode
+            appState.practiceMode = true;
+            appState.reviewMode = false;
+            appState.currentModule = module;
+            appState.currentQuestion = 0;
+            appState.answers = {};
+            
+            // Store original questions and use filtered ones
+            appState.originalQuestions = [...appState.questions];
+            appState.questions = practiceQuestions;
+            
+            // Show practice mode header
+            const practiceHeader = document.getElementById('practiceModeHeader');
+            practiceHeader.style.display = 'block';
+            document.getElementById('practiceModuleName').textContent = getModuleName(module) + ' 专项练习';
+            
+            // Show exit practice button
+            document.getElementById('exitPracticeBtn').style.display = 'inline-flex';
+            
+            // Update test header
+            document.getElementById('testTitle').innerHTML = `<i class="fas fa-dumbbell"></i> ${getModuleName(module)}专项练习`;
+            document.getElementById('testDescription').textContent = `专注练习${getModuleName(module)}相关题目，共${practiceQuestions.length}道题目`;
+            
+            // Switch to test tab and render
+            switchTab('test');
+            renderQuestion();
+            updatePracticeStats();
+        }
+
+        function exitPractice() {
+            if (confirm('确定要退出当前练习吗？进度将不会保存。')) {
+                exitAllModes();
+                appState.currentQuestion = 0;
+                appState.answers = {};
+                renderQuestion();
+                switchTab('practice');
+            }
+        }
+
+        // Utility Functions
+        function getRandomQuestions(count) {
+            const shuffled = [...appState.questions].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+    </script>
+</body>
+</html>

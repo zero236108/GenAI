@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高等数学课件 - 变限积分</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            /* 浅色主题变量 */
+            --primary-gradient-start: #667eea;
+            --primary-gradient-end: #764ba2;
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --main-bg: white;
+            --text-color: #333;
+            --text-color-light: #6c757d;
+            --nav-bg: #f8f9fa;
+            --nav-border: #e9ecef;
+            --button-border: #667eea;
+            --button-text: #667eea;
+            --button-hover-bg: #667eea;
+            --button-hover-text: white;
+            --concept-gradient-start: #f5f7fa;
+            --concept-gradient-end: #c3cfe2;
+            --definition-bg: white;
+            --definition-border: #667eea;
+            --theorem-bg: #fffbf0;
+            --theorem-border: #ffd700;
+            --example-bg: #f0f8ff;
+            --example-border: #4169e1;
+            --formula-bg: #f8f9fa;
+            --formula-border: #dee2e6;
+            --graph-bg: white;
+            --interactive-gradient-start: #e0c3fc;
+            --interactive-gradient-end: #8ec5fc;
+            --exercise-bg: #fff5f5;
+            --exercise-border: #ff6b6b;
+            --tip-bg: #d4edda;
+            --tip-border: #c3e6cb;
+            --animation-bg: #f8f9fa;
+            --canvas-axes: #333;
+            --shadow-color: rgba(0,0,0,0.3);
+            --shadow-light: rgba(0,0,0,0.1);
+            --shadow-lighter: rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] {
+            /* 深色主题变量 */
+            --primary-gradient-start: #8b9ef3;
+            --primary-gradient-end: #9d6fc9;
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #0f0f1e;
+            --main-bg: #1e1e2e;
+            --text-color: #e0e0e0;
+            --text-color-light: #a0a0a0;
+            --nav-bg: #2a2a3e;
+            --nav-border: #3a3a4e;
+            --button-border: #8b9ef3;
+            --button-text: #8b9ef3;
+            --button-hover-bg: #8b9ef3;
+            --button-hover-text: #1e1e2e;
+            --concept-gradient-start: #2a2a3e;
+            --concept-gradient-end: #323248;
+            --definition-bg: #2a2a3e;
+            --definition-border: #8b9ef3;
+            --theorem-bg: #3a3a2e;
+            --theorem-border: #ffd700;
+            --example-bg: #2a2e3a;
+            --example-border: #6189f1;
+            --formula-bg: #2a2a3e;
+            --formula-border: #3a3a4e;
+            --graph-bg: #2a2a3e;
+            --interactive-gradient-start: #3a2e4a;
+            --interactive-gradient-end: #2e3a4a;
+            --exercise-bg: #3a2a2a;
+            --exercise-border: #ff8b8b;
+            --tip-bg: #2a3a2e;
+            --tip-border: #4a5a4e;
+            --animation-bg: #2a2a3e;
+            --canvas-axes: #e0e0e0;
+            --shadow-color: rgba(0,0,0,0.5);
+            --shadow-light: rgba(0,0,0,0.3);
+            --shadow-lighter: rgba(0,0,0,0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--main-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow-color);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            color: white;
+            font-size: 16px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .theme-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(20deg);
+        }
+        
+        nav {
+            background: var(--nav-bg);
+            padding: 20px 40px;
+            border-bottom: 2px solid var(--nav-border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: var(--main-bg);
+            border: 2px solid var(--button-border);
+            border-radius: 25px;
+            color: var(--button-text);
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: var(--button-hover-bg);
+            color: var(--button-hover-text);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, var(--concept-gradient-start) 0%, var(--concept-gradient-end) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px var(--shadow-light);
+        }
+        
+        .concept-box h2 {
+            color: var(--button-border);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: var(--definition-bg);
+            border-left: 5px solid var(--definition-border);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px var(--shadow-lighter);
+        }
+        
+        .definition h3 {
+            color: var(--definition-border);
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: var(--theorem-bg);
+            border: 2px solid var(--theorem-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--theorem-border);
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: var(--example-bg);
+            border: 2px solid var(--example-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--example-border);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: var(--formula-bg);
+            border: 1px solid var(--formula-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+
+        /* 自定义滚动条样式 */
+        .formula::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .formula::-webkit-scrollbar-track {
+            background: var(--formula-border);
+            border-radius: 4px;
+        }
+
+        .formula::-webkit-scrollbar-thumb {
+            background: var(--button-border);
+            border-radius: 4px;
+        }
+
+        .formula::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gradient-end);
+        }
+
+        /* Firefox 滚动条样式 */
+        .formula {
+            scrollbar-width: thin;
+            scrollbar-color: var(--button-border) var(--formula-border);
+        }
+
+        /* 确保 MathJax 公式不被截断 */
+        .formula mjx-container {
+            display: inline-block !important;
+            max-width: none !important;
+        }
+        
+        .graph-container {
+            background: var(--graph-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px var(--shadow-light);
+        }
+        
+        .graph-container h3 {
+            color: var(--button-border);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, var(--interactive-gradient-start) 0%, var(--interactive-gradient-end) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: var(--formula-border);
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--button-border);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: var(--button-border);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: var(--exercise-bg);
+            border: 2px solid var(--exercise-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: var(--exercise-border);
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: var(--nav-bg);
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid var(--nav-border);
+            color: var(--text-color-light);
+        }
+        
+        .tip {
+            background: var(--tip-bg);
+            border: 1px solid var(--tip-border);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            background: var(--animation-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .integral-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: var(--button-border);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .animation-btn:hover {
+            background: var(--primary-gradient-end);
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+            color: var(--text-color);
+        }
+
+        /* MathJax 深色主题适配 */
+        [data-theme="dark"] mjx-container {
+            color: #e0e0e0 !important;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .animation-container {
+                height: 200px;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .theme-icon {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高等数学 - 变限积分</h1>
+            <div class="subtitle">微积分中的重要概念与应用</div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-icon" id="themeIcon">🌙</span>
+                <span id="themeText">深色模式</span>
+            </button>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('intro')">基本概念</button>
+            <button onclick="showSection('formula')">求导公式</button>
+            <button onclick="showSection('method')">处理方法</button>
+            <button onclick="showSection('example')">例题解析</button>
+            <button onclick="showSection('exercise')">练习题</button>
+            <button onclick="showSection('animation')">动画演示</button>
+        </nav>
+        
+        <main>
+            <!-- 基本概念部分 -->
+            <div class="section active" id="intro">
+                <div class="concept-box">
+                    <h2>📚 变限积分的基本概念</h2>
+                    <p>变限积分是微积分中的重要概念，它将积分与函数联系起来，为微积分基本定理奠定了基础。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>定义 1.1：积分上限函数</h3>
+                    <p>设 \( f(x) \) 在 \([a,b]\) 上连续，则对任意 \( x \in [a,b] \)，函数</p>
+                    <div class="formula">
+                        \[ \Phi(x) = \int_a^x f(t) \mathrm{d}t \]
+                    </div>
+                    <p>称为积分上限函数（或变限积分函数）。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>微积分基本定理</h3>
+                    <p>若 \( f(x) \) 在 \([a,b]\) 上连续，则积分上限函数 \( \Phi(x) \) 在 \([a,b]\) 上可导，且</p>
+                    <div class="formula">
+                        \[ \frac{\mathrm{d}}{\mathrm{d}x} \int_a^x f(t) \mathrm{d}t = f(x) \]
+                    </div>
+                    <p>这表明积分上限函数是被积函数的一个原函数。</p>
+                </div>
+                
+                <div class="tip">
+                    理解要点：变限积分将定积分转化为函数，建立了积分与微分之间的桥梁。
+                </div>
+            </div>
+            
+            <!-- 求导公式部分 -->
+            <div class="section" id="formula">
+                <div class="concept-box">
+                    <h2>🔧 变限积分的求导公式</h2>
+                    <p>掌握变限积分的求导方法是解决相关问题的关键。</p>
+                </div>
+                
+                <div class="definition">
+                    <h3>复合上限求导</h3>
+                    <p>当积分上限是复合函数时：</p>
+                    <div class="formula">
+                        \[ \frac{\mathrm{d}}{\mathrm{d}x} \int_a^{u(x)} f(t) \mathrm{d}t = f(u(x)) \cdot u'(x) \]
+                    </div>
+                </div>
+                
+                <div class="definition">
+                    <h3>上下限均为函数</h3>
+                    <p>当积分上下限都是函数时：</p>
+                    <div class="formula">
+                        \[ \frac{\mathrm{d}}{\mathrm{d}x} \int_{v(x)}^{u(x)} f(t) \mathrm{d}t = f(u(x)) \cdot u'(x) - f(v(x)) \cdot v'(x) \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>示例计算</h3>
+                    <p>计算 \( \frac{\mathrm{d}}{\mathrm{d}x} \int_{x^2}^{\sin x} e^t \mathrm{d}t \)：</p>
+                    <div class="formula">
+                        \[ e^{\sin x} \cos x - 2x e^{x^2} \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 处理方法部分 -->
+            <div class="section" id="method">
+                <div class="concept-box">
+                    <h2>🛠️ 乘积型/混合型积分处理方法</h2>
+                    <p>当被积函数或积分限包含变量x时，需要特殊处理方法。</p>
+                </div>
+                
+                <div class="theorem">
+                    <h3>拆项法</h3>
+                    <div class="formula">
+                        \[ \int_{0}^{x} (x - t) f(t) \mathrm{d}t = x \int_{0}^{x} f(t) \mathrm{d}t - \int_{0}^{x} t f(t) \mathrm{d}t \]
+                    </div>
+                    <p>求导后：</p>
+                    <div class="formula">
+                        \[ \frac{\mathrm{d}}{\mathrm{d}x} \int_{0}^{x} (x - t) f(t) \mathrm{d}t = \int_{0}^{x} f(t) \mathrm{d}t \]
+                    </div>
+                </div>
+                
+                <div class="theorem">
+                    <h3>换元法</h3>
+                    <p>计算 \( \int_{0}^{x} t e^{x t} \mathrm{d}t \)：</p>
+                    <div class="formula">
+                        \[ \text{令 } u = x t \Rightarrow \frac{1}{x} \int_{0}^{x^2} e^{u} \mathrm{d}u \]
+                    </div>
+                    <p>再求导：</p>
+                    <div class="formula">
+                        \[ -\frac{1}{x^2} \int_{0}^{x^2} e^{u} \mathrm{d}u + 2 e^{x^2} \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 例题解析部分 -->
+            <div class="section" id="example">
+                <div class="example">
+                    <h3>例1：分段函数的变限积分</h3>
+                    <p>设函数 \( f(x) \) 定义如下：</p>
+                    <div class="formula">
+                        \[ f(x) = 
+                        \begin{cases} 
+                        x^2 + 1, & x \leq 1, \\
+                        2x, & x > 1.
+                        \end{cases} \]
+                    </div>
+                    <p>定义变限积分函数 \( F(x) = \int_0^x f(t) \mathrm{d}t \)，求 \( F(x) \) 的表达式。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>1. 当 \( x \leq 1 \) 时：</p>
+                    <div class="formula">
+                        \[ F(x) = \int_0^x (t^2 + 1) \mathrm{d}t = \frac{x^3}{3} + x \]
+                    </div>
+                    
+                    <p>2. 当 \( x > 1 \) 时：</p>
+                    <div class="formula">
+                        \[ F(x) = \int_0^1 (t^2 + 1) \mathrm{d}t + \int_1^x 2t \mathrm{d}t = \frac{4}{3} + x^2 - 1 = x^2 + \frac{1}{3} \]
+                    </div>
+                    
+                    <p>最终表达式：</p>
+                    <div class="formula">
+                        \[ F(x) = 
+                        \begin{cases} 
+                        \frac{x^3}{3} + x, & x \leq 1, \\
+                        x^2 + \frac{1}{3}, & x > 1.
+                        \end{cases} \]
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <h3>例2：二阶导数计算</h3>
+                    <p>设 \( f(x) = x \int_0^x \cos t^2 \mathrm{d}t \)，求 \( f''(0) \)。</p>
+                    
+                    <p><strong>解：</strong></p>
+                    <p>1. 先求一阶导数：</p>
+                    <div class="formula">
+                        \[ f'(x) = \int_0^x \cos t^2 \mathrm{d}t + x \cos x^2 \]
+                    </div>
+                    
+                    <p>2. 再求二阶导数：</p>
+                    <div class="formula">
+                        \[ f''(x) = \cos x^2 + \cos x^2 - 2x^2 \sin x^2 = 2\cos x^2 - 2x^2 \sin x^2 \]
+                    </div>
+                    
+                    <p>3. 代入 \( x = 0 \)：</p>
+                    <div class="formula">
+                        \[ f''(0) = 2 \times 1 - 0 = 2 \]
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 练习题部分 -->
+            <div class="section" id="exercise">
+                <div class="exercise">
+                    <h3>变限积分练习题</h3>
+                    <ol>
+                        <li>
+                            计算下列变限积分的导数：
+                            <div style="margin: 10px 0;">
+                                (a) \( \frac{\mathrm{d}}{\mathrm{d}x} \int_0^{x^2} \sin t^3 \mathrm{d}t \)
+                            </div>
+                            <div style="margin: 10px 0;">
+                                (b) \( \frac{\mathrm{d}}{\mathrm{d}x} \int_{\cos x}^{\sin x} e^{t^2} \mathrm{d}t \)
+                            </div>
+                        </li>
+                        <li>
+                            设 \( F(x) = \int_0^x (x - t) f(t) \mathrm{d}t \)，证明 \( F''(x) = f(x) \)
+                        </li>
+                        <li>
+                            计算极限：
+                            \[ \lim_{x \to 0} \frac{x \int_0^x [\ln(e-t)-1] \mathrm{d}t}{\sqrt{1+x^3}-1} \]
+                        </li>
+                        <li>
+                            证明：当 \( 0 < x < \frac{\pi}{4} \) 时，
+                            \[ \int_0^x e^t \cos t \mathrm{d}t > x \]
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="tip">
+                    提示：第3题可以使用洛必达法则，第4题可以构造函数分析单调性。
+                </div>
+                
+                <div class="exercise">
+                    <h3>参考答案</h3>
+                    <ol>
+                        <li>
+                            (a) \( 2x \sin x^6 \) <br>
+                            (b) \( e^{\sin^2 x} \cos x + e^{\cos^2 x} \sin x \)
+                        </li>
+                        <li>提示：先求一阶导数 \( F'(x) = \int_0^x f(t) \mathrm{d}t \)，再求二阶导数</li>
+                        <li>\( -\dfrac{1}{e} \)</li>
+                        <li>提示：设 \( F(x) = \int_0^x e^t \cos t \mathrm{d}t - x \)，证明 \( F'(x) > 0 \)</li>
+                    </ol>
+                </div>
+            </div>
+                <!-- 动画演示部分 -->
+            <div class="section" id="animation">
+                <div class="concept-box">
+                    <h2>🎬 变限积分动画演示</h2>
+                    <p>通过动画直观理解变限积分的概念和性质</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>积分上限函数的可视化</h3>
+                    <div class="math-display">
+                        \[ \Phi(x) = \int_a^x f(t) dt \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="integralCanvas" class="integral-animation"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startIntegralAnimation()">开始演示</button>
+                        <button class="animation-btn" onclick="resetIntegralAnimation()">重置</button>
+                    </div>
+                    <p>演示说明：动画展示了积分上限函数 \(\Phi(x) = \int_0^x f(t) dt\) 的形成过程，随着x的变化，积分面积逐渐增加。</p>
+                </div>
+
+                <div class="interactive-demo">
+                    <h3>微积分基本定理动画</h3>
+                    <div class="math-display">
+                        \[ \frac{d}{dx} \int_a^x f(t) dt = f(x) \]
+                    </div>
+                    <div class="animation-container">
+                        <canvas id="ftcCanvas" class="integral-animation"></canvas>
+                    </div>
+                    <div class="animation-controls">
+                        <button class="animation-btn" onclick="startFTCAnimation()">开始演示</button>
+                        <button class="animation-btn" onclick="pauseFTCAnimation()">暂停</button>
+                    </div>
+                    <p>演示说明：动画展示了微积分基本定理，积分上限函数的导数等于被积函数在该点的值。</p>
+                </div>
+
+
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 苏州经贸职业技术学院 | 变限积分专题</p>
+            <p>建议使用Chrome、Firefox或Edge浏览器获得最佳体验</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+
+        // 主题切换功能
+        let currentTheme = 'light';
+
+        function initTheme() {
+            // 尝试从存储中获取主题偏好（在实际环境中使用）
+            // const savedTheme = localStorage.getItem('theme');
+            // if (savedTheme) {
+            //     currentTheme = savedTheme;
+            // }
+            
+            // 检查系统主题偏好
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                currentTheme = 'dark';
+            }
+            
+            applyTheme(currentTheme);
+        }
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = '浅色模式';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = '深色模式';
+            }
+            
+            // 重新渲染画布以适应主题
+            if (typeof redrawCanvases === 'function') {
+                redrawCanvases();
+            }
+            
+            // 尝试保存主题偏好（在实际环境中使用）
+            // try {
+            //     localStorage.setItem('theme', theme);
+            // } catch (e) {
+            //     console.log('Unable to save theme preference');
+            // }
+        }
+
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
+
+        // 监听系统主题变化
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (!currentTheme) {  // 只有在用户没有手动设置时才响应系统变化
+                    applyTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+
+            // 如果切换到动画章节，初始化动画
+            if (sectionId === 'animation') {
+                initAnimations();
+            }
+        }
+
+        // 动画相关变量
+        let integralAnimationId;
+        let ftcAnimationId;
+        let derivativeAnimationId;
+
+        // 获取当前主题的颜色
+        function getThemeColors() {
+            const isDark = currentTheme === 'dark';
+            return {
+                axes: isDark ? '#e0e0e0' : '#333',
+                primary: isDark ? '#8b9ef3' : '#667eea',
+                secondary: isDark ? '#ff8b8b' : '#ff6b6b',
+                fill: isDark ? 'rgba(139, 158, 243, 0.3)' : 'rgba(102, 126, 234, 0.3)',
+                background: isDark ? '#2a2a3e' : 'white',
+                text: isDark ? '#e0e0e0' : '#333'
+            };
+        }
+
+        // 初始化所有动画
+        function initAnimations() {
+            initIntegralAnimation();
+            initFTCAnimation();
+        }
+
+        // 重新绘制所有画布（主题切换时调用）
+        function redrawCanvases() {
+            const integralCanvas = document.getElementById('integralCanvas');
+            const ftcCanvas = document.getElementById('ftcCanvas');
+            
+            if (integralCanvas && integralCanvas.getContext) {
+                initIntegralAnimation();
+            }
+            if (ftcCanvas && ftcCanvas.getContext) {
+                initFTCAnimation();
+            }
+        }
+
+        // 积分上限函数动画
+        function initIntegralAnimation() {
+            const canvas = document.getElementById('integralCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+            const colors = getThemeColors();
+
+            function drawAxes() {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 设置背景
+                ctx.fillStyle = colors.background;
+                ctx.fillRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = colors.axes;
+                ctx.lineWidth = 2;
+                
+                // X轴
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                
+                // Y轴
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                
+                // 箭头
+                ctx.moveTo(width - margin, height - margin);
+                ctx.lineTo(width - margin - 10, height - margin - 5);
+                ctx.lineTo(width - margin - 10, height - margin + 5);
+                ctx.closePath();
+                
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin - 5, margin + 10);
+                ctx.lineTo(margin + 5, margin + 10);
+                ctx.closePath();
+                
+                ctx.stroke();
+                
+                // 绘制刻度
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = colors.text;
+                ctx.font = '12px Arial';
+                
+                // X轴刻度
+                for (let i = 0; i <= 5; i++) {
+                    const x = margin + i * graphWidth / 5;
+                    ctx.beginPath();
+                    ctx.moveTo(x, height - margin);
+                    ctx.lineTo(x, height - margin + 5);
+                    ctx.stroke();
+                    ctx.fillText(i, x, height - margin + 10);
+                }
+                
+                // Y轴刻度
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                for (let i = 0; i <= 5; i++) {
+                    const y = height - margin - i * graphHeight / 5;
+                    ctx.beginPath();
+                    ctx.moveTo(margin, y);
+                    ctx.lineTo(margin - 5, y);
+                    ctx.stroke();
+                    ctx.fillText(i, margin - 10, y);
+                }
+                
+                // 标签
+                ctx.textAlign = 'center';
+                ctx.fillText('x', width - margin + 20, height - margin);
+                ctx.textAlign = 'right';
+                ctx.fillText('y', margin, margin - 20);
+            }
+
+            function drawFunction(progress) {
+                drawAxes();
+                
+                // 绘制函数曲线 f(x) = sin(x) + 1
+                ctx.beginPath();
+                ctx.strokeStyle = colors.primary;
+                ctx.lineWidth = 3;
+                
+                const maxX = progress * 5;
+                
+                for (let x = 0; x <= maxX; x += 0.05) {
+                    const px = margin + x * graphWidth / 5;
+                    const py = height - margin - (Math.sin(x) + 1) * graphHeight / 2;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+                
+                // 绘制积分面积
+                if (progress > 0) {
+                    ctx.fillStyle = colors.fill;
+                    ctx.beginPath();
+                    ctx.moveTo(margin, height - margin);
+                    
+                    for (let x = 0; x <= maxX; x += 0.05) {
+                        const px = margin + x * graphWidth / 5;
+                        const py = height - margin - (Math.sin(x) + 1) * graphHeight / 2;
+                        ctx.lineTo(px, py);
+                    }
+                    
+                    ctx.lineTo(margin + maxX * graphWidth / 5, height - margin);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // 显示当前积分值
+                    ctx.fillStyle = colors.secondary;
+                    ctx.font = '14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Φ(${maxX.toFixed(1)})`, 
+                                margin + maxX * graphWidth / 5, margin - 10);
+                }
+            }
+
+            // 动画控制
+            let integralStartTime = null;
+
+            function animateIntegral(timestamp) {
+                if (!integralStartTime) integralStartTime = timestamp;
+                const elapsed = timestamp - integralStartTime;
+                const duration = 3000;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                drawFunction(progress);
+                
+                if (progress < 1) {
+                    integralAnimationId = requestAnimationFrame(animateIntegral);
+                }
+            }
+
+            window.startIntegralAnimation = function() {
+                if (integralAnimationId) {
+                    cancelAnimationFrame(integralAnimationId);
+                }
+                integralStartTime = null;
+                integralAnimationId = requestAnimationFrame(animateIntegral);
+            };
+
+            window.resetIntegralAnimation = function() {
+                if (integralAnimationId) {
+                    cancelAnimationFrame(integralAnimationId);
+                    integralAnimationId = null;
+                }
+                drawAxes();
+            };
+
+            // 初始绘制坐标轴
+            drawAxes();
+        }
+
+        // 微积分基本定理动画
+        function initFTCAnimation() {
+            const canvas = document.getElementById('ftcCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const margin = 40;
+            const graphWidth = width - 2 * margin;
+            const graphHeight = height - 2 * margin;
+            const colors = getThemeColors();
+
+            let ftcStartTime = null;
+
+            function drawFTC(progress) {
+                ctx.clearRect(0, 0, width, height);
+                
+                // 设置背景
+                ctx.fillStyle = colors.background;
+                ctx.fillRect(0, 0, width, height);
+                
+                // 绘制坐标轴
+                ctx.beginPath();
+                ctx.strokeStyle = colors.axes;
+                ctx.lineWidth = 2;
+                ctx.moveTo(margin, height - margin);
+                ctx.lineTo(width - margin, height - margin);
+                ctx.moveTo(margin, margin);
+                ctx.lineTo(margin, height - margin);
+                ctx.stroke();
+
+                // 绘制函数曲线 f(x) = x²/4 + 1
+                ctx.beginPath();
+                ctx.strokeStyle = colors.primary;
+                ctx.lineWidth = 3;
+                
+                const currentX = progress * 5;
+                
+                for (let x = 0; x <= 5; x += 0.1) {
+                    const px = margin + x * graphWidth / 5;
+                    const py = height - margin - (x*x/4 + 1) * graphHeight / 3;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+                
+                // 绘制积分上限函数 Φ(x) = ∫₀ˣ f(t) dt
+                ctx.beginPath();
+                ctx.strokeStyle = colors.secondary;
+                ctx.lineWidth = 3;
+                
+                for (let x = 0; x <= currentX; x += 0.1) {
+                    const px = margin + x * graphWidth / 5;
+                    const py = height - margin - (x*x*x/12 + x) * graphHeight / 8;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+                
+                // 绘制当前点和切线
+                if (progress > 0) {
+                    const currentPX = margin + currentX * graphWidth / 5;
+                    const currentFY = height - margin - (currentX*currentX/4 + 1) * graphHeight / 3;
+                    const currentPhiY = height - margin - (currentX*currentX*currentX/12 + currentX) * graphHeight / 8;
+                    
+                    // 绘制点
+                    ctx.beginPath();
+                    ctx.fillStyle = colors.secondary;
+                    ctx.arc(currentPX, currentPhiY, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.fillStyle = colors.primary;
+                    ctx.arc(currentPX, currentFY, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // 绘制切线
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#00aa00';
+                    ctx.lineWidth = 2;
+                    const slope = (currentX*currentX/4 + 1);
+                    const tangentLength = 50;
+                    ctx.moveTo(currentPX - tangentLength, currentPhiY - slope * -tangentLength * graphHeight / graphWidth);
+                    ctx.lineTo(currentPX + tangentLength, currentPhiY - slope * tangentLength * graphHeight / graphWidth);
+                    ctx.stroke();
+                    
+                    // 添加文本说明
+                    ctx.fillStyle = colors.text;
+                    ctx.font = '14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Φ'(x) = f(x)`, currentPX + 60, currentPhiY - 25);
+                }
+            }
+
+            function animateFTC(timestamp) {
+                if (!ftcStartTime) ftcStartTime = timestamp;
+                const elapsed = timestamp - ftcStartTime;
+                const duration = 5000;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                drawFTC(progress);
+                
+                if (progress < 1) {
+                    ftcAnimationId = requestAnimationFrame(animateFTC);
+                }
+            }
+
+            window.startFTCAnimation = function() {
+                if (ftcAnimationId) {
+                    cancelAnimationFrame(ftcAnimationId);
+                }
+                ftcStartTime = null;
+                ftcAnimationId = requestAnimationFrame(animateFTC);
+            };
+
+            window.pauseFTCAnimation = function() {
+                if (ftcAnimationId) {
+                    cancelAnimationFrame(ftcAnimationId);
+                    ftcAnimationId = null;
+                }
+            };
+
+            // 初始绘制
+            drawFTC(0);
+        }
+
+
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化主题
+            initTheme();
+            
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+            
+            // 默认显示动画章节
+            // document.getElementById('animation').classList.add('active');
+            // initAnimations();
+        });
+    </script>
+</body>
+</html>

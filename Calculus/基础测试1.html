@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微积分基础测试</title>
+    
+    <!-- MathJax for LaTeX Math Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .concept-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .definition {
+            background: white;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .definition h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .theorem {
+            background: #fffbf0;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .theorem::before {
+            content: "定理";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #ffd700;
+            color: #333;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .example {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .example::before {
+            content: "例题";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .formula {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .graph-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .graph-container h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .interactive-demo h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        .exercise {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .exercise ol {
+            margin-left: 20px;
+        }
+        
+        .exercise li {
+            margin: 10px 0;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #6c757d;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip::before {
+            content: "💡";
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        /* 动画容器样式 */
+        .animation-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .integral-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .animation-btn {
+            padding: 8px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .animation-btn:hover {
+            background: #5569c0;
+            transform: translateY(-2px);
+        }
+
+        /* LaTeX公式样式 */
+        .math-display {
+            font-size: 1.2em;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav button {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+
+            .animation-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>微积分基础测试</h1>
+            <div class="subtitle">代数、解析几何、函数和三角学基础</div>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="showSection('algebra')">代数</button>
+            <button onclick="showSection('geometry')">解析几何</button>
+            <button onclick="showSection('function')">函数</button>
+            <button onclick="showSection('trigonometry')">三角学</button>
+            <button onclick="showSection('answer')">参考答案</button>
+        </nav>
+        
+        <main>
+            <!-- 代数部分 -->
+            <div class="section active" id="algebra">
+                <div class="concept-box">
+                    <h2>📚📚 代数基础测试</h2>
+                    <p>扎实的代数基础是学习微积分的前提条件。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>1. 指数运算</h3>
+                    <p>不使用计算器，计算下列各式：</p>
+                    <ol type="a">
+                        <li>\( (-3)^{4} \)</li>
+                        <li>\( -3^{4} \)</li>
+                        <li>\( 3^{-4} \)</li>
+                        <li>\( \frac{5^{23}}{5^{21}} \)</li>
+                        <li>\( \left(\frac{2}{3}\right)^{-2} \)</li>
+                        <li>\( 16^{-3/4} \)</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>2. 根式化简</h3>
+                    <p>化简下列各式（答案中不能有负指数）：</p>
+                    <ol type="a">
+                        <li>\( \sqrt{200}-\sqrt{32} \)</li>
+                        <li>\( (3a^{3}b^{3})(4ab^{2})^{2} \)</li>
+                        <li>\( \left(\frac{3x^{3/2}y^{3}}{x^{2}y^{-1/2}}\right)^{-2} \)</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>3. 多项式展开</h3>
+                    <p>展开并化简下列各式：</p>
+                    <ol type="a">
+                        <li>\( 3(x+6)+4(2x-5) \)</li>
+                        <li>\( (x+3)(4x-5) \)</li>
+                        <li>\( (\sqrt{a}+\sqrt{b})(\sqrt{a}-\sqrt{b}) \)</li>
+                        <li>\( (2x+3)^{2} \)</li>
+                        <li>\( (x+2)^{3} \)</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>4. 因式分解</h3>
+                    <p>因式分解下列各式：</p>
+                    <ol type="a">
+                        <li>\( 4x^{2}-25 \)</li>
+                        <li>\( 2x^{2}+5x-12 \)</li>
+                        <li>\( x^{3}-3x^{2}-4x+12 \)</li>
+                        <li>\( x^{4}+27x \)</li>
+                        <li>\( 3x^{3/2}-9x^{1/2}+6x^{-1/2} \)</li>
+                        <li>\( x^{3}y-4xy \)</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>5. 分式化简</h3>
+                    <p>化简下列各式：</p>
+                    <ol type="a">
+                        <li>\( \frac{x^{2}+3x+2}{x^{2}-x-2} \)</li>
+                        <li>\( \frac{2x^{2}-x-1}{x^{2}-9}\cdot\frac{x+3}{2x+1} \)</li>
+                        <li>\( \frac{x^{2}}{x^{2}-4}-\frac{x+1}{x+2} \)</li>
+                        <li>\( \frac{\frac{y}{x}-\frac{x}{y}}{\frac{1}{y}-\frac{1}{x}} \)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- 解析几何部分 -->
+            <div class="section" id="geometry">
+                <div class="concept-box">
+                    <h2>📐📐 解析几何基础测试</h2>
+                    <p>解析几何为微积分中的曲线分析提供了基础工具。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>1. 直线方程</h3>
+                    <p>求过点(2,-5)且满足下列条件的直线的方程：</p>
+                    <ol type="a">
+                        <li>斜率为-3</li>
+                        <li>平行于x轴</li>
+                        <li>平行于y轴</li>
+                        <li>平行于直线 \( 2x-4y=3 \)</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>2. 圆的方程</h3>
+                    <p>求圆心为(-1,4)且过点(3,-2)的圆的方程。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>3. 圆的几何性质</h3>
+                    <p>通过圆的方程 \( x^{2}+y^{2}-6x+10y+9=0 \) 求圆心和半径。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>4. 平面几何</h3>
+                    <p>已知点A(-7,4)和点B(5,-12)是平面上的两点：</p>
+                    <ol type="a">
+                        <li>求过这两点的直线的斜率</li>
+                        <li>求过这两点的直线的方程。该直线的截距是多少？</li>
+                        <li>求线段AB中点的坐标</li>
+                        <li>求线段AB的长度</li>
+                        <li>求线段AB的垂直平分线的方程</li>
+                        <li>求以线段AB为直径的圆的方程</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- 函数部分 -->
+            <div class="section" id="function">
+                <div class="concept-box">
+                    <h2>📈📉 函数基础测试</h2>
+                    <p>函数概念是微积分研究的核心对象。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>1. 函数图像分析</h3>
+                    <p>函数f的图像如图所示：</p>
+                    <ol type="a">
+                        <li>写出f(-1)的值</li>
+                        <li>估计f(2)的值</li>
+                        <li>求f(x)=2时x的值</li>
+                        <li>估计f(x)=0时x的值</li>
+                        <li>写出该函数的定义域和值域</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>2. 差商计算</h3>
+                    <p>已知 \( f(x)=x^{3} \)，计算差商 \( \frac{f(2+h)-f(2)}{h} \) 并化简。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>3. 函数定义域</h3>
+                    <p>求下列函数的定义域：</p>
+                    <ol type="a">
+                        <li>\( f(x)=\frac{2x+1}{x^{2}+x-2} \)</li>
+                        <li>\( g(x)=\frac{\sqrt[3]{x}}{x^{2}+1} \)</li>
+                        <li>\( h(x)=\sqrt{4-x}+\sqrt{x^{2}-1} \)</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>4. 函数变换</h3>
+                    <p>如何从函数f的图像得到下列函数的图像？</p>
+                    <ol type="a">
+                        <li>\( y=-f(x) \)</li>
+                        <li>\( y=2f(x)-1 \)</li>
+                        <li>\( y=f(x-3)+2 \)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- 三角学部分 -->
+            <div class="section" id="trigonometry">
+                <div class="concept-box">
+                    <h2>△△ 三角学基础测试</h2>
+                    <p>三角学在微积分的周期函数和积分运算中至关重要。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>1. 角度弧度转换</h3>
+                    <p>将角度转化为弧度：</p>
+                    <ol type="a">
+                        <li>\( 300^{\circ} \)</li>
+                        <li>\( -18^{\circ} \)</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>2. 弧度角度转换</h3>
+                    <p>将弧度转化为角度：</p>
+                    <ol type="a">
+                        <li>\( \frac{5\pi}{6} \)</li>
+                        <li>2</li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>3. 弧长计算</h3>
+                    <p>求半径为12cm、圆心角为\( 30^{\circ} \)的圆弧的长度。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>4. 三角函数值</h3>
+                    <p>求下列三角函数值：</p>
+                    <ol type="a">
+                        <li>\( \tan\left(\frac{\pi}{3}\right) \)</li>
+                        <li>\( \sin\left(\frac{7\pi}{6}\right) \)</li>
+                        <li>\( \sec\left(\frac{5\pi}{3}\right) \)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- 参考答案部分 -->
+            <div class="section" id="answer">
+                <div class="concept-box">
+                    <h2>✅✅ 参考答案</h2>
+                    <p>检查你的答案，找出需要加强的知识点。</p>
+                </div>
+                
+                <div class="exercise">
+                    <h3>代数部分答案</h3>
+                    <ol>
+                        <li>
+                            (a) 81 (b) -81 (c) \( \frac{1}{81} \) (d) 25 (e) \( \frac{9}{4} \) (f) \( \frac{1}{8} \)
+                        </li>
+                        <li>
+                            (a) \( 6\sqrt{2} \) (c) \( \frac{x}{9y^{7}} \)
+                        </li>
+                        <li>
+                            (a) \( 11x-2 \) (b) \( 4x^{2}+7x-15 \) (c) \( a-b \) (d) \( 4x^{2}+12x+9 \) (e) \( x^{3}+6x^{2}+12x+8 \)
+                        </li>
+                        <li>
+                            (a) \( (2x+5)(2x-5) \) (b) \( (2x-3)(x+4) \) (c) \( (x-2)(x+2)(x-3) \)
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>解析几何部分答案</h3>
+                    <ol>
+                        <li>
+                            (a) \( y=-3x+1 \) (b) \( y=-5 \) (c) \( x=2 \) (d) \( y=\frac{1}{2}x-6 \)
+                        </li>
+                        <li>
+                            \( (x+1)^{2}+(y-4)^{2}=52 \)
+                        </li>
+                        <li>
+                            圆心为(3,-5)，半径为5
+                        </li>
+                        <li>
+                            (a) \( -\frac{4}{3} \) (b) \( 4x+3y+16=0 \)，x轴截距为-4，y轴截距为\( -\frac{16}{3} \) (c) \( (-1,-4) \) (d) 20 (e) \( 3x-4y=13 \) (f) \( (x+1)^{2}+(y+4)^{2}=100 \)
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>函数部分答案</h3>
+                    <ol>
+                        <li>
+                            (a) -2 (c) -3, 1 (e) [-3,3], [-2,3]
+                        </li>
+                        <li>
+                            \( 12+6h+h^{2} \)
+                        </li>
+                        <li>
+                            (a) \( (-\infty,-2)\cup(-2,1)\cup(1,+\infty) \) (b) \( (-\infty,+\infty) \) (c) \( (-\infty,-1]\cup[1,4] \)
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="exercise">
+                    <h3>三角学部分答案</h3>
+                    <ol>
+                        <li>
+                            (a) \( \frac{5\pi}{3} \) (b) \( -\frac{\pi}{10} \)
+                        </li>
+                        <li>
+                            (a) \( 150^{\circ} \) (b) \( \frac{360^{\circ}}{\pi}\approx 114.6^{\circ} \)
+                        </li>
+                        <li>
+                            \( 2\pi \) cm
+                        </li>
+                        <li>
+                            (a) \( \sqrt{3} \) (b) \( -\frac{1}{2} \) (c) 2
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 苏州经贸职业技术学院 </p>
+        </footer>
+    </div>
+    
+    <script>
+        // 配置 MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+        
+        // 切换显示不同章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示选中的章节
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新导航按钮状态
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise().then(() => {
+                    console.log('MathJax公式渲染完成');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
